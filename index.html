@@ -1,790 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InfoNica Hamburg — Tu guía nicaragüense en Alemania</title>
-  <meta name="description" content="Guías, trámites, recursos y comunidad para nicaragüenses viviendo en Hamburgo, Alemania." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --blue:#1A4DAB; --blue-dark:#0d2d6e; --blue-mid:#1e5abf;
-      --red:#D42B2B; --red-light:#e83838;
-      --white:#ffffff; --offwhite:#F6F8FC;
-      --text:#0f1923; --text-mid:#3a4456; --text-soft:#7a859a;
-      --border:#e2e8f2; --wa:#25D366; --radius:14px;
-    }
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html{scroll-behavior:smooth;}
-    body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--text);font-size:16px;line-height:1.65;}
-
-    /* TOPBAR — cambia el texto aquí */
-    .topbar{background:var(--red);text-align:center;padding:9px 5%;font-size:.82rem;color:#fff;font-weight:500;}
-    .topbar a{color:#ffd4d4;text-decoration:underline;font-weight:600;}
-
-    /* NAV */
-    nav{position:sticky;top:0;z-index:500;background:rgba(13,45,110,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;box-shadow:0 2px 24px rgba(0,0,0,.2);}
-    .nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
-    .nav-logo img{height:42px;width:42px;border-radius:50%;border:2px solid rgba(255,255,255,.25);object-fit:cover;}
-    .logo-name{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;line-height:1.1;}
-    .logo-name span{color:#f87171;}
-    .logo-sub{font-size:.65rem;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:.8px;}
-    .nav-menu{display:flex;align-items:center;gap:.2rem;list-style:none;}
-    .nav-menu>li{position:relative;}
-    .nav-menu>li>a{color:rgba(255,255,255,.78);text-decoration:none;font-size:.87rem;font-weight:500;padding:8px 14px;border-radius:8px;display:flex;align-items:center;gap:5px;transition:background .2s,color .2s;white-space:nowrap;}
-    .nav-menu>li>a:hover{background:rgba(255,255,255,.1);color:#fff;}
-    .nav-menu>li>a .arr{font-size:.7rem;opacity:.6;}
-    .dropdown{position:absolute;top:calc(100% + 8px);left:0;background:#fff;border-radius:12px;padding:8px;min-width:230px;box-shadow:0 16px 48px rgba(0,0,0,.16);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s;border:1px solid var(--border);}
-    .nav-menu>li:hover .dropdown,.nav-menu>li:focus-within .dropdown{opacity:1;pointer-events:all;transform:translateY(0);}
-    .dropdown a{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;text-decoration:none;color:var(--text-mid);font-size:.88rem;font-weight:500;transition:background .15s,color .15s;}
-    .dropdown a:hover{background:var(--offwhite);color:var(--blue);}
-    .dropdown a .di{font-size:1.1rem;width:24px;text-align:center;}
-    .dropdown-lbl{font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-soft);padding:10px 14px 4px;display:block;}
-    .dropdown hr{border:none;border-top:1px solid var(--border);margin:6px 0;}
-    .btn-wa-nav{background:var(--wa);color:#fff!important;padding:9px 18px;border-radius:24px;font-weight:600!important;font-size:.84rem!important;margin-left:10px;transition:background .2s,transform .15s!important;}
-    .btn-wa-nav:hover{background:#1ebe5d!important;transform:scale(1.04);}
-    .hamburger{display:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px;}
-    .hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px;}
-    .mobile-drawer{display:none;flex-direction:column;position:fixed;top:68px;left:0;right:0;bottom:0;background:var(--blue-dark);padding:20px 5% 40px;overflow-y:auto;z-index:499;}
-    .mobile-drawer.open{display:flex;}
-    .mob-lbl{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin:20px 0 8px;}
-    .mobile-drawer a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1rem;font-weight:500;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
-    .mobile-drawer a:hover{color:#fff;}
-
-    /* HERO — cambia la URL de la foto aquí */
-    .hero{position:relative;min-height:600px;display:flex;align-items:center;background-image:url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1400&q=80');background-size:cover;background-position:center;overflow:hidden;}
-    .hero-ov{position:absolute;inset:0;background:linear-gradient(100deg,rgba(13,45,110,.92) 0%,rgba(13,45,110,.75) 55%,rgba(13,45,110,.35) 100%);}
-    .hero-content{position:relative;z-index:2;padding:80px 5% 110px;max-width:780px;}
-    .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:6px 16px;font-size:.8rem;color:rgba(255,255,255,.85);font-weight:500;margin-bottom:24px;letter-spacing:.3px;}
-    .hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5.5vw,4rem);font-weight:800;color:#fff;line-height:1.1;margin-bottom:18px;letter-spacing:-1px;}
-    .hero h1 em{color:#f87171;font-style:normal;}
-    .hero p{color:rgba(255,255,255,.72);font-size:1.08rem;max-width:560px;margin-bottom:34px;line-height:1.75;}
-    .hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
-    .btn-primary{background:var(--red);color:#fff;padding:14px 28px;border-radius:10px;font-weight:600;text-decoration:none;font-size:.94rem;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px;}
-    .btn-primary:hover{background:var(--red-light);transform:translateY(-2px);}
-    .btn-outline{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;padding:14px 28px;border-radius:10px;font-weight:500;text-decoration:none;font-size:.94rem;transition:background .2s;}
-    .btn-outline:hover{background:rgba(255,255,255,.2);}
-    .hero-stats{position:absolute;bottom:0;left:0;right:0;z-index:2;background:rgba(255,255,255,.06);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.12);display:flex;align-items:center;padding:18px 5%;gap:40px;flex-wrap:wrap;}
-    .hstat-n{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;line-height:1;}
-    .hstat-l{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:2px;}
-
-    /* SECTIONS */
-    .sec{padding:80px 5%;}
-    .sec-white{background:var(--white);}
-    .sec-off{background:var(--offwhite);}
-    .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:block;}
-    .eb-blue{color:var(--blue);}
-    .eb-red{color:var(--red);}
-    .eb-white{color:rgba(255,255,255,.5);}
-    .sec-h{font-family:'Syne',sans-serif;font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;line-height:1.15;margin-bottom:10px;letter-spacing:-.5px;}
-    .sh-blue{color:var(--blue-dark);}
-    .sh-white{color:#fff;}
-    .sec-sub{color:var(--text-soft);font-size:1rem;max-width:500px;margin-bottom:48px;}
-    .sub-white{color:rgba(255,255,255,.55);}
-
-    /* MAIN CATEGORY CARDS WITH PHOTOS */
-    .main-cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;}
-    .mcat{border-radius:18px;overflow:hidden;text-decoration:none;display:block;position:relative;min-height:240px;transition:transform .25s,box-shadow .25s;}
-    .mcat:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,.18);}
-    .mcat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s;}
-    .mcat:hover img{transform:scale(1.06);}
-    .mcat-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.2) 60%,transparent 100%);}
-    .mcat-body{position:absolute;bottom:0;left:0;right:0;padding:22px;}
-    .mcat-tag{display:inline-block;background:var(--red);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
-    .mcat-tag.blue{background:var(--blue);}
-    .mcat-tag.green{background:#059669;}
-    .mcat-tag.amber{background:#d97706;}
-    .mcat-body h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:6px;line-height:1.25;}
-    .mcat-body p{font-size:.82rem;color:rgba(255,255,255,.72);line-height:1.5;}
-    .mcat-arrow{display:inline-flex;align-items:center;gap:5px;margin-top:12px;color:rgba(255,255,255,.85);font-size:.8rem;font-weight:600;background:rgba(255,255,255,.15);padding:5px 12px;border-radius:20px;}
-
-    /* NEWS */
-    .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px;}
-    .news-feat{grid-column:span 2;}
-    @media(max-width:780px){.news-feat{grid-column:span 1;}}
-    .ncard{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;}
-    .ncard:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(26,77,171,.1);}
-    .ncard-img{width:100%;height:180px;object-fit:cover;display:block;}
-    .news-feat .ncard-img{height:240px;}
-    .ncard-body{padding:20px 22px 22px;}
-    .ncard-cat{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:block;}
-    .cat-m{color:var(--blue);}
-    .cat-i{color:var(--red);}
-    .cat-v{color:#059669;}
-    .ncard-body h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.3;}
-    .ncard-body p{font-size:.87rem;color:var(--text-soft);line-height:1.6;}
-    .ncard-meta{font-size:.76rem;color:var(--text-soft);margin-top:14px;}
-
-    /* GUIDE LIST */
-    .glist{display:flex;flex-direction:column;gap:10px;}
-    .gitem{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:16px;text-decoration:none;transition:border-color .2s,background .15s;}
-    .gitem:hover{border-color:var(--blue);background:#f0f5ff;}
-    .gnum{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;background:var(--offwhite);}
-    .ginfo{flex:1;}
-    .ginfo h4{font-family:'Syne',sans-serif;font-size:.97rem;font-weight:700;color:var(--text);margin-bottom:2px;}
-    .ginfo p{font-size:.82rem;color:var(--text-soft);}
-    .gbadge{font-size:.67rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
-    .b-new{background:#ecfdf5;color:#065f46;}
-    .b-soon{background:#fef3c7;color:#92400e;}
-    .b-hot{background:#fee2e2;color:#991b1b;}
-
-    /* FIN GRID */
-    .fin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
-    .fcard{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px 22px 24px;text-decoration:none;display:flex;flex-direction:column;transition:border-color .2s,transform .2s,box-shadow .2s;}
-    .fcard:hover{border-color:var(--blue);transform:translateY(-5px);box-shadow:0 12px 36px rgba(26,77,171,.1);}
-    .fcard-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:16px;}
-    .fi-blue{background:#e8f0fd;}
-    .fi-green{background:#ecfdf5;}
-    .fi-amber{background:#fffbeb;}
-    .fi-red{background:#fef2f2;}
-    .fcard h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--blue-dark);margin-bottom:6px;line-height:1.3;}
-    .fcard p{font-size:.83rem;color:var(--text-soft);line-height:1.55;flex:1;}
-    .fcard-link{margin-top:16px;font-size:.82rem;font-weight:600;color:var(--blue);}
-
-    /* ABOUT — CAMBIA AQUÍ tu info personal */
-    .about-grid{display:grid;grid-template-columns:340px 1fr;gap:60px;align-items:center;}
-    @media(max-width:860px){.about-grid{grid-template-columns:1fr;}}
-    .about-photo-wrap{position:relative;}
-    .about-photo{width:100%;aspect-ratio:4/5;border-radius:20px;object-fit:cover;display:block;}
-    .about-ph{width:100%;aspect-ratio:4/5;border-radius:20px;background:linear-gradient(135deg,#dbe8fb,#c3d6f5);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--blue);font-size:.9rem;font-weight:500;gap:12px;}
-    .about-ph span{font-size:4rem;}
-    .about-badge{position:absolute;bottom:-16px;right:-16px;background:var(--red);color:#fff;border-radius:14px;padding:14px 18px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;box-shadow:0 8px 24px rgba(212,43,43,.3);text-align:center;line-height:1.3;}
-    .about-badge small{display:block;font-family:'Inter',sans-serif;font-size:.72rem;font-weight:400;opacity:.8;}
-    .about-text h2{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3vw,2.4rem);font-weight:800;color:var(--blue-dark);line-height:1.15;margin-bottom:18px;letter-spacing:-.5px;}
-    .about-text h2 span{color:var(--red);}
-    .about-text p{color:var(--text-mid);font-size:1rem;line-height:1.8;margin-bottom:16px;}
-    .about-social{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;}
-    .soc-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-size:.87rem;font-weight:600;text-decoration:none;transition:opacity .2s;}
-    .soc-btn:hover{opacity:.85;}
-    .soc-wa{background:var(--wa);color:#fff;}
-    .soc-email{background:var(--offwhite);color:var(--text);border:1px solid var(--border);}
-
-    /* FAQ */
-    .faq-wrap{max-width:820px;}
-    .acc{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
-    .acc-btn{width:100%;text-align:left;background:var(--white);border:none;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Syne',sans-serif;font-size:.97rem;font-weight:700;color:var(--blue-dark);}
-    .acc-btn:hover{background:#f5f8ff;}
-    .acc-ic{width:24px;height:24px;border-radius:50%;background:#eef3ff;color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s;font-size:.75rem;font-style:normal;}
-    .acc-btn.open .acc-ic{transform:rotate(180deg);}
-    .acc-body{max-height:0;overflow:hidden;transition:max-height .38s ease;}
-    .acc-inner{padding:0 22px 20px;color:var(--text-mid);font-size:.92rem;line-height:1.8;border-top:1px solid var(--border);}
-    .acc-inner ol,.acc-inner ul{padding-left:20px;margin-top:10px;}
-    .acc-inner li{margin-bottom:6px;}
-    .tip{background:#eef3ff;border-left:3px solid var(--blue);padding:10px 16px;border-radius:0 8px 8px 0;margin-top:14px;font-size:.87rem;}
-    .tip.red{background:#fff0f0;border-color:var(--red);}
-
-    /* CTA */
-    .cta-box{background:var(--blue-dark);border-radius:24px;padding:64px 5%;position:relative;overflow:hidden;text-align:center;}
-    .cta-box::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.04);}
-    .cta-box::after{content:'';position:absolute;bottom:-60px;left:5%;width:240px;height:240px;border-radius:50%;background:rgba(212,43,43,.1);}
-    .cta-inner{position:relative;z-index:2;max-width:580px;margin:0 auto;}
-    .cta-inner h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;color:#fff;margin-bottom:14px;line-height:1.15;letter-spacing:-.5px;}
-    .cta-inner p{color:rgba(255,255,255,.6);font-size:1rem;margin-bottom:32px;}
-    .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-    .btn-wa-big{background:var(--wa);color:#fff;padding:14px 28px;border-radius:10px;font-weight:700;text-decoration:none;font-size:.95rem;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s;}
-    .btn-wa-big:hover{background:#1ebe5d;transform:translateY(-2px);}
-    .btn-email{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:14px 28px;border-radius:10px;font-weight:500;text-decoration:none;font-size:.95rem;display:inline-flex;align-items:center;gap:8px;transition:background .2s;}
-    .btn-email:hover{background:rgba(255,255,255,.18);}
-    .email-tip{background:linear-gradient(135deg,#fef3c7,#fef9e7);border:1.5px solid #fcd34d;border-radius:14px;padding:24px 28px;margin-top:32px;text-align:left;}
-    .email-tip h4{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#92400e;margin-bottom:8px;}
-    .email-tip p{font-size:.88rem;color:#78350f;line-height:1.65;}
-    .email-tip a{color:#b45309;font-weight:600;}
-
-    /* FOOTER */
-    .flag-bar{height:5px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue) 33.3%,#fff 33.3%,#fff 66.6%,var(--red) 66.6%);}
-    footer{background:#08193a;padding:56px 5% 28px;}
-    .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;margin-bottom:44px;}
-    .f-logo{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:10px;}
-    .f-logo span{color:#f87171;}
-    .foot-brand p{color:rgba(255,255,255,.32);font-size:.83rem;max-width:230px;line-height:1.7;}
-    .foot-col h4{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px;}
-    .foot-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
-    .foot-col a{color:rgba(255,255,255,.35);text-decoration:none;font-size:.87rem;transition:color .2s;}
-    .foot-col a:hover{color:rgba(255,255,255,.75);}
-    .foot-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-    .foot-bottom p{color:rgba(255,255,255,.2);font-size:.78rem;}
-
-    /* WA FAB */
-    .wa-fab{position:fixed;bottom:28px;right:28px;z-index:999;width:56px;height:56px;border-radius:50%;background:var(--wa);text-decoration:none;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(37,211,102,.45);transition:transform .2s;}
-    .wa-fab:hover{transform:scale(1.1);}
-
-    @media(max-width:720px){
-      .nav-menu{display:none;}
-      .hamburger{display:flex;}
-      .hero{min-height:520px;}
-      .sec{padding:56px 5%;}
-      .gbadge{display:none;}
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InfoNica Hamburg — Tu guía en Alemania</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ✏️ CAMBIA tu número WhatsApp: reemplaza TUNUMERO (ej: 50588112233) -->
-<a class="wa-fab" href="https://wa.me/+49015157841507" target="_blank" title="WhatsApp InfoNica Hamburg">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.112 1.528 5.837L.057 23.998l6.304-1.654A11.954 11.954 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.034-1.388l-.36-.214-3.742.982.999-3.648-.235-.374A9.808 9.808 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-</a>
-
-<!-- ✏️ TOPBAR: cambia el texto del anuncio -->
-<div class="topbar">
-  🇳🇮 ¡InfoNica Hamburg ya está en WhatsApp! Únete a la comunidad →
-  <a href="https://wa.me/+49015157841507" target="_blank">Clic aquí</a>
-</div>
-
-<nav>
-  <!-- ✏️ LOGO: cambia "Infonicahamburg.jpeg" por tu archivo de logo -->
-  <a href="#inicio" class="nav-logo">
-    <img src="Infonicahamburg.jpeg" alt="InfoNica Hamburg" onerror="this.style.display='none'" />
-    <div>
-      <div class="logo-name">InfoNica <span>Hamburg</span></div>
-      <div class="logo-sub">Tu comunidad nicaragüense 🇳🇮🇩🇪</div>
-    </div>
-  </a>
-
-  <ul class="nav-menu">
-  <li><a href="#noticias">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-      Noticias</a></li>
-
-    <li>
-      <a href="#tramites">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-        Trámites <span class="arr">▾</span>
-      </a>
-      <div class="dropdown">
-        <span class="dropdown-lbl">Migración & Papeles</span>
-        <a href="#tramites"><span class="di">🏛</span> Amt für Migration</a>
-        <a href="#tramites"><span class="di">🤝</span> BUT — Asesoría</a>
-        <hr>
-        <span class="dropdown-lbl">Títulos & Estudios</span>
-        <a href="#tramites"><span class="di">🎓</span> Título universitario</a>
-        <a href="#tramites"><span class="di">📜</span> Bachillerato</a>
-      </div>
-    </li>
-
-    <li>
-      <a href="#finanzas">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-        Finanzas <span class="arr">▾</span>
-      </a>
-      <div class="dropdown">
-        <span class="dropdown-lbl">Tu dinero en Alemania</span>
-        <a href="#finanzas"><span class="di">🏦</span> Cuenta bancaria</a>
-        <a href="#finanzas"><span class="di">💵</span> Efectivo</a>
-        <a href="#finanzas"><span class="di">🪪</span> Social Card</a>
-        <a href="#finanzas"><span class="di">⚠️</span> Deudas</a>
-      </div>
-    </li>
-
-    <li>
-      <a href="#vida">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Vivir en HH <span class="arr">▾</span>
-      </a>
-      <div class="dropdown">
-        <span class="dropdown-lbl">Vida diaria</span>
-        <a href="#vida"><span class="di">🏠</span> Apartamento</a>
-        <a href="#vida"><span class="di">🇩🇪</span> Cursos de alemán</a>
-      </div>
-    </li>
-
-    <li>
-      <a href="#apoyo">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-        Salud & Apoyo <span class="arr">▾</span>
-      </a>
-      <div class="dropdown">
-        <span class="dropdown-lbl">Ayuda y bienestar</span>
-        <a href="#apoyo"><span class="di">🩺</span> Médicos en español</a>
-        <a href="#apoyo"><span class="di">🫂</span> Grupos de apoyo</a>
-      </div>
-    </li>
-
-    <li>
-      <a href="#sobre-mi">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-        Sobre mí
-      </a>
-    </li>
-    <li><a href="https://wa.me/+49015157841507" target="_blank" class="btn-wa-nav">💬 WhatsApp</a></li>
-  </ul>
-  <div class="hamburger" id="ham" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
-
-<div class="mobile-drawer" id="drawer">
-  <a href="#noticias" onclick="closeMenu()">🗞 Noticias</a>
-  <span class="mob-lbl">Trámites</span>
-  <a href="#tramites" onclick="closeMenu()">🏛 Amt für Migration</a>
-  <a href="#tramites" onclick="closeMenu()">🤝 BUT — Asesoría</a>
-  <a href="#tramites" onclick="closeMenu()">🎓 Título universitario</a>
-  <a href="#tramites" onclick="closeMenu()">📜 Bachillerato</a>
-  <span class="mob-lbl">Finanzas</span>
-  <a href="#finanzas" onclick="closeMenu()">🏦 Cuenta bancaria</a>
-  <a href="#finanzas" onclick="closeMenu()">💵 Efectivo</a>
-  <a href="#finanzas" onclick="closeMenu()">🪪 Social Card</a>
-  <a href="#finanzas" onclick="closeMenu()">⚠️ Deudas</a>
-  <span class="mob-lbl">Vivir en HH</span>
-  <a href="#vida" onclick="closeMenu()">🏠 Buscar apartamento</a>
-  <a href="#vida" onclick="closeMenu()">🇩🇪 Cursos de alemán</a>
-  <span class="mob-lbl">Salud & Apoyo</span>
-  <a href="#apoyo" onclick="closeMenu()">🩺 Médicos en español</a>
-  <a href="#apoyo" onclick="closeMenu()">🫂 Grupos de apoyo</a>
-  <span class="mob-lbl">Más</span>
-  <a href="#sobre-mi" onclick="closeMenu()">👤 Sobre mí</a>
-  <a href="https://wa.me/+49015157841507" target="_blank" style="color:var(--wa);font-weight:700;margin-top:10px;">💬 Unirse al WhatsApp</a>
-</div>
-
-<!-- ══ HERO ══ -->
-<section class="hero" id="inicio">
-  <div class="hero-ov"></div>
-  <div class="hero-content">
-    <div class="hero-pill">🇳🇮 Nicaragua &nbsp;→&nbsp; 🇩🇪 Hamburg</div>
-    <!-- ✏️ HERO: cambia el título y descripción -->
-    <h1>Tu guía de vida<br/>en <em>Hamburg</em></h1>
-    <p>Trámites, finanzas, salud y comunidad — todo lo que necesitás para vivir en Hamburgo, explicado en español por alguien que lo vivió.</p>
-    <div class="hero-btns">
-      <a href="#tramites" class="btn-primary">📋 Ver trámites</a>
-      <a href="#noticias" class="btn-outline">🗞 Últimas noticias</a>
-    </div>
-  </div>
-  <div class="hero-stats">
-    <!-- ✏️ STATS: actualiza los números cuando tengas más contenido -->
-    <div><div class="hstat-n">4</div><div class="hstat-l">Categorías</div></div>
-    <div><div class="hstat-n">12+</div><div class="hstat-l">Guías</div></div>
-    <div><div class="hstat-n">HH</div><div class="hstat-l">Hamburg, Alemania</div></div>
-    <div><div class="hstat-n">🆓</div><div class="hstat-l">100% gratis</div></div>
-  </div>
-</section>
-
-<!-- ══ 4 CATEGORÍAS CON FOTO ══ -->
-<section class="sec sec-white">
-  <span class="eyebrow eb-blue">Explora por tema</span>
-  <h2 class="sec-h sh-blue">Todo lo que necesitás saber</h2>
-  <p class="sec-sub">Cuatro grandes áreas para que encontrés lo que buscás en segundos.</p>
-  <div class="main-cats">
-    <!-- ✏️ FOTOS: cambia las URLs de las imágenes por las tuyas propias -->
-    <a href="#tramites" class="mcat">
-      <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=600&q=80" alt="Trámites" loading="lazy"/>
-      <div class="mcat-ov"></div>
-      <div class="mcat-body">
-        <span class="mcat-tag blue">Oficinas</span>
-        <h3>Trámites Migratorios</h3>
-        <p>Amt für Migration, títulos, BUT y más</p>
-        <span class="mcat-arrow">Ver guías →</span>
-      </div>
-    </a>
-    <a href="#finanzas" class="mcat">
-      <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=600&q=80" alt="Finanzas" loading="lazy"/>
-      <div class="mcat-ov"></div>
-      <div class="mcat-body">
-        <span class="mcat-tag amber">Dinero</span>
-        <h3>Finanzas en Alemania</h3>
-        <p>Cuenta bancaria, Social Card, deudas</p>
-        <span class="mcat-arrow">Ver guías →</span>
-      </div>
-    </a>
-    <a href="#vida" class="mcat">
-      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80" alt="Vivir en Hamburg" loading="lazy"/>
-      <div class="mcat-ov"></div>
-      <div class="mcat-body">
-        <span class="mcat-tag">Vida diaria</span>
-        <h3>Vivir en Hamburg</h3>
-        <p>Apartamento y cursos de alemán</p>
-        <span class="mcat-arrow">Ver guías →</span>
-      </div>
-    </a>
-    <a href="#apoyo" class="mcat">
-      <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="Salud" loading="lazy"/>
-      <div class="mcat-ov"></div>
-      <div class="mcat-body">
-        <span class="mcat-tag green">Bienestar</span>
-        <h3>Salud & Apoyo</h3>
-        <p>Médicos en español y grupos de ayuda</p>
-        <span class="mcat-arrow">Ver guías →</span>
-      </div>
-    </a>
-  </div>
-</section>
-
-<!-- ══ NOTICIAS ══ -->
-<section class="sec sec-off" id="noticias">
-  <span class="eyebrow eb-red">🗞 Actualidad</span>
-  <h2 class="sec-h sh-blue">Noticias para la comunidad</h2>
-  <p class="sec-sub">Información relevante sobre migración, leyes y recursos en Hamburg.</p>
-  <div class="news-grid">
-    <!-- ✏️ NOTICIAS: cambia título, descripción, fecha y foto de cada noticia -->
-    <div class="news-feat">
-      <a href="#" class="ncard">
-        <img class="ncard-img" src="https://images.unsplash.com/photo-1599946347371-68eb71b16afc?auto=format&fit=crop&w=900&q=80" alt="Hamburg" loading="lazy"/>
-        <div class="ncard-body">
-          <span class="ncard-cat cat-i">🔴 Importante</span>
-          <h3>Nueva forma de contactar el Amt für Migration — todo online</h3>
-          <p>El sistema cambió. Ya no se hace todo presencialmente. Aquí explicamos paso a paso cómo usar el nuevo portal para citas, documentos y comunicación con la autoridad migratoria.</p>
-          <div class="ncard-meta">📅 Próximamente · 📂 Migración</div>
+    <nav class="fb-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo-box">🇳🇮</div>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Buscar trámites...">
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="#" class="nav-icon active" title="Inicio"><i class="fa-solid fa-house"></i></a>
+                <a href="#noticias" class="nav-icon" title="Noticias"><i class="fa-solid fa-newspaper"></i></a>
+                <a href="#tramites" class="nav-icon" title="Guías"><i class="fa-solid fa-book"></i></a>
+            </div>
+            <div class="nav-right">
+                <a href="https://wa.me/+49015157841507" class="btn-wa-top"><i class="fa-brands fa-whatsapp"></i> <span>Comunidad</span></a>
+            </div>
         </div>
-      </a>
+    </nav>
+
+    <div class="main-layout">
+        <aside class="sidebar-left">
+            <div class="profile-link">
+                <img src="Infonicahamburg.jpeg" alt="Logo" class="avatar-sm">
+                <span><strong>InfoNica Hamburg</strong></span>
+            </div>
+            <ul class="side-links">
+                <li><a href="#noticias"><i class="fa-solid fa-bullhorn" style="color: #e41e3f;"></i> Noticias Actuales</a></li>
+                <li><a href="#tramites"><i class="fa-solid fa-file-signature" style="color: #1877f2;"></i> Trámites y Papeles</a></li>
+                <li><a href="#finanzas"><i class="fa-solid fa-wallet" style="color: #f7b928;"></i> Dinero y Finanzas</a></li>
+                <li><a href="#vida"><i class="fa-solid fa-house-chimney" style="color: #45bd62;"></i> Vivienda y Alemán</a></li>
+                <li><a href="#apoyo"><i class="fa-solid fa-heart-pulse" style="color: #f02849;"></i> Salud y Apoyo</a></li>
+            </ul>
+        </aside>
+
+        <main class="feed">
+            
+            <section class="card hero-card">
+                <div class="hero-content">
+                    <h1>Tu guía de vida en <em>Hamburg</em></h1>
+                    <p>Todo lo que necesitás para vivir en Alemania, explicado por nicaragüenses.</p>
+                </div>
+            </section>
+
+            <section id="noticias" class="card post">
+                <div class="post-header">
+                    <img src="Infonicahamburg.jpeg" class="avatar-sm">
+                    <div>
+                        <h4>InfoNica Hamburg</h4>
+                        <small>Últimas noticias · <i class="fa-solid fa-earth-americas"></i></small>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <div class="news-item">
+                        <span class="badge red">IMPORTANTE</span>
+                        <h5>Nuevo sistema online en el Amt für Migration</h5>
+                        <p>Las citas y entrega de documentos ahora se gestionan a través del portal digital oficial.</p>
+                    </div>
+                    <div class="news-item">
+                        <span class="badge green">EDUCACIÓN</span>
+                        <h5>Cursos de alemán 2025</h5>
+                        <p>Ya están abiertas las listas para los Integrationskurs gratuitos en Hamburg.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tramites" class="card post">
+                <div class="post-title"><h3>🏛️ Trámites Migratorios y Estudios</h3></div>
+                <div class="grid-guides">
+                    <div class="guide-box">
+                        <i class="fa-solid fa-landmark"></i>
+                        <h5>Amt für Migration</h5>
+                        <p>Guía de residencia y citas.</p>
+                    </div>
+                    <div class="guide-box">
+                        <i class="fa-solid fa-handshake"></i>
+                        <h5>BUT — Asesoría</h5>
+                        <p>Ayuda para familias y niños.</p>
+                    </div>
+                    <div class="guide-box">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <h5>Títulos Univ.</h5>
+                        <p>Cómo homologar tu carrera.</p>
+                    </div>
+                    <div class="guide-box">
+                        <i class="fa-solid fa-scroll"></i>
+                        <h5>Bachillerato</h5>
+                        <p>Validación de secundaria.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="finanzas" class="card post">
+                <div class="post-title"><h3>💰 Finanzas en Alemania</h3></div>
+                <div class="list-items">
+                    <div class="list-row"><i class="fa-solid fa-building-columns"></i> <span><strong>Cuenta Bancaria:</strong> Cómo abrirla sin complicaciones.</span></div>
+                    <div class="list-row"><i class="fa-solid fa-credit-card"></i> <span><strong>Social Card:</strong> Información sobre la tarjeta de beneficios.</span></div>
+                    <div class="list-row"><i class="fa-solid fa-triangle-exclamation"></i> <span><strong>Deudas (Schufa):</strong> Qué hacer si tienes deudas en Alemania.</span></div>
+                </div>
+            </section>
+
+            <section id="vida" class="card post">
+                <div class="post-title"><h3>🏠 Vida Diaria y Salud</h3></div>
+                <div class="grid-guides">
+                    <div class="guide-box color-green">
+                        <i class="fa-solid fa-key"></i>
+                        <h5>Apartamento</h5>
+                        <p>Tips para buscar alquiler.</p>
+                    </div>
+                    <div class="guide-box color-green">
+                        <i class="fa-solid fa-language"></i>
+                        <h5>Cursos Alemán</h5>
+                        <p>Dónde estudiar en HH.</p>
+                    </div>
+                    <div class="guide-box color-red">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        <h5>Médicos</h5>
+                        <p>Atención en español.</p>
+                    </div>
+                    <div class="guide-box color-red">
+                        <i class="fa-solid fa-users"></i>
+                        <h5>Grupos Apoyo</h5>
+                        <p>Comunidad nicaragüense.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar-right">
+            <div class="card info-box">
+                <h4>Comunidad de WhatsApp</h4>
+                <p>¿Tienes una duda específica? Únete al grupo y pregunta a otros nicas en Hamburg.</p>
+                <a href="https://wa.me/+49015157841507" class="btn-wa-full"><i class="fa-brands fa-whatsapp"></i> Unirse ahora</a>
+            </div>
+            <div class="footer-mini">
+                InfoNica Hamburg © 2026 · 🇳🇮🇩🇪
+            </div>
+        </aside>
     </div>
-    <a href="#" class="ncard">
-      <img class="ncard-img" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=500&q=80" alt="Alemán" loading="lazy"/>
-      <div class="ncard-body">
-        <span class="ncard-cat cat-v">🟢 Educación</span>
-        <h3>Cursos de alemán gratuitos disponibles en Hamburg para 2025</h3>
-        <p>Lista actualizada de dónde inscribirse, qué documentos pedir y cómo acceder al Integrationskurs.</p>
-        <div class="ncard-meta">📅 Próximamente · 📂 Vida en HH</div>
-      </div>
-    </a>
-    <a href="#" class="ncard">
-      <img class="ncard-img" src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=500&q=80" alt="Documentos" loading="lazy"/>
-      <div class="ncard-body">
-        <span class="ncard-cat cat-m">🔵 Trámites</span>
-        <h3>Reconocimiento de títulos nicaragüenses: qué cambió en 2025</h3>
-        <p>Nuevas disposiciones para diplomas de bachillerato y universitarios de Nicaragua en Alemania.</p>
-        <div class="ncard-meta">📅 Próximamente · 📂 Trámites</div>
-      </div>
-    </a>
-  </div>
-</section>
 
-<!-- ══ TRÁMITES ══ -->
-<section class="sec sec-white" id="tramites">
-  <span class="eyebrow eb-blue">📋 Documentos</span>
-  <h2 class="sec-h sh-blue">Trámites migratorios</h2>
-  <p class="sec-sub">Guías paso a paso para los papeles más importantes con las autoridades alemanas.</p>
-  <!-- ✏️ GUÍAS: cambia títulos y descripciones cuando tengas el contenido listo -->
-  <div class="glist">
-   <div class="acc">
-  <button class="acc-btn" onclick="toggleAcc(this)">
-    🛡 Beneficios para solicitantes de asilo en Hamburg — Guía completa por sección
-    <i class="acc-ic">▼</i>
-  </button>
-  <div class="acc-body">
-    <div class="acc-inner">
-
-      <p>Si estás solicitando asilo en Alemania, tenés derecho a pedir los <strong>Asylbewerberleistungen</strong> — beneficios oficiales según la ley AsylbLG. Desde enero 2023 los gestiona directamente el <strong>Amt für Migration de Hamburg</strong>. La página oficial está aquí:<br/>
-      🔗 <a href="https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/asylbewerberleistungen-904606" target="_blank">hamburg.de — Asylbewerberleistungen</a></p>
-
-      <p style="margin-top:18px;font-weight:700;color:#1A4DAB;">¿A quién aplica?</p>
-      <p>Podés solicitarlos si tenés: <strong>Aufenthaltsgestattung</strong> (permiso mientras se procesa tu asilo), <strong>Duldung</strong> (tolerancia temporal), o permiso de residencia por §§ 23(1), 24(1) o 25(4) — y no tenés acceso a Bürgergeld ni seguro médico regular.</p>
-
-      <hr style="border:none;border-top:1px solid #e2e8f2;margin:18px 0;"/>
-
-      <p style="font-weight:700;color:#1A4DAB;">📦 Sección 1 — Grundleistungen (Necesidades básicas)</p>
-      <p>Cubre lo esencial para vivir: alimentación, alojamiento, calefacción, ropa, higiene personal y artículos del hogar. También incluye un monto en efectivo para necesidades personales cotidianas.</p>
-      <p style="margin-top:8px;">💳 <strong>Cómo se paga:</strong> En las Erstaufnahmeeinrichtungen (centros de primera acogida) como alojamiento, comida y ropa en especie. Fuera de estos centros, generalmente como dinero en la <strong>SocialCard</strong> (tarjeta Visa sin cuenta bancaria) desde febrero 2024. Cada persona mayor de 18 años recibe su propia tarjeta.</p>
-      <p style="margin-top:8px;">📍 <strong>Dónde solicitarlo:</strong> Amt für Migration — Referat M43<br/>
-      Bargkoppelstieg 14, 22145 Hamburg (Rahlstedt)<br/>
-      Solo con cita previa: <a href="https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/asylbewerberleistungen-904606" target="_blank">reservar cita online</a></p>
-
-      <hr style="border:none;border-top:1px solid #e2e8f2;margin:18px 0;"/>
-
-      <p style="font-weight:700;color:#1A4DAB;">🏥 Sección 2 — Gesundheitsleistungen (Atención médica)</p>
-      <p>Los solicitantes de asilo <strong>no tienen seguro médico regular</strong>, pero sí tienen derecho a atención básica:</p>
-      <ul>
-        <li>Tratamiento médico por enfermedades agudas o dolor</li>
-        <li>Atención dental de urgencia</li>
-        <li>Vacunas obligatorias y controles preventivos necesarios</li>
-        <li>Atención completa durante embarazo y parto</li>
-      </ul>
-      <p style="margin-top:8px;">⏱ <strong>Después de 18 meses</strong> en Alemania, tenés derecho a seguro médico completo (Krankenversicherung) con todas las prestaciones.</p>
-      <p style="margin-top:8px;">📄 <strong>Al llegar:</strong> La Zentrale Erstaufnahme te da una <em>"Bescheinigung zur Vorlage beim Arzt"</em> (certificado para el médico) hasta que recibas tu tarjeta de salud.</p>
-      <p style="margin-top:8px;">📍 <strong>Dónde solicitarlo:</strong> Mismo Referat M43, o directamente en la Zentrale Erstaufnahme si recién llegaste.</p>
-
-      <hr style="border:none;border-top:1px solid #e2e8f2;margin:18px 0;"/>
-
-      <p style="font-weight:700;color:#1A4DAB;">🤰 Sección 3 — Leistungen bei Schwangerschaft und Geburt (Embarazo y nacimiento)</p>
-      <p>Si estás embarazada o acabás de dar a luz, podés pedir beneficios adicionales:</p>
-      <ul>
-        <li>Ropa de maternidad</li>
-        <li>Equipo para el bebé: pañales, bolsa cambiadora, ropa de recién nacido</li>
-        <li>Atención médica completa durante el embarazo y el parto</li>
-      </ul>
-      <p style="margin-top:8px;">📍 <strong>Dónde solicitarlo:</strong> Referat M43 — Bargkoppelstieg 14, 22145 Hamburg<br/>
-      Llevá el <em>Mutterpass</em> (libreta de embarazo) como documento de apoyo.</p>
-
-      <hr style="border:none;border-top:1px solid #e2e8f2;margin:18px 0;"/>
-
-      <p style="font-weight:700;color:#1A4DAB;">📚 Sección 4 — BuT: Bildung und Teilhabe (Educación y Participación)</p>
-      <p><strong>BuT</strong> significa <em>Bildung und Teilhabe</em> — Educación y Participación Social. Son beneficios específicos para <strong>niños, jóvenes y adultos jóvenes</strong> que estudian. Incluye:</p>
-      <ul>
-        <li>Material escolar (mochilas, cuadernos, etc.)</li>
-        <li>Almuerzo en la escuela o guardería</li>
-        <li>Paseos y excursiones escolares</li>
-        <li>Transporte al colegio</li>
-        <li>Clases de apoyo o tutoría</li>
-        <li>Actividades sociales y culturales (deportes, música, etc.) — hasta 15€/mes</li>
-      </ul>
-      <p style="margin-top:8px;">📍 <strong>Dónde solicitarlo:</strong> Referat M43 — Bargkoppelstieg 14, 22145 Hamburg<br/>
-      Llevá la <em>Schulbescheinigung</em> (constancia del colegio) y cualquier factura o presupuesto relacionado.</p>
-
-      <hr style="border:none;border-top:1px solid #e2e8f2;margin:18px 0;"/>
-
-      <p style="font-weight:700;color:#1A4DAB;">⚙️ Sección 5 — Sonstige Leistungen (Otras ayudas especiales)</p>
-      <p>En situaciones especiales, podés solicitar ayudas adicionales no cubiertas por las secciones anteriores. Se evalúan caso por caso. Ejemplos: gastos de transporte por razones médicas, necesidades especiales de personas con discapacidad, o situaciones de emergencia específicas.</p>
-      <p style="margin-top:8px;">📍 <strong>Dónde solicitarlo:</strong> Referat M43 — con cita previa.<br/>
-      📞 Consultas telefónicas: (040) 428 39 – 4399<br/>
-      Miércoles 09:00–11:00 h y 13:00–15:00 h</p>
-
-      <hr style="border:none;border-top:1px solid #e2e8f2;margin:18px 0;"/>
-
-      <p style="font-weight:700;color:#1A4DAB;">📋 Documentos que necesitás para cualquier solicitud</p>
-      <ul>
-        <li>Pasaporte o documento de identidad con tu permiso actual (Aufenthaltsgestattung, Duldung)</li>
-        <li>Comprobantes de ingresos de todos en tu hogar</li>
-        <li>Comprobantes de ahorros o bienes (cuentas, vehículos, propiedades)</li>
-        <li>Contrato de alquiler con montos de renta, calefacción y luz</li>
-        <li>Según el caso: Mutterpass, constancia escolar, facturas médicas, etc.</li>
-        <li>Nachweis über frühere Sozialleistungen (comprobante de ayudas anteriores, si aplica)</li>
-      </ul>
-
-      <div class="tip">
-        💡 <strong>Consejo:</strong> Las citas pueden tardar semanas. Pedila apenas llegues, sin esperar. Si el sistema online no muestra fechas disponibles, revisá todos los días — liberan cupos constantemente.
-      </div>
-
-      <div class="tip red" style="margin-top:10px;">
-        ⚠️ Tenés la obligación de declarar todos tus ingresos y ahorros. Ocultarlos puede cancelar tus beneficios y generar problemas legales graves.
-      </div>
-
-    </div>
-  </div>
-</div>
-    <a href="#" class="gitem">
-      <div class="gnum">🤝</div>
-      <div class="ginfo">
-        <h4>BUT — Beratungs- und Unterstützungsstelle</h4>
-        <p>Qué es, dónde está, cómo pedir asesoría gratuita y para qué tipo de situaciones te ayudan</p>
-      </div>
-      <span class="gbadge b-soon">⏳ Pronto</span>
-    </a>
-    <a href="#" class="gitem">
-      <div class="gnum">🎓</div>
-      <div class="ginfo">
-        <h4>Reconocimiento de título universitario de Nicaragua</h4>
-        <p>Proceso con anabin y KMK, documentos a apostillar, costos y tiempos de respuesta</p>
-      </div>
-      <span class="gbadge b-soon">⏳ Pronto</span>
-    </a>
-    <a href="#" class="gitem">
-      <div class="gnum">📜</div>
-      <div class="ginfo">
-        <h4>Reconocimiento de bachillerato nicaragüense en Alemania</h4>
-        <p>Dónde presentar la solicitud, documentos equivalentes y qué pasa si no está en anabin</p>
-      </div>
-      <span class="gbadge b-soon">⏳ Pronto</span>
-    </a>
-  </div>
-</section>
-
-<!-- ══ FINANZAS ══ -->
-<section class="sec sec-off" id="finanzas">
-  <span class="eyebrow eb-blue">💰 Dinero</span>
-  <h2 class="sec-h sh-blue">Finanzas en Alemania</h2>
-  <p class="sec-sub">Desde abrir tu primera cuenta hasta entender la Sozialcard.</p>
-  <div class="fin-grid">
-    <a href="#" class="fcard">
-      <div class="fcard-icon fi-blue">🏦</div>
-      <h3>Abrir cuenta bancaria</h3>
-      <p>Bancos sin Schufa, documentos que pedirán y mejores opciones para migrantes recién llegados.</p>
-      <span class="fcard-link">Leer guía →</span>
-    </a>
-    <a href="#" class="fcard">
-      <div class="fcard-icon fi-green">💵</div>
-      <h3>Dinero en efectivo</h3>
-      <p>Dónde retirar cash, comisiones, cómo funciona el sistema Geldautomat en Alemania.</p>
-      <span class="fcard-link">Leer guía →</span>
-    </a>
-    <a href="#" class="fcard">
-      <div class="fcard-icon fi-amber">🪪</div>
-      <h3>Social Card (Sozialcard)</h3>
-      <p>Qué es, quién tiene derecho, cómo pedirla y qué descuentos te da en Hamburg.</p>
-      <span class="fcard-link">Leer guía →</span>
-    </a>
-    <a href="#" class="fcard">
-      <div class="fcard-icon fi-red">⚠️</div>
-      <h3>Deudas en Alemania</h3>
-      <p>Qué hacer si tenés deudas, dónde buscar asesoría gratuita (Schuldnerberatung) y cómo negociar.</p>
-      <span class="fcard-link">Leer guía →</span>
-    </a>
-  </div>
-</section>
-
-<!-- ══ VIDA EN HAMBURG ══ -->
-<section class="sec sec-white" id="vida">
-  <span class="eyebrow eb-blue">🏙 Vida diaria</span>
-  <h2 class="sec-h sh-blue">Vivir en Hamburg</h2>
-  <p class="sec-sub">Lo más importante para establecerte: techo e idioma.</p>
-  <div class="glist">
-    <a href="#" class="gitem">
-      <div class="gnum">🏠</div>
-      <div class="ginfo">
-        <h4>Cómo buscar apartamento en Hamburg</h4>
-        <p>Plataformas (Immoscout, WG-Gesucht), documentos que piden, red flags, contratos y derechos</p>
-      </div>
-      <span class="gbadge b-soon">⏳ Pronto</span>
-    </a>
-    <a href="#" class="gitem">
-      <div class="gnum">🇩🇪</div>
-      <div class="ginfo">
-        <h4>Cursos de alemán gratis o económicos en Hamburg</h4>
-        <p>Integrationskurs, VHS, apps gratuitas y grupos de conversación con links y precios actuales</p>
-      </div>
-      <span class="gbadge b-new">✅ Disponible</span>
-    </a>
-  </div>
-</section>
-
-<!-- ══ SALUD & APOYO ══ -->
-<section class="sec sec-off" id="apoyo">
-  <span class="eyebrow eb-red">🤝 Apoyo</span>
-  <h2 class="sec-h sh-blue">Salud & Grupos de apoyo</h2>
-  <p class="sec-sub">No estás solo. Hay médicos y organizaciones que te acompañan.</p>
-  <div class="fin-grid">
-    <a href="#" class="fcard">
-      <div class="fcard-icon fi-blue">🩺</div>
-      <h3>Médicos que hablan español</h3>
-      <p>Lista de médicos generales, especialistas y dentistas hispanohablantes en los barrios de Hamburgo.</p>
-      <span class="fcard-link">Ver lista →</span>
-    </a>
-    <a href="#" class="fcard">
-      <div class="fcard-icon fi-green">🫂</div>
-      <h3>Grupos de apoyo</h3>
-      <p>Organizaciones para migrantes, grupos comunitarios y asesoría psicológica gratuita en Hamburg.</p>
-      <span class="fcard-link">Ver grupos →</span>
-    </a>
-  </div>
-</section>
-
-<!-- ══ FAQ ══ -->
-<section class="sec sec-white">
-  <span class="eyebrow eb-blue">❓ Preguntas frecuentes</span>
-  <h2 class="sec-h sh-blue">Las dudas más comunes</h2>
-  <p class="sec-sub">Respuestas rápidas a lo que más nos preguntan en la comunidad.</p>
-  <!-- ✏️ FAQ: agrega o cambia preguntas y respuestas aquí --><div class="acc">
-  <button class="acc-btn" onclick="toggleAcc(this)">
-    🛡 Beneficios para solicitantes de asilo en Hamburg (AsylbLG) — Guía completa
-    <i class="acc-ic">▼</i>
-  </button>
-  <div class="acc-body">
-    <div class="acc-inner">
-
-      <p>Si estás solicitando asilo en Alemania y necesitás ayuda económica o médica, tenés derecho a solicitar los <strong>Asylbewerberleistungen</strong> — los beneficios para solicitantes de asilo según la ley AsylbLG. Desde enero de 2023, estos trámites los maneja directamente el <strong>Amt für Migration de Hamburg</strong>.</p>
-
-      <p style="margin-top:16px;font-weight:700;">✅ ¿Quién puede pedirlos?</p>
-      <p>Podés solicitarlos si:</p>
-      <ul>
-        <li>Tenés una <strong>Aufenthaltsgestattung</strong> (permiso mientras se procesa tu asilo)</li>
-        <li>Tenés una <strong>Duldung</strong> (tolerancia temporal)</li>
-        <li>Estás en proceso de ingreso por aeropuerto</li>
-        <li>Tenés permiso de residencia por §§ 23(1), 24(1) o 25(4) de la ley de residencia</li>
-        <li>No tenés derecho a Bürgergeld ni a seguro médico regular</li>
-      </ul>
-
-      <p style="margin-top:16px;font-weight:700;">💰 ¿Qué beneficios incluye?</p>
-
-      <p>🍽 <strong>1. Grundleistungen — Necesidades básicas</strong><br/>
-      Cubre alimentación, alojamiento, calefacción, ropa, higiene y artículos del hogar. Se pagan como dinero en efectivo, tarjeta o vales según tu situación.</p>
-
-      <p style="margin-top:10px;">🏥 <strong>2. Leistungen bei Krankheit — Atención médica</strong><br/>
-      Si no tenés seguro médico, cubrís enfermedades agudas y emergencias. Incluye médico, medicamentos y hospitalización urgente.</p>
-
-      <p style="margin-top:10px;">🤰 <strong>3. Leistungen bei Schwangerschaft — Embarazo y nacimiento</strong><br/>
-      Si estás embarazada: ropa de maternidad, equipo para el bebé (pañales, bolsa cambiadora, etc.).</p>
-
-      <p style="margin-top:10px;">📚 <strong>4. Sonstige Leistungen — Otras ayudas</strong><br/>
-      En casos especiales: útiles escolares, transporte, actividades culturales y sociales. Depende de tu situación individual.</p>
-
-      <p style="margin-top:16px;font-weight:700;">⚠️ Importante sobre los montos en 2025:</p>
-      <p>Los beneficios básicos (§3 AsylbLG, primeros 36 meses) bajaron aproximadamente un 4% en 2025. Después de 36 meses en Alemania, los montos se equiparan a los del Bürgergeld.</p>
-
-      <p style="margin-top:16px;font-weight:700;">📋 Documentos que necesitás llevar:</p>
-      <ul>
-        <li>Pasaporte o documento de identidad con tu permiso actual (Aufenthaltsgestattung, Duldung)</li>
-        <li>Comprobantes de ingresos de todos en tu hogar (recibos de salario, ayudas previas, etc.)</li>
-        <li>Comprobantes de ahorros o bienes (cuentas bancarias, vehículos, propiedades)</li>
-        <li>Contrato de alquiler y comprobantes de renta, calefacción y luz</li>
-        <li>Según el caso: cartilla de embarazo, constancia escolar, presupuestos médicos</li>
-      </ul>
-
-      <p style="margin-top:16px;font-weight:700;">📍 Dónde presentar la solicitud:</p>
-      <p><strong>Referat M43 — Amt für Migration</strong><br/>
-      Bargkoppelstieg 14, 22145 Hamburg (Rahlstedt)<br/>
-      🚌 Cómo llegar: S-Bahn hasta Rahlstedt, luego bus</p>
-
-      <p style="margin-top:10px;">🕐 <strong>Atención:</strong> Solo con cita previa. Sin cita no te atienden.<br/>
-      📞 Teléfono consultas: (040) 428 39 – 4399<br/>
-      Miércoles 09:00–11:00 h y 13:00–15:00 h</p>
-
-      <p style="margin-top:10px;">💻 <strong>También podés solicitar online:</strong><br/>
-      El Amt für Migration tiene servicio digital para pedir algunos beneficios sin ir en persona.<br/>
-      🔗 <a href="https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/asylbewerberleistungen-904606" target="_blank">hamburg.de — Asylbewerberleistungen</a></p>
-
-      <div class="tip">
-        💡 <strong>Consejo:</strong> Si es tu primera vez, llevá a alguien que hable alemán o pedí al BUT que te acompañe. Tener todos los documentos completos desde el principio acelera mucho el proceso.
-      </div>
-
-      <div class="tip red" style="margin-top:10px;">
-        ⚠️ Si tenés ingresos propios o ahorros, debés declararlos obligatoriamente. Ocultarlos puede cancelar tus beneficios y generar problemas legales.
-      </div>
-
-    </div>
-  </div>
-</div>
-  <div class="faq-wrap">
-    <div class="acc">
-      <button class="acc-btn" onclick="toggleAcc(this)">¿Cómo pido cita en el Amt für Migration? <i class="acc-ic">▼</i></button>
-      <div class="acc-body"><div class="acc-inner">
-        El sistema cambió recientemente a un portal principalmente online. Publicaremos la guía completa pronto. Mientras tanto, preguntá en nuestra comunidad de WhatsApp.
-        <div class="tip">💡 La gente en WhatsApp comparte experiencias actuales. ¡No dudés en preguntar!</div>
-      </div></div>
-    </div>
-    <div class="acc">
-      <button class="acc-btn" onclick="toggleAcc(this)">¿Qué banco me recomiendan si llegué hace poco? <i class="acc-ic">▼</i></button>
-      <div class="acc-body"><div class="acc-inner">
-        Las opciones más populares sin historial alemán (Schufa) son bancos digitales como <strong>N26</strong> o <strong>Vivid Money</strong>. Abren la cuenta en minutos desde el celular y no requieren Schufa.
-        <div class="tip red">⚠️ En Alemania casi todo se paga por transferencia. Tener cuenta bancaria es esencial desde el primer día.</div>
-      </div></div>
-    </div>
-    <div class="acc">
-      <button class="acc-btn" onclick="toggleAcc(this)">¿Dónde aprendo alemán gratis en Hamburg? <i class="acc-ic">▼</i></button>
-      <div class="acc-body"><div class="acc-inner">
-        <ol>
-          <li><strong>Integrationskurs</strong> — hasta 700 horas subsidiadas si tenés permiso de residencia</li>
-          <li><strong>Volkshochschule Hamburg (VHS)</strong> — cursos accesibles para todos</li>
-          <li><strong>Deutsche Welle</strong> — cursos online 100% gratis</li>
-          <li><strong>Duolingo</strong> — para practicar a diario</li>
-        </ol>
-        <div class="tip">💡 Preguntá en el Jobcenter si sos elegible para el Integrationskurs — es casi gratis.</div>
-      </div></div>
-    </div>
-    <div class="acc">
-      <button class="acc-btn" onclick="toggleAcc(this)">¿Qué es la Sozialcard y quién puede pedirla? <i class="acc-ic">▼</i></button>
-      <div class="acc-body"><div class="acc-inner">
-        La Sozialcard de Hamburg da descuentos en transporte, cultura y deporte para personas con ingresos bajos. Si recibís Bürgergeld, Sozialhilfe u otras ayudas sociales, podés solicitarla. Publicaremos la guía completa próximamente.
-      </div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ SOBRE MÍ — PERSONALIZA ESTA SECCIÓN COMPLETA ══ -->
-<section class="sec sec-off" id="sobre-mi">
-  <div class="about-grid">
-    <div class="about-photo-wrap">
-      <!--
-        ✏️ OPCIÓN A — Con tu foto real:
-        Borrá el div .about-ph de abajo y descomenta esto:
-        <img class="about-photo" src="tu-foto.jpg" alt="Tu nombre" />
-      -->
-      <div class="about-ph">
-        <span>👤</span>
-        <p>Tu foto aquí</p>
-        <p style="font-size:.75rem;opacity:.6;">Reemplazá el placeholder</p>
-      </div>
-      <!-- ✏️ BADGE: cambia el texto del badge decorativo -->
-      <div class="about-badge">🇳🇮→🇩🇪<small>Nica en Hamburg</small></div>
-    </div>
-    <div class="about-text">
+</body>
+</html>
       <span class="eyebrow eb-red">👤 Sobre mí</span>
       <!-- ✏️ CAMBIA: tu nombre, tu historia, tus links -->
       <h2>Hola, soy <span>[Arvid Daniel Cabrera Pozo]</span></h2>
