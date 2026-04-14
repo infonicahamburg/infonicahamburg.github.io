@@ -1,253 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InfoNica Hamburg — Tu guía en Alemania</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoNica Hamburg | Portal Comunitario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="fb-nav">
-        <div class="nav-container">
-            <div class="nav-left">
-                <div class="logo-box">🇳🇮</div>
-                <div class="search-bar">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Buscar trámites...">
+    <header class="ts-header">
+        <div class="header-top">
+            <div class="container">
+                <div class="logo-area" onclick="showSection('home')" style="cursor:pointer">
+                    <span class="logo-text">INFO<strong>NICA</strong></span>
+                    <span class="logo-subtext">HAMBURG</span>
                 </div>
-            </div>
-            <div class="nav-center">
-                <a href="#" class="nav-icon active" title="Inicio"><i class="fa-solid fa-house"></i></a>
-                <a href="#noticias" class="nav-icon" title="Noticias"><i class="fa-solid fa-newspaper"></i></a>
-                <a href="#tramites" class="nav-icon" title="Guías"><i class="fa-solid fa-book"></i></a>
-            </div>
-            <div class="nav-right">
-                <a href="https://wa.me/+49015157841507" class="btn-wa-top"><i class="fa-brands fa-whatsapp"></i> <span>Comunidad</span></a>
+                <nav class="main-nav">
+                    <a href="javascript:void(0)" onclick="showSection('migracion')">Migración</a>
+                    <a href="javascript:void(0)" onclick="showSection('estudios')">Estudios</a>
+                    <a href="javascript:void(0)" onclick="showSection('finanzas')">Finanzas</a>
+                    <a href="javascript:void(0)" onclick="showSection('vida')">Vida Diaria</a>
+                </nav>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <div class="main-layout">
-        <aside class="sidebar-left">
-            <div class="profile-link">
-                <img src="Infonicahamburg.jpeg" alt="Logo" class="avatar-sm">
-                <span><strong>InfoNica Hamburg</strong></span>
-            </div>
-            <ul class="side-links">
-                <li><a href="#noticias"><i class="fa-solid fa-bullhorn" style="color: #e41e3f;"></i> Noticias Actuales</a></li>
-                <li><a href="#tramites"><i class="fa-solid fa-file-signature" style="color: #1877f2;"></i> Trámites y Papeles</a></li>
-                <li><a href="#finanzas"><i class="fa-solid fa-wallet" style="color: #f7b928;"></i> Dinero y Finanzas</a></li>
-                <li><a href="#vida"><i class="fa-solid fa-house-chimney" style="color: #45bd62;"></i> Vivienda y Alemán</a></li>
-                <li><a href="#apoyo"><i class="fa-solid fa-heart-pulse" style="color: #f02849;"></i> Salud y Apoyo</a></li>
-            </ul>
-        </aside>
-
-        <main class="feed">
-            
-            <section class="card hero-card">
-                <div class="hero-content">
-                    <h1>Tu guía de vida en <em>Hamburg</em></h1>
-                    <p>Todo lo que necesitás para vivir en Alemania, explicado por nicaragüenses.</p>
+    <main class="container content-area">
+        
+        <section id="home" class="page-section active">
+            <div class="hero-news">
+                <div class="news-card large">
+                    <div class="image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1449156001437-3a1621dfbe2b?auto=format&fit=crop&w=1200&q=80">
+                    </div>
+                    <div class="news-content">
+                        <span class="category">BIENVENIDO</span>
+                        <h1>Tu Portal de Información en Hamburg</h1>
+                        <p>Selecciona una categoría en el menú superior para ver los trámites detallados y guías paso a paso.</p>
+                        <div class="quick-tags">
+                            <span onclick="showSection('migracion')">#Residencia</span>
+                            <span onclick="showSection('estudios')">#Homologación</span>
+                            <span onclick="showSection('finanzas')">#SocialCard</span>
+                        </div>
+                    </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="noticias" class="card post">
-                <div class="post-header">
-                    <img src="Infonicahamburg.jpeg" class="avatar-sm">
+        <section id="migracion" class="page-section">
+            <div class="section-header">
+                <button class="btn-back" onclick="showSection('home')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                <h2>Trámites Migratorios</h2>
+            </div>
+            <div class="detail-card">
+                <h3><i class="fa-solid fa-landmark"></i> Amt für Migration</h3>
+                <p>Información sobre cómo solicitar citas, renovación de Aufenthaltstitel y cambio de domicilio en Hamburg.</p>
+                <hr>
+                <h3><i class="fa-solid fa-passport"></i> Residencia</h3>
+                <p>Requisitos para nicaragüenses según el tipo de visado o estatus humanitario.</p>
+            </div>
+        </section>
+
+        <section id="estudios" class="page-section">
+            <div class="section-header">
+                <button class="btn-back" onclick="showSection('home')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                <h2>Estudios y Homologación</h2>
+            </div>
+            <div class="detail-grid">
+                <div class="card-item">
+                    <h4><i class="fa-solid fa-graduation-cap"></i> Títulos Universitarios</h4>
+                    <p>Proceso de Anabin y reconocimiento de carreras profesionales.</p>
+                </div>
+                <div class="card-item">
+                    <h4><i class="fa-solid fa-scroll"></i> Bachillerato</h4>
+                    <p>Cómo validar tus notas de secundaria para acceder a un Ausbildung o Universidad.</p>
+                </div>
+                <div class="card-item">
+                    <h4><i class="fa-solid fa-handshake"></i> Asesoría BUT</h4>
+                    <p>Apoyo para materiales escolares y actividades extracurriculares para niños.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="finanzas" class="page-section">
+            <div class="section-header">
+                <button class="btn-back" onclick="showSection('home')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                <h2>Economía y Finanzas</h2>
+            </div>
+            <div class="detail-card">
+                <div class="finance-row">
+                    <i class="fa-solid fa-credit-card"></i>
                     <div>
-                        <h4>InfoNica Hamburg</h4>
-                        <small>Últimas noticias · <i class="fa-solid fa-earth-americas"></i></small>
+                        <h4>Social Card (Bezahlkarte)</h4>
+                        <p>Últimas noticias sobre el funcionamiento de la tarjeta de beneficios en Hamburg.</p>
                     </div>
                 </div>
-                <div class="post-body">
-                    <div class="news-item">
-                        <span class="badge red">IMPORTANTE</span>
-                        <h5>Nuevo sistema online en el Amt für Migration</h5>
-                        <p>Las citas y entrega de documentos ahora se gestionan a través del portal digital oficial.</p>
-                    </div>
-                    <div class="news-item">
-                        <span class="badge green">EDUCACIÓN</span>
-                        <h5>Cursos de alemán 2025</h5>
-                        <p>Ya están abiertas las listas para los Integrationskurs gratuitos en Hamburg.</p>
+                <div class="finance-row">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <div>
+                        <h4>Cuenta Bancaria</h4>
+                        <p>Bancos recomendados para nicaragüenses y requisitos de apertura.</p>
                     </div>
                 </div>
-            </section>
-
-            <section id="tramites" class="card post">
-                <div class="post-title"><h3>🏛️ Trámites Migratorios y Estudios</h3></div>
-                <div class="grid-guides">
-                    <div class="guide-box">
-                        <i class="fa-solid fa-landmark"></i>
-                        <h5>Amt für Migration</h5>
-                        <p>Guía de residencia y citas.</p>
-                    </div>
-                    <div class="guide-box">
-                        <i class="fa-solid fa-handshake"></i>
-                        <h5>BUT — Asesoría</h5>
-                        <p>Ayuda para familias y niños.</p>
-                    </div>
-                    <div class="guide-box">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <h5>Títulos Univ.</h5>
-                        <p>Cómo homologar tu carrera.</p>
-                    </div>
-                    <div class="guide-box">
-                        <i class="fa-solid fa-scroll"></i>
-                        <h5>Bachillerato</h5>
-                        <p>Validación de secundaria.</p>
+                <div class="finance-row">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <h4>Deudas (Schufa)</h4>
+                        <p>Qué es la Schufa y cómo mantener un historial crediticio limpio en Alemania.</p>
                     </div>
                 </div>
-            </section>
-
-            <section id="finanzas" class="card post">
-                <div class="post-title"><h3>💰 Finanzas en Alemania</h3></div>
-                <div class="list-items">
-                    <div class="list-row"><i class="fa-solid fa-building-columns"></i> <span><strong>Cuenta Bancaria:</strong> Cómo abrirla sin complicaciones.</span></div>
-                    <div class="list-row"><i class="fa-solid fa-credit-card"></i> <span><strong>Social Card:</strong> Información sobre la tarjeta de beneficios.</span></div>
-                    <div class="list-row"><i class="fa-solid fa-triangle-exclamation"></i> <span><strong>Deudas (Schufa):</strong> Qué hacer si tienes deudas en Alemania.</span></div>
-                </div>
-            </section>
-
-            <section id="vida" class="card post">
-                <div class="post-title"><h3>🏠 Vida Diaria y Salud</h3></div>
-                <div class="grid-guides">
-                    <div class="guide-box color-green">
-                        <i class="fa-solid fa-key"></i>
-                        <h5>Apartamento</h5>
-                        <p>Tips para buscar alquiler.</p>
-                    </div>
-                    <div class="guide-box color-green">
-                        <i class="fa-solid fa-language"></i>
-                        <h5>Cursos Alemán</h5>
-                        <p>Dónde estudiar en HH.</p>
-                    </div>
-                    <div class="guide-box color-red">
-                        <i class="fa-solid fa-user-doctor"></i>
-                        <h5>Médicos</h5>
-                        <p>Atención en español.</p>
-                    </div>
-                    <div class="guide-box color-red">
-                        <i class="fa-solid fa-users"></i>
-                        <h5>Grupos Apoyo</h5>
-                        <p>Comunidad nicaragüense.</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <aside class="sidebar-right">
-            <div class="card info-box">
-                <h4>Comunidad de WhatsApp</h4>
-                <p>¿Tienes una duda específica? Únete al grupo y pregunta a otros nicas en Hamburg.</p>
-                <a href="https://wa.me/+49015157841507" class="btn-wa-full"><i class="fa-brands fa-whatsapp"></i> Unirse ahora</a>
             </div>
-            <div class="footer-mini">
-                InfoNica Hamburg © 2026 · 🇳🇮🇩🇪
+        </section>
+
+        <section id="vida" class="page-section">
+            <div class="section-header">
+                <button class="btn-back" onclick="showSection('home')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                <h2>Vida Diaria en Hamburg</h2>
             </div>
-        </aside>
-    </div>
+            <div class="detail-grid">
+                <div class="card-item">
+                    <h4><i class="fa-solid fa-house-chimney"></i> Apartamentos</h4>
+                    <p>Plataformas de búsqueda y documentos necesarios (WBS, Schufa, etc.).</p>
+                </div>
+                <div class="card-item">
+                    <h4><i class="fa-solid fa-user-doctor"></i> Salud</h4>
+                    <p>Directorio de médicos que hablan español y sistema de seguros.</p>
+                </div>
+                <div class="card-item">
+                    <h4><i class="fa-solid fa-users"></i> Grupos de Apoyo</h4>
+                    <p>Encuentros comunitarios y redes de ayuda mutua.</p>
+                </div>
+            </div>
+        </section>
 
-</body>
-</html>
-      <span class="eyebrow eb-red">👤 Sobre mí</span>
-      <!-- ✏️ CAMBIA: tu nombre, tu historia, tus links -->
-      <h2>Hola, soy <span>[Arvid Daniel Cabrera Pozo]</span></h2>
-      <p>Soy nicaragüense viviendo en Hamburg desde octubre del 2024. Llegué sin saber casi nada de cómo funciona todo aquí — los trámites, el idioma, el sistema bancario. Todo fue aprendizaje difícil.</p>
-      <p>Creé InfoNica Hamburg porque quiero que las personas que llegan después de mí tengan un camino más fácil. Toda la información aquí la conseguí por experiencia propia o de nuestra comunidad.</p>
-      <p>Si tenés preguntas, sugerencias o querés contribuir, escribime. Esta página es para todos los nicas en Hamburg.</p>
-      <div class="about-social">
-        <a href="https://wa.me/+49015157841507" class="soc-btn soc-wa" target="_blank">💬 WhatsApp</a>
-        <a href="mailto:infonicahamburg@gmail.com" class="soc-btn soc-email">✉️ Escribirme</a>
-      </div>
-    </div>
-  </div>
-</section>
+    </main>
 
-<!-- ══ CTA ══ -->
-<section class="sec sec-white">
-  <div class="cta-box">
-    <div class="cta-inner">
-      <span class="eyebrow eb-white">💬 Comunidad</span>
-      <h2>¿Tenés preguntas?<br/>Estamos en WhatsApp</h2>
-      <p>Únete a la comunidad InfoNica Hamburg. Preguntamos, compartimos experiencias y nos ayudamos entre todos — gratis y en español.</p>
-      <div class="cta-btns">
-        <a href="https://wa.me/+49015157841507" target="_blank" class="btn-wa-big">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.112 1.528 5.837L.057 23.998l6.304-1.654A11.954 11.954 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.034-1.388l-.36-.214-3.742.982.999-3.648-.235-.374A9.808 9.808 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-          Unirse al WhatsApp
-        </a>
-        <a href="mailto:infonicahamburg@gmail.com" class="btn-email">✉️ Enviarnos un correo</a>
-      </div>
-      <!-- Guía correo -->
-      <div class="email-tip">
-        <h4>📧 ¿Cómo crear el correo de la página?</h4>
-        <p>Creá una cuenta de Gmail dedicada: <strong>infonicahamburg@gmail.com</strong> — ve a <a href="https://gmail.com" target="_blank">gmail.com</a> → "Crear cuenta". Así separás lo personal del proyecto. Cuando tengas dominio propio (infonicahamburg.de), podés conectarlo con <a href="https://zoho.com/mail" target="_blank">Zoho Mail</a> que tiene correo personalizado gratis.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    <footer class="ts-footer">
+        <div class="container">
+            <p>&copy; 2026 InfoNica Hamburg | <a href="https://wa.me/+49015157841507" style="color:inherit">Contacto WhatsApp</a></p>
+        </div>
+    </footer>
 
-<!-- FOOTER -->
-<div class="flag-bar"></div>
-<footer>
-  <div class="foot-top">
-    <div class="foot-brand">
-      <div class="f-logo">InfoNica <span>Hamburg</span></div>
-      <p>Información práctica para la comunidad nicaragüense en Hamburgo. Hecho con ❤️ por nicas para nicas.</p>
-    </div>
-    <div class="foot-col">
-      <h4>Trámites</h4>
-      <ul>
-        <li><a href="#tramites">Amt für Migration</a></li>
-        <li><a href="#tramites">BUT — Asesoría</a></li>
-        <li><a href="#tramites">Título universitario</a></li>
-        <li><a href="#tramites">Bachillerato</a></li>
-      </ul>
-    </div>
-    <div class="foot-col">
-      <h4>Finanzas</h4>
-      <ul>
-        <li><a href="#finanzas">Cuenta bancaria</a></li>
-        <li><a href="#finanzas">Efectivo</a></li>
-        <li><a href="#finanzas">Social Card</a></li>
-        <li><a href="#finanzas">Deudas</a></li>
-      </ul>
-    </div>
-    <div class="foot-col">
-      <h4>Vida & Apoyo</h4>
-      <ul>
-        <li><a href="#vida">Buscar apartamento</a></li>
-        <li><a href="#vida">Cursos de alemán</a></li>
-        <li><a href="#apoyo">Médicos en español</a></li>
-        <li><a href="#apoyo">Grupos de apoyo</a></li>
-      </ul>
-    </div>
-    <div class="foot-col">
-      <h4>Contacto</h4>
-      <ul>
-        <li><a href="#sobre-mi">Sobre mí</a></li>
-        <li><a href="https://wa.me/TUNUMERO" target="_blank">WhatsApp</a></li>
-        <li><a href="mailto:infonicahamburg@gmail.com">Correo</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="foot-bottom">
-    <p>© 2025 InfoNica Hamburg · Para nicaragüenses en Alemania 🇳🇮🇩🇪</p>
-    <p>Hecho con amor desde Hamburg</p>
-  </div>
-</footer>
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
 
-<script>
-  function toggleMenu(){document.getElementById('drawer').classList.toggle('open');}
-  function closeMenu(){document.getElementById('drawer').classList.remove('open');}
-  function toggleAcc(btn){
-    const body=btn.nextElementSibling;
-    const isOpen=btn.classList.contains('open');
-    document.querySelectorAll('.acc-btn.open').forEach(b=>{b.classList.remove('open');b.nextElementSibling.style.maxHeight=null;});
-    if(!isOpen){btn.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
-  }
-</script>
+            // Mostrar la sección seleccionada
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.add('active');
+                // Volver arriba automáticamente al cambiar
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+
 </body>
 </html>
