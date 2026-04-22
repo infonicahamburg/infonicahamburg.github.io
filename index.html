@@ -1,31 +1,73 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>InfoNicaHamburg - Portal Integral</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } }
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    boxShadow: {
+                        glow: '0 0 0 1px rgba(255,255,255,0.08), 0 20px 80px rgba(0,0,0,0.35)'
+                    }
+                }
+            }
         }
     </script>
     <style>
-        body { background-color: #09090b; color: #f4f4f5; }
-        .bento-card { transition: all 0.3s ease; border: 1px solid rgba(63, 63, 70, 0.3); background-color: rgba(24, 24, 27, 0.4); }
-        .active-tab { background-color: #27272a; color: white; border: 1px solid #3f3f46; }
+        :root {
+            --bg: #09090b;
+            --panel: rgba(24, 24, 27, 0.66);
+            --panel-strong: rgba(39, 39, 42, 0.92);
+            --stroke: rgba(255,255,255,0.08);
+        }
+        html, body {
+            background:
+                radial-gradient(circle at top left, rgba(244,114,182,0.12), transparent 28%),
+                radial-gradient(circle at top right, rgba(125,211,252,0.10), transparent 24%),
+                radial-gradient(circle at bottom left, rgba(167,243,208,0.10), transparent 24%),
+                linear-gradient(180deg, #09090b 0%, #0a0a0c 100%);
+            color: #f4f4f5;
+        }
+        body { margin: 0; font-family: Inter, sans-serif; }
+        .bento-card {
+            transition: all 0.28s ease;
+            border: 1px solid var(--stroke);
+            background: var(--panel);
+            backdrop-filter: blur(14px);
+        }
+        .bento-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.14);
+            background: rgba(39,39,42,0.72);
+        }
+        .active-tab {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.14);
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeIn 0.42s ease-out forwards; }
+        .soft-border {
+            border: 1px solid rgba(255,255,255,0.08);
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
+
     <script type="text/babel">
         const { useState } = React;
 
@@ -40,11 +82,53 @@
                 briefcase: '<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
                 social: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10"/>'
             };
-            return <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: icons[name] }} />;
+
+            return (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    dangerouslySetInnerHTML={{ __html: icons[name] }}
+                />
+            );
         };
 
+        const SectionBanner = ({ label, title, text, image, tint = 'from-pink-400/25 via-transparent to-transparent' }) => (
+            <div className="overflow-hidden rounded-[2rem] soft-border bg-zinc-900/60 shadow-glow">
+                <div className="grid lg:grid-cols-[1.1fr_.9fr]">
+                    <div className="p-6 md:p-8 lg:p-10">
+                        <span className="inline-flex items-center rounded-full bg-white/8 px-3 py-1 text-[10px] font-bold tracking-[0.25em] text-zinc-200 uppercase">
+                            {label}
+                        </span>
+                        <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
+                            {title}
+                        </h2>
+                        <p className="mt-4 max-w-xl text-sm md:text-base text-zinc-300 leading-relaxed">
+                            {text}
+                        </p>
+                    </div>
+
+                    <div className="relative min-h-[220px] lg:min-h-full">
+                        <img
+                            src={image}
+                            alt={title}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-tr ${tint} to-black/10`} />
+                    </div>
+                </div>
+            </div>
+        );
+
         const DOCTORS_FULL = [
-            { cat: 'Cabecera', name: 'Zawa Othman', addr: 'Gurlittstraße 31-33, 20099 Hamburg', telf: '040 246460', note: 'Fachärztin für Allgemeinmedizin. Español no confirmado.' },
             { cat: 'Cabecera', name: 'Dra. Beatriz H. Cañas de Sandberger', addr: 'Burmesterstr. 2, 22305 Hamburg', telf: '040 294165', note: 'Allgemeinmedizin, Tropenmedizin y Migrantenmedizin. Habla español.' },
             { cat: 'Cabecera', name: 'Dra. Joneth Mayorca Parra', addr: 'Washingtonallee 14A, 22111 Hamburg', telf: '040 55643224', note: 'De Venezuela. Formularios en español. Acepta cualquier seguro.' },
             { cat: 'Cabecera', name: 'Elena Kohl', addr: 'Bei der Apostelkirche 20, 20257 Hamburg', telf: '040 409 814', note: 'Entrada histórica; verificar si la consulta sigue activa.' },
@@ -60,9 +144,9 @@
             { cat: 'Pediatría', name: 'Dr. Marie Coen Schäfer', addr: 'Pestalozzistraße 15, 22305 Hamburg', telf: '040 61 61 63' },
             { cat: 'Pediatría', name: 'Dr. med. Marianne Kilian', addr: 'Eppendorfer Landstraße 74, 20249 Hamburg', telf: '040 48 20 36' },
             { cat: 'Pediatría', name: 'Dr. med. Laima Petrick', addr: 'August-Krogmann-Str. 14a, 22159 Hamburg', telf: '040 643 1777' },
-            { cat: 'Pediatría', name: 'Dr. med. Bernd Friedrich', addr: 'Neue Große Bergstr. 7, 22767 Hamburg', telf: '040 38 22 22' },
+            { cat: 'Pediatría', name: 'Dr. med. Bernd Friedrich', addr: 'Neue Große Bergstraße 7, 22767 Hamburg', telf: '040 38 22 22' },
 
-            { cat: 'Dentista', name: 'Zahnarztpraxis von Schuler Alarcon', addr: 'Böttgerstraße 12, 20148 Hamburg', telf: '040 456 547', note: 'Marianela von Schuler Alarcon y Veronica Höppner-Rohder. Atención en español, inglés y lengua de signos.' },
+            { cat: 'Dentista', name: 'Zahnarztpraxis von Schuler Alarcon', addr: 'Böttgerstraße 12, 20148 Hamburg', telf: '040 456 547', note: 'Atención en español, inglés y lengua de signos.' },
             { cat: 'Dentista', name: 'Zahnarztpraxis Silva-Bielecke & Dr. Heinz Gordon', addr: 'Holsteinischer Kamp 1, 22081 Hamburg', telf: '040 20976237', note: 'Sonia Rojas habla español. Acepta seguro público y privado.' },
             { cat: 'Dentista', name: 'Dentista Hamburg', addr: 'Speersort 8 (Eingang Mönckebergstr. 17), 20095 Hamburg', telf: '040 344 544', note: 'Clínica especialista en implantes, endodoncia y periodoncia. Atención en español. Abiertos sábados y domingos.' },
 
@@ -126,35 +210,93 @@
                 ? newsItems
                 : newsItems.filter(n => n.type === newsFilter);
 
+            const SECTION_IMAGES = {
+                inicio: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80',
+                noticias: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1600&q=80',
+                salud: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80',
+                finanzas: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80',
+                amt: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80',
+                empleo: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=80',
+                social: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80',
+                edu: 'https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1600&q=80'
+            };
+
             const DashboardHome = () => (
                 <div className="space-y-8">
-                    <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                        {DASHBOARD_CARDS.map((card) => (
-                            <div key={card.title} className="bento-card p-5 rounded-3xl">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-xs uppercase tracking-widest text-zinc-500">{card.title}</span>
-                                    <Icon name={card.icon} />
+                    <section className="overflow-hidden rounded-[2.5rem] soft-border bg-zinc-900/60 shadow-glow">
+                        <div className="grid gap-0 lg:grid-cols-[1.15fr_.85fr]">
+                            <div className="p-6 sm:p-8 md:p-10 lg:p-12">
+                                <span className="inline-flex items-center rounded-full bg-pink-400/10 px-3 py-1 text-[10px] font-bold tracking-[0.25em] text-pink-200 uppercase">
+                                    Portal integral
+                                </span>
+                                <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[0.95]">
+                                    InfoNicaHamburg
+                                </h1>
+                                <p className="mt-5 max-w-2xl text-sm sm:text-base text-zinc-300 leading-relaxed">
+                                    La plataforma centralizada para la comunidad nicaragüense e hispana en Hamburgo, con acceso rápido a salud, noticias, empleo, trámites y educación.
+                                </p>
+
+                                <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                    {DASHBOARD_CARDS.map((card) => (
+                                        <div key={card.title} className="rounded-3xl border border-white/8 bg-white/5 p-4">
+                                            <div className="flex items-center justify-between text-zinc-400">
+                                                <span className="text-[10px] uppercase tracking-[0.22em]">{card.title}</span>
+                                                <Icon name={card.icon} />
+                                            </div>
+                                            <div className="mt-3 text-2xl sm:text-3xl font-extrabold">{card.value}</div>
+                                            <div className="mt-1 text-xs sm:text-sm text-zinc-400">{card.desc}</div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div className="mt-3 text-3xl font-bold">{card.value}</div>
-                                <div className="mt-1 text-sm text-zinc-400">{card.desc}</div>
+
+                                <div className="mt-8 flex flex-wrap gap-3">
+                                    <button onClick={() => setTab('salud')} className="rounded-full bg-pink-300/15 px-5 py-3 text-sm font-semibold text-pink-100 border border-pink-300/20">
+                                        Abrir salud
+                                    </button>
+                                    <button onClick={() => setTab('noticias')} className="rounded-full bg-sky-300/15 px-5 py-3 text-sm font-semibold text-sky-100 border border-sky-300/20">
+                                        Ver noticias
+                                    </button>
+                                    <button onClick={() => setTab('amt')} className="rounded-full bg-emerald-300/15 px-5 py-3 text-sm font-semibold text-emerald-100 border border-emerald-300/20">
+                                        Trámites
+                                    </button>
+                                </div>
                             </div>
-                        ))}
+
+                            <div className="relative min-h-[280px] lg:min-h-full">
+                                <img
+                                    src={SECTION_IMAGES.inicio}
+                                    alt="Hamburgo"
+                                    className="absolute inset-0 h-full w-full object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-tr from-black/65 via-black/18 to-pink-300/15" />
+                                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 lg:p-8">
+                                    <div className="rounded-3xl border border-white/12 bg-black/30 p-4 backdrop-blur-xl">
+                                        <p className="text-xs uppercase tracking-[0.25em] text-zinc-200">Acceso rápido</p>
+                                        <p className="mt-2 text-sm text-zinc-100/90">
+                                            Todo lo importante de la comunidad en una sola pantalla, optimizado para móvil.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bento-card p-6 rounded-3xl">
-                            <h3 className="text-xl font-bold mb-3">Accesos rápidos</h3>
+                        <div className="bento-card p-6 rounded-[2rem]">
+                            <h3 className="text-xl font-bold mb-3 text-pink-100">Accesos rápidos</h3>
                             <div className="grid grid-cols-2 gap-3">
-                                <button onClick={() => setTab('salud')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Salud</button>
-                                <button onClick={() => setTab('noticias')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Noticias</button>
-                                <button onClick={() => setTab('amt')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Migration Amt</button>
-                                <button onClick={() => setTab('edu')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Educación</button>
+                                <button onClick={() => setTab('salud')} className="rounded-2xl bg-pink-300/10 border border-pink-300/15 py-3 text-sm font-semibold text-pink-100">Salud</button>
+                                <button onClick={() => setTab('noticias')} className="rounded-2xl bg-sky-300/10 border border-sky-300/15 py-3 text-sm font-semibold text-sky-100">Noticias</button>
+                                <button onClick={() => setTab('amt')} className="rounded-2xl bg-emerald-300/10 border border-emerald-300/15 py-3 text-sm font-semibold text-emerald-100">Migration Amt</button>
+                                <button onClick={() => setTab('edu')} className="rounded-2xl bg-amber-300/10 border border-amber-300/15 py-3 text-sm font-semibold text-amber-100">Educación</button>
                             </div>
                         </div>
 
-                        <div className="bento-card p-6 rounded-3xl">
-                            <h3 className="text-xl font-bold mb-3">Hoy conviene revisar</h3>
-                            <ul className="space-y-3 text-sm text-zinc-400">
+                        <div className="bento-card p-6 rounded-[2rem]">
+                            <h3 className="text-xl font-bold mb-3 text-sky-100">Hoy conviene revisar</h3>
+                            <ul className="space-y-3 text-sm text-zinc-300">
                                 <li>• Citas médicas y teléfonos de contacto.</li>
                                 <li>• Noticias oficiales y comunitarias.</li>
                                 <li>• Trámites del portal de Hamburgo.</li>
@@ -166,44 +308,60 @@
 
             return (
                 <div className="min-h-screen flex flex-col md:flex-row">
-                    <nav className="w-full md:w-64 bg-zinc-950 border-r border-zinc-900 p-6 space-y-2 sticky top-0 h-auto md:h-screen">
-                        <div className="flex items-center gap-3 mb-10 px-2">
-                            <img src="./Infonicahamburg.jpeg" className="w-8 h-8 rounded-lg" />
+                    <nav className="w-full md:w-64 bg-zinc-950/95 border-r border-white/8 p-4 sm:p-6 space-y-2 sticky top-0 h-auto md:h-screen">
+                        <div className="flex items-center gap-3 mb-6 md:mb-10 px-2">
+                            <img src="./Infonicahamburg.jpeg" className="w-9 h-9 rounded-xl object-cover" alt="InfoNicaHamburg" />
                             <span className="font-bold text-lg">InfoNica</span>
                         </div>
-                        {[
-                            { id: 'inicio', label: 'Inicio', icon: 'home' },
-                            { id: 'noticias', label: 'News Hub', icon: 'news' },
-                            { id: 'salud', label: 'Salud', icon: 'health' },
-                            { id: 'finanzas', label: 'Finanzas', icon: 'finance' },
-                            { id: 'amt', label: 'Migration Amt', icon: 'gov' },
-                            { id: 'empleo', label: 'Agencia Empleo', icon: 'briefcase' },
-                            { id: 'social', label: 'SocialCard', icon: 'social' },
-                            { id: 'edu', label: 'Educación', icon: 'edu' },
-                        ].map(item => (
-                            <button
-                                key={item.id}
-                                onClick={() => setTab(item.id)}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${tab === item.id ? 'active-tab' : 'text-zinc-500 hover:bg-zinc-900'}`}
-                            >
-                                <Icon name={item.icon} /> {item.label}
-                            </button>
-                        ))}
+
+                        <div className="md:space-y-2 flex md:block gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                            {[
+                                { id: 'inicio', label: 'Inicio', icon: 'home' },
+                                { id: 'noticias', label: 'News Hub', icon: 'news' },
+                                { id: 'salud', label: 'Salud', icon: 'health' },
+                                { id: 'finanzas', label: 'Finanzas', icon: 'finance' },
+                                { id: 'amt', label: 'Migration Amt', icon: 'gov' },
+                                { id: 'empleo', label: 'Agencia Empleo', icon: 'briefcase' },
+                                { id: 'social', label: 'SocialCard', icon: 'social' },
+                                { id: 'edu', label: 'Educación', icon: 'edu' },
+                            ].map(item => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setTab(item.id)}
+                                    className={`whitespace-nowrap md:whitespace-normal w-auto md:w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all ${
+                                        tab === item.id ? 'active-tab' : 'text-zinc-400 hover:bg-white/5'
+                                    }`}
+                                >
+                                    <Icon name={item.icon} />
+                                    {item.label}
+                                </button>
+                            ))}
+                        </div>
                     </nav>
 
-                    <main className="flex-1 p-6 md:p-12 max-w-5xl mx-auto w-full animate-fade">
-
+                    <main className="flex-1 p-4 sm:p-6 md:p-10 lg:p-12 max-w-6xl mx-auto w-full animate-fade">
                         {tab === 'inicio' && <DashboardHome />}
 
                         {tab === 'noticias' && (
                             <div className="space-y-8">
-                                <h2 className="text-3xl font-bold">News Hub</h2>
+                                <SectionBanner
+                                    label="News Hub"
+                                    title="Noticias oficiales, comunitarias y prensa"
+                                    text="Aquí puedes centralizar contenido confiable de BAMF, la comunidad y COSMO, con visuales más claras y navegación cómoda en teléfono."
+                                    image={SECTION_IMAGES.noticias}
+                                    tint="from-sky-400/20 via-transparent to-transparent"
+                                />
+
                                 <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
                                     {['Todos', 'Oficial', 'Comunidad', 'Radio/Prensa'].map(f => (
                                         <button
                                             key={f}
                                             onClick={() => setNewsFilter(f)}
-                                            className={`px-4 py-2 rounded-full text-xs font-bold border ${newsFilter === f ? 'bg-white text-black border-white' : 'bg-zinc-900 text-zinc-500 border-zinc-800'}`}
+                                            className={`px-4 py-2 rounded-full text-xs font-bold border ${
+                                                newsFilter === f
+                                                    ? 'bg-white text-black border-white'
+                                                    : 'bg-zinc-900 text-zinc-400 border-zinc-800'
+                                            }`}
                                         >
                                             {f}
                                         </button>
@@ -212,11 +370,13 @@
 
                                 <div className="grid gap-4">
                                     {filteredNews.map((item) => (
-                                        <div key={item.title} className="bento-card p-6 rounded-3xl">
-                                            <span className="text-[10px] font-bold px-2 py-1 rounded bg-white/10">{item.tag}</span>
-                                            <h4 className="font-bold mt-3">{item.title}</h4>
-                                            <p className="text-sm text-zinc-400 mt-2">{item.text}</p>
-                                            <a href={item.href} target="_blank" rel="noreferrer" className="text-xs text-zinc-500 mt-4 block underline">
+                                        <div key={item.title} className="bento-card p-6 rounded-[2rem]">
+                                            <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-white/8 text-zinc-200">
+                                                {item.tag}
+                                            </span>
+                                            <h4 className="font-bold mt-3 text-lg">{item.title}</h4>
+                                            <p className="text-sm text-zinc-300 mt-2">{item.text}</p>
+                                            <a href={item.href} target="_blank" rel="noreferrer" className="text-xs text-zinc-400 mt-4 block underline">
                                                 Ver fuente
                                             </a>
                                         </div>
@@ -226,49 +386,71 @@
                         )}
 
                         {tab === 'salud' && (
-                            <div className="space-y-12">
+                            <div className="space-y-10">
+                                <SectionBanner
+                                    label="Salud"
+                                    title="Doctores que hablan español en Hamburgo"
+                                    text="Directorio visual y optimizado para móvil. Las entradas con datos dudosos quedan marcadas para revisión antes de publicar como definitivas."
+                                    image={SECTION_IMAGES.salud}
+                                    tint="from-emerald-400/20 via-transparent to-transparent"
+                                />
+
                                 <section>
-                                    <h2 className="text-3xl font-bold mb-6">Doctores que hablan Español</h2>
-                                    <div className="bg-zinc-900/50 rounded-[2.5rem] border border-zinc-800 overflow-hidden">
-                                        <table className="w-full text-left text-sm">
-                                            <thead className="bg-zinc-900">
-                                                <tr>
-                                                    <th className="p-4 text-zinc-500 font-medium">Especialidad</th>
-                                                    <th className="p-4 text-zinc-500 font-medium">Nombre</th>
-                                                    <th className="p-4 text-zinc-500 font-medium">Dirección / Notas</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-zinc-800">
-                                                {DOCTORS_FULL.map((d, i) => (
-                                                    <tr key={i} className="hover:bg-zinc-800/30">
-                                                        <td className="p-4 align-top">
-                                                            <span className="text-emerald-500 font-bold text-[10px] uppercase tracking-tighter">{d.cat}</span>
-                                                        </td>
-                                                        <td className="p-4 align-top font-semibold text-zinc-100">{d.name}</td>
-                                                        <td className="p-4 align-top text-zinc-400">
-                                                            <div className="text-xs">{d.addr}</div>
-                                                            {d.telf && <div className="text-emerald-600 font-mono mt-1">{d.telf}</div>}
-                                                            {d.note && <div className="text-[10px] mt-1 italic text-zinc-500">{d.note}</div>}
-                                                        </td>
+                                    <div className="bg-zinc-900/50 rounded-[2rem] border border-zinc-800 overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full min-w-[920px] text-left text-sm">
+                                                <thead className="bg-zinc-900">
+                                                    <tr>
+                                                        <th className="p-4 text-zinc-400 font-medium">Especialidad</th>
+                                                        <th className="p-4 text-zinc-400 font-medium">Nombre</th>
+                                                        <th className="p-4 text-zinc-400 font-medium">Dirección / Notas</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody className="divide-y divide-zinc-800">
+                                                    {DOCTORS_FULL.map((d, i) => (
+                                                        <tr key={i} className="hover:bg-zinc-800/30">
+                                                            <td className="p-4 align-top">
+                                                                <span className="text-emerald-300 font-bold text-[10px] uppercase tracking-[0.22em]">
+                                                                    {d.cat}
+                                                                </span>
+                                                            </td>
+                                                            <td className="p-4 align-top font-semibold text-zinc-100">{d.name}</td>
+                                                            <td className="p-4 align-top text-zinc-300">
+                                                                <div className="text-xs">{d.addr}</div>
+                                                                {d.telf && <div className="text-emerald-300 font-mono mt-1">{d.telf}</div>}
+                                                                {d.note && <div className="text-[10px] mt-1 italic text-zinc-500">{d.note}</div>}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </section>
 
-                                <section className="pt-10 border-t border-zinc-900">
+                                <section className="pt-4">
                                     <h2 className="text-2xl font-bold mb-6">Apps y Búsqueda Online</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="bento-card p-8 rounded-3xl">
-                                            <h4 className="font-bold text-blue-500 mb-2">Doctolib</h4>
-                                            <p className="text-sm text-zinc-400">Filtra por idioma del doctor y revisa disponibilidad.</p>
-                                            <a href="https://www.doctolib.de" className="mt-4 block text-xs underline font-bold tracking-widest">ABRIR WEB</a>
+                                        <div className="bento-card p-8 rounded-[2rem] overflow-hidden">
+                                            <div className="aspect-[16/9] overflow-hidden rounded-3xl mb-5">
+                                                <img src={SECTION_IMAGES.salud} alt="Salud" className="w-full h-full object-cover" loading="lazy" />
+                                            </div>
+                                            <h4 className="font-bold text-pink-100 mb-2">Doctolib</h4>
+                                            <p className="text-sm text-zinc-300">La herramienta más útil para filtrar por idioma del doctor y disponibilidad.</p>
+                                            <a href="https://www.doctolib.de" target="_blank" rel="noreferrer" className="mt-4 block text-xs underline font-bold tracking-widest text-pink-200">
+                                                ABRIR WEB
+                                            </a>
                                         </div>
-                                        <div className="bento-card p-8 rounded-3xl">
-                                            <h4 className="font-bold text-orange-500 mb-2">Portal 116117</h4>
-                                            <p className="text-sm text-zinc-400">Para urgencias médicas fuera de horario de oficina.</p>
-                                            <a href="https://www.116117.de" className="mt-4 block text-xs underline font-bold tracking-widest">VER URGENCIAS</a>
+
+                                        <div className="bento-card p-8 rounded-[2rem] overflow-hidden">
+                                            <div className="aspect-[16/9] overflow-hidden rounded-3xl mb-5">
+                                                <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1600&q=80" alt="Urgencias" className="w-full h-full object-cover" loading="lazy" />
+                                            </div>
+                                            <h4 className="font-bold text-sky-100 mb-2">Portal 116117</h4>
+                                            <p className="text-sm text-zinc-300">Para urgencias médicas fuera de horario de oficina.</p>
+                                            <a href="https://www.116117.de" target="_blank" rel="noreferrer" className="mt-4 block text-xs underline font-bold tracking-widest text-sky-200">
+                                                VER URGENCIAS
+                                            </a>
                                         </div>
                                     </div>
                                 </section>
@@ -277,63 +459,125 @@
 
                         {tab === 'finanzas' && (
                             <div className="space-y-8">
-                                <h2 className="text-3xl font-bold">Finanzas y Deudas</h2>
-                                <div className="bento-card p-8 rounded-3xl bg-red-500/5 border-red-500/20">
-                                    <h4 className="font-bold text-red-500 mb-2">Gestión de Deudas (Schulden)</h4>
-                                    <p className="text-sm text-zinc-400">No ignores las cartas de Inkasso. Pide un plan de pagos para no afectar tu Schufa.</p>
+                                <SectionBanner
+                                    label="Finanzas"
+                                    title="Finanzas y deudas"
+                                    text="Una vista clara para recordar lo importante: cartas de Inkasso, Schufa y bancos recomendados en una presentación limpia y móvil."
+                                    image={SECTION_IMAGES.finanzas}
+                                    tint="from-amber-400/20 via-transparent to-transparent"
+                                />
+
+                                <div className="bento-card p-8 rounded-[2rem] bg-rose-400/5 border-rose-300/20">
+                                    <h4 className="font-bold text-rose-100 mb-2">Gestión de deudas (Schulden)</h4>
+                                    <p className="text-sm text-zinc-300">No ignores las cartas de Inkasso. Pide un plan de pagos para no afectar tu Schufa.</p>
                                 </div>
-                                <div className="bento-card p-8 rounded-3xl">
-                                    <h4 className="font-bold mb-2">Bancos Recomendados</h4>
-                                    <p className="text-sm text-zinc-400">Cuentas rápidas: Revolut, N26. Físicas: Sparkasse, Commerzbank.</p>
+
+                                <div className="bento-card p-8 rounded-[2rem]">
+                                    <div className="aspect-[16/9] rounded-3xl overflow-hidden mb-5">
+                                        <img src={SECTION_IMAGES.finanzas} alt="Finanzas" className="w-full h-full object-cover" loading="lazy" />
+                                    </div>
+                                    <h4 className="font-bold mb-2 text-amber-100">Bancos recomendados</h4>
+                                    <p className="text-sm text-zinc-300">Cuentas rápidas: Revolut, N26. Físicas: Sparkasse, Commerzbank.</p>
                                 </div>
                             </div>
                         )}
 
                         {tab === 'amt' && (
                             <div className="space-y-8">
-                                <h2 className="text-3xl font-bold">Amt für Migration</h2>
-                                <div className="bento-card p-8 rounded-3xl">
-                                    <h4 className="font-bold text-emerald-500 mb-4">Navegación Web</h4>
-                                    <ul className="space-y-4 text-sm text-zinc-400">
+                                <SectionBanner
+                                    label="Migration Amt"
+                                    title="Trámites de residencia y portal de Hamburgo"
+                                    text="Diseñado para que las personas encuentren más rápido la ruta oficial y no se pierdan en menús pequeños."
+                                    image={SECTION_IMAGES.amt}
+                                    tint="from-cyan-400/20 via-transparent to-transparent"
+                                />
+
+                                <div className="bento-card p-8 rounded-[2rem]">
+                                    <h4 className="font-bold text-emerald-100 mb-4">Navegación web</h4>
+                                    <ul className="space-y-4 text-sm text-zinc-300">
                                         <li>1. Entra al portal Hamburg Service.</li>
-                                        <li>2. Usa la función "Online-Antrag" para renovaciones de residencia.</li>
+                                        <li>2. Usa la función “Online-Antrag” para renovaciones de residencia.</li>
                                     </ul>
-                                    <a href="https://www.hamburg.de/welcome/" className="mt-6 block bg-white text-black py-3 rounded-xl text-center font-bold text-sm">Portal Oficial</a>
+                                    <a
+                                        href="https://www.hamburg.de/welcome/"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mt-6 inline-flex items-center justify-center rounded-2xl bg-emerald-300/15 border border-emerald-300/20 px-5 py-3 text-sm font-bold text-emerald-100"
+                                    >
+                                        Portal oficial
+                                    </a>
                                 </div>
                             </div>
                         )}
 
                         {tab === 'empleo' && (
                             <div className="space-y-8">
-                                <h2 className="text-3xl font-bold">Agencia de Empleo</h2>
-                                <div className="bento-card p-8 rounded-3xl border-l-4 border-blue-500">
-                                    <h4 className="font-bold mb-2">Agentur für Arbeit</h4>
-                                    <p className="text-sm text-zinc-400 mb-4">Búsqueda de empleo y bonos de asesoría (AVGS).</p>
-                                    <a href="https://www.arbeitsagentur.de/" className="text-blue-500 text-xs font-bold underline uppercase tracking-widest">Ver Web Oficial</a>
+                                <SectionBanner
+                                    label="Empleo"
+                                    title="Agencia de Empleo"
+                                    text="Una presentación más visual para acceder a empleo, asesoría y bonos AVGS desde cualquier pantalla."
+                                    image={SECTION_IMAGES.empleo}
+                                    tint="from-violet-400/20 via-transparent to-transparent"
+                                />
+
+                                <div className="bento-card p-8 rounded-[2rem] border-l-4 border-sky-300/60">
+                                    <div className="aspect-[16/9] rounded-3xl overflow-hidden mb-5">
+                                        <img src={SECTION_IMAGES.empleo} alt="Empleo" className="w-full h-full object-cover" loading="lazy" />
+                                    </div>
+                                    <h4 className="font-bold mb-2 text-sky-100">Agentur für Arbeit</h4>
+                                    <p className="text-sm text-zinc-300 mb-4">Búsqueda de empleo y bonos de asesoría (AVGS).</p>
+                                    <a href="https://www.arbeitsagentur.de/" target="_blank" rel="noreferrer" className="text-sky-200 text-xs font-bold underline uppercase tracking-widest">
+                                        Ver web oficial
+                                    </a>
                                 </div>
                             </div>
                         )}
 
                         {tab === 'social' && (
-                            <div className="text-center py-20 animate-fade">
-                                <h2 className="text-4xl font-bold mb-4">Portal SocialCard</h2>
-                                <p className="text-zinc-500 mb-10 max-w-md mx-auto text-sm">Gestiona tus ayudas directas a través del portal oficial de Hamburgo.</p>
-                                <a href="https://portal.socialcard.de/" className="bg-purple-600 text-white px-10 py-5 rounded-[2rem] font-bold text-lg hover:shadow-2xl transition-all">ACCEDER AL PORTAL</a>
+                            <div className="space-y-8">
+                                <SectionBanner
+                                    label="SocialCard"
+                                    title="Portal SocialCard"
+                                    text="Una interfaz más grande y limpia, pensada para tocar con el dedo sin problemas en Android o iPhone."
+                                    image={SECTION_IMAGES.social}
+                                    tint="from-fuchsia-400/20 via-transparent to-transparent"
+                                />
+
+                                <div className="text-center py-10 sm:py-14 animate-fade">
+                                    <h2 className="text-3xl sm:text-4xl font-black mb-4">Portal SocialCard</h2>
+                                    <p className="text-zinc-400 mb-10 max-w-md mx-auto text-sm">
+                                        Gestiona tus ayudas directas a través del portal oficial de Hamburgo.
+                                    </p>
+                                    <a
+                                        href="https://portal.socialcard.de/"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="inline-flex items-center justify-center rounded-[1.5rem] bg-fuchsia-400/90 text-white px-8 py-4 font-bold text-base sm:text-lg hover:shadow-2xl transition-all"
+                                    >
+                                        ACCEDER AL PORTAL
+                                    </a>
+                                </div>
                             </div>
                         )}
 
                         {tab === 'edu' && (
                             <div className="space-y-8">
-                                <h2 className="text-3xl font-bold">Educación y Ausbildung</h2>
-                                <div className="bento-card p-10 rounded-[3rem] border-l-8 border-orange-500">
-                                    <h3 className="text-xl font-bold text-orange-500 mb-4">Regla de Oro: Ausbildung > 2 años</h3>
-                                    <p className="text-zinc-400 leading-relaxed">
+                                <SectionBanner
+                                    label="Educación"
+                                    title="Educación y Ausbildung"
+                                    text="Una presentación más visual para orientar estudios, formación y camino laboral con mejor lectura en móvil."
+                                    image={SECTION_IMAGES.edu}
+                                    tint="from-amber-400/20 via-transparent to-transparent"
+                                />
+
+                                <div className="bento-card p-8 sm:p-10 rounded-[2.5rem] border-l-8 border-amber-300/70">
+                                    <h3 className="text-xl font-bold text-amber-100 mb-4">Regla de Oro: Ausbildung &gt; 2 años</h3>
+                                    <p className="text-zinc-300 leading-relaxed">
                                         Debido a la complejidad del idioma técnico alemán, se recomienda encarecidamente realizar formaciones que superen los 2 años para garantizar estabilidad y aprendizaje real.
                                     </p>
                                 </div>
                             </div>
                         )}
-
                     </main>
                 </div>
             );
