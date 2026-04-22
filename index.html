@@ -44,44 +44,125 @@
         };
 
         const DOCTORS_FULL = [
-            { cat: 'Cabecera', name: 'Elena Kohl', addr: 'Bei der Apostelkirche 20, 20257 Hamburg', telf: '040 409 814', mail: 'info@praxis-elena-kohl.de' },
-            { cat: 'Cabecera', name: 'Dra. Sandra Martínez Coll', addr: 'Gurlittstr. 31-33, 20099 Hamburg', telf: '+49 40 246460' },
-            { cat: 'Cabecera', name: 'Dra. Beatriz H. Cañas de Sandberger', addr: 'Burmesterstr. 2, 22305 Hamburg', note: 'Medicina general, tropical y de migración' },
-            { cat: 'Cabecera', name: 'Médico (s/n)', addr: 'Große Bergstraße 211, 22767 Hamburg', telf: '040 38087857', note: 'Secretaria no habla español' },
-            { cat: 'Cabecera', name: 'Dra. Joneth Mayorca Parra', addr: 'Washingtonallee 14a, 22111 Hamburg', note: 'De Venezuela. Acepta cualquier seguro' },
+            { cat: 'Cabecera', name: 'Zawa Othman', addr: 'Gurlittstraße 31-33, 20099 Hamburg', telf: '040 246460', note: 'Fachärztin für Allgemeinmedizin. Español no confirmado.' },
+            { cat: 'Cabecera', name: 'Dra. Beatriz H. Cañas de Sandberger', addr: 'Burmesterstr. 2, 22305 Hamburg', telf: '040 294165', note: 'Allgemeinmedizin, Tropenmedizin y Migrantenmedizin. Habla español.' },
+            { cat: 'Cabecera', name: 'Dra. Joneth Mayorca Parra', addr: 'Washingtonallee 14A, 22111 Hamburg', telf: '040 55643224', note: 'De Venezuela. Formularios en español. Acepta cualquier seguro.' },
+            { cat: 'Cabecera', name: 'Elena Kohl', addr: 'Bei der Apostelkirche 20, 20257 Hamburg', telf: '040 409 814', note: 'Entrada histórica; verificar si la consulta sigue activa.' },
+
             { cat: 'Ginecología', name: 'Praxisklinik Winterhude', addr: 'Mühlenkamp 32, 22303 Hamburg', telf: '040 411 668 0' },
             { cat: 'Ginecología', name: 'Dr. med. Dirk Schuh', addr: 'Jungfrauenthal 8, 20149 Hamburg', telf: '040 480 10 02' },
             { cat: 'Ginecología', name: 'Dr. med. Annette Loeck', addr: 'Blankeneser Bahnhofstr. 5, 22587 Hamburg', telf: '040 866 487 790' },
-            { cat: 'Ginecología', name: 'Dr. med. Ulrike von der Mark', addr: 'Ottenser Hauptstraße 33, 22765 Hamburg', note: 'Habla español. Recepción solo Al/Ing.' },
-            { cat: 'Ginecología', name: 'Dra. Alexandra Thewes', addr: 'Alsentrasse 25, 22769 Hamburg', note: 'Colega habla español' },
-            { cat: 'Ginecología', name: 'Dr. med. Elisenda Laborda Rouch', addr: 'Isestraße 63, 20149 Hamburg', telf: '+49 40 483008' },
-            { cat: 'Ginecología', name: 'Dr. med. Elisabeth Künkel', addr: 'Heußweg 37, 20255 Hamburg', note: 'Habla español. Todos los seguros.' },
+            { cat: 'Ginecología', name: 'Dr. med. Ulrike von der Mark', addr: 'Ottenser Hauptstraße 33, 22765 Hamburg', telf: '040 3901244', note: 'Doctora habla español. Recepción solo alemán/inglés. Seguro público.' },
+            { cat: 'Ginecología', name: 'Dra. Alexandra Thewes', addr: 'Alsenstraße 25, 22769 Hamburg', telf: '040 856017', note: 'Ella habla inglés, una colega habla español. Consultar seguros.' },
+            { cat: 'Ginecología', name: 'Dr. med. Elisenda Laborda Rouch', addr: 'Isestraße 63, 20149 Hamburg', telf: '+49 40 483008', note: 'Frauenarztpraxis Isestraße. Acepta seguros públicos y privados.' },
+            { cat: 'Ginecología', name: 'Dr. med. Elisabeth Künkel', addr: 'Heußweg 37, 20255 Hamburg', telf: '+49 40 4210613', note: 'Habla español. Acepta todos los seguros.' },
+
             { cat: 'Pediatría', name: 'Dr. Marie Coen Schäfer', addr: 'Pestalozzistraße 15, 22305 Hamburg', telf: '040 61 61 63' },
-            { cat: 'Pediatría', name: 'Dr. med. Marianne Kilian', addr: 'Eppendorfer Landstrasse 74, 20249 Hamburg', telf: '040 48 20 36' },
+            { cat: 'Pediatría', name: 'Dr. med. Marianne Kilian', addr: 'Eppendorfer Landstraße 74, 20249 Hamburg', telf: '040 48 20 36' },
             { cat: 'Pediatría', name: 'Dr. med. Laima Petrick', addr: 'August-Krogmann-Str. 14a, 22159 Hamburg', telf: '040 643 1777' },
             { cat: 'Pediatría', name: 'Dr. med. Bernd Friedrich', addr: 'Neue Große Bergstr. 7, 22767 Hamburg', telf: '040 38 22 22' },
-            { cat: 'Dentista', name: 'Zahnarztpraxis von Schuler Alarcon', addr: 'Böttgerstraße 12, 20148 Hamburg', note: 'Marianela von Schuler Alarcon y Veronica Höppner-Rohder.' },
-            { cat: 'Dentista', name: 'Silva-Bielecke & Dr. Heinz Gordon', addr: 'Holsteinischer Kamp 1, 22081 Hamburg', note: 'Sonia Rojas habla español.' },
-            { cat: 'Dentista', name: 'Dentista Hamburg', addr: 'Speersort 8, 20095 Hamburg', note: 'Español. Abierto Sábados y Domingos.' },
-            { cat: 'ORL / Alergia', name: 'PD Dr. Marcos Sánchez Hanke', addr: 'Speersort 8, 20095 Hamburg', telf: '040 338730', note: 'Secretaria habla español.' },
-            { cat: 'ORL / Alergia', name: 'Dra. Johanna Lanwehr', addr: 'Osterstraße 126, 20255 Hamburg', note: 'Estudió en Nicaragua y España.' },
-            { cat: 'Oftalmología', name: 'Dr. med. Gabriele Brumm', addr: 'Eppendorfer Landstrasse 36, 20249 Hamburg', note: 'Habla español muy bien.' },
-            { cat: 'Traumatología', name: 'Dra. Luisa Klein', addr: 'Asklepios AGZ West / Heidberg', note: 'Citas por app Samedi.' },
+
+            { cat: 'Dentista', name: 'Zahnarztpraxis von Schuler Alarcon', addr: 'Böttgerstraße 12, 20148 Hamburg', telf: '040 456 547', note: 'Marianela von Schuler Alarcon y Veronica Höppner-Rohder. Atención en español, inglés y lengua de signos.' },
+            { cat: 'Dentista', name: 'Zahnarztpraxis Silva-Bielecke & Dr. Heinz Gordon', addr: 'Holsteinischer Kamp 1, 22081 Hamburg', telf: '040 20976237', note: 'Sonia Rojas habla español. Acepta seguro público y privado.' },
+            { cat: 'Dentista', name: 'Dentista Hamburg', addr: 'Speersort 8 (Eingang Mönckebergstr. 17), 20095 Hamburg', telf: '040 344 544', note: 'Clínica especialista en implantes, endodoncia y periodoncia. Atención en español. Abiertos sábados y domingos.' },
+
+            { cat: 'ORL / Alergia', name: 'PD Dr. Marcos Sánchez Hanke', addr: 'Speersort 8, 20095 Hamburg', telf: '040 338730', note: 'Secretaria también habla español. Acepta cualquier seguro.' },
+            { cat: 'ORL / Alergia', name: 'Dra. Johanna Lanwehr – HNO Gemeinschaftspraxis Osterstraße', addr: 'Osterstraße 126, 20255 Hamburg (Eimsbüttel)', telf: '+49 40 4917474 / +49 40 4910081', note: 'Estudió en España y Nicaragua. Habla español.' },
+
+            { cat: 'Oftalmología', name: 'Dr. med. Gabriele Brumm', addr: 'Eppendorfer Landstrasse 36, 20249 Hamburg', telf: '040 207255', note: 'Habla español muy bien. Asistente no habla español.' },
+
+            { cat: 'Traumatología', name: 'Dra. Luisa Klein', addr: 'Asklepios Gesundheitszentrum West / Heidberg', telf: '040 81912027 (West) / 040 181887-9850 (Heidberg)', note: 'Excelente doctora. Citas por app Samedi o página web.' },
+
             { cat: 'Psicología', name: 'Dipl.-Psych. Francisca de Lima', addr: 'Hamburg' },
-            { cat: 'Psicología', name: 'Dr. Enrique Orive Asensio', addr: 'Bahrenfelderstr. 169, 22765 Hamburg' },
-            { cat: 'Psicología', name: 'Dipl.-Psych. Catalina Löffler', addr: 'Winterhuder Marktplatz 2, 22299 Hamburg' },
-            { cat: 'Psicología', name: 'Dipl.-Psych. Maria V. del Vecchio-Schulz', addr: 'Schloßstr. 98, 22041 Hamburg', telf: '040 430 4962' },
-            { cat: 'Psicología', name: 'María Teresa González Osorio', addr: 'Bahrenfeld, Hamburg' },
-            { cat: 'Neurología', name: 'Dr. med. Mauricio Dessauer', addr: 'Hoheluftchaussee 56, 20253 Hamburg' },
-            { cat: 'Dermatología', name: 'Dra. Andrea Vanegas Ramirez', addr: 'Uhlenhorster Weg 30, 22085 Hamburg', note: 'TROPICDERM. Colombiana.' },
-            { cat: 'Dermatología', name: 'Dr. Christina Hojabri', addr: 'Neue Große Bergstraße 20, 22767 Hamburg', note: 'Especialista infantil.' },
-            { cat: 'Matrona', name: 'Lourdes Alonso', addr: 'Hamburg', note: 'Visita puerperal en español.' },
-            { cat: 'Matrona', name: 'Viktoria Nickel', addr: 'Heidberg 5, 22301 Hamburg', telf: '0171 142 11 61' }
+            { cat: 'Psicología', name: 'Dr. Enrique Orive Asensio', addr: 'Bahrenfelderstr. 169, 5.OG, 22765 Hamburg', telf: 'kontakt@psychotherapie-hamburg-altona.de' },
+            { cat: 'Psicología', name: 'Dipl.-Psych. Catalina Löffler', addr: 'Winterhuder Marktplatz 2, 22299 Hamburg', telf: '040-36 85 85 34' },
+            { cat: 'Psicología', name: 'Dipl.-Psych. Maria V. del Vecchio-Schulz', addr: 'Schloßstr. 98, 22041 Hamburg', telf: '040 430 4962', note: 'Email no disponible. Contactar por teléfono o Doctolib.' },
+            { cat: 'Psicología', name: 'María Teresa González Osorio', addr: 'Bahrenfeld, Hamburg', telf: '+49 177 3322958' },
+            { cat: 'Psicología / Neurología', name: 'Dr. med. Mauricio Dessauer', addr: 'Hoheluftchaussee 56, 20253 Hamburg', telf: '040 / 4 20 41 52', note: 'Psiquiatría y Neurología.' },
+
+            { cat: 'Dermatología', name: 'Dra. Andrea Vanegas Ramirez', addr: 'Uhlenhorster Weg 30 / Mönckebergstr. 17, 22085 Hamburg', telf: 'info@tropicderm.de', note: 'Colombiana. TROPICDERM. Particular y seguro TK.' },
+            { cat: 'Dermatología', name: 'Dr. Christina Hojabri', addr: 'Neue Große Bergstraße 20, 22767 Hamburg', telf: '040 38 619 062', note: 'Especialista en dermatología infantil.' },
+
+            { cat: 'Matrona', name: 'Lourdes Alonso', addr: 'Hamburg', telf: '040 642 331 96 / 0176 961 632 40', note: 'Visita puerperal en español y alemán.' },
+            { cat: 'Matrona', name: 'Viktoria Nickel', addr: 'Heidberg 5, 22301 Hamburg', telf: '040 412 600 14 / 0171 142 11 61', note: 'Atiende en Winterhude, Eppendorf y Alsterdorf.' }
+        ];
+
+        const DASHBOARD_CARDS = [
+            { title: 'Salud', value: '32', desc: 'médicos y especialistas', icon: 'health' },
+            { title: 'Noticias', value: '3', desc: 'fuentes activas', icon: 'news' },
+            { title: 'Trámites', value: '4', desc: 'atajos oficiales', icon: 'gov' },
+            { title: 'Apoyo', value: '116117', desc: 'urgencias fuera de horario', icon: 'briefcase' }
         ];
 
         const App = () => {
             const [tab, setTab] = useState('inicio');
             const [newsFilter, setNewsFilter] = useState('Todos');
+
+            const newsItems = [
+                {
+                    type: 'Oficial',
+                    tag: 'BAMF OFICIAL',
+                    title: 'Información oficial de migración',
+                    text: 'Noticias oficiales sobre integración, residencia y permisos en Alemania.',
+                    href: 'https://www.facebook.com/bamf.socialmedia/'
+                },
+                {
+                    type: 'Comunidad',
+                    tag: 'COMUNIDAD',
+                    title: 'Migración en Alemania',
+                    text: 'Información comunitaria útil sobre trámites, experiencias y apoyo.',
+                    href: 'https://www.facebook.com/migracionenalemania'
+                },
+                {
+                    type: 'Radio/Prensa',
+                    tag: 'COSMO',
+                    title: 'COSMO en español',
+                    text: 'Noticias, entrevistas y podcast para migrantes en Alemania.',
+                    href: 'https://www.facebook.com/cosmoestacionsur/'
+                }
+            ];
+
+            const filteredNews = newsFilter === 'Todos'
+                ? newsItems
+                : newsItems.filter(n => n.type === newsFilter);
+
+            const DashboardHome = () => (
+                <div className="space-y-8">
+                    <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                        {DASHBOARD_CARDS.map((card) => (
+                            <div key={card.title} className="bento-card p-5 rounded-3xl">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs uppercase tracking-widest text-zinc-500">{card.title}</span>
+                                    <Icon name={card.icon} />
+                                </div>
+                                <div className="mt-3 text-3xl font-bold">{card.value}</div>
+                                <div className="mt-1 text-sm text-zinc-400">{card.desc}</div>
+                            </div>
+                        ))}
+                    </section>
+
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bento-card p-6 rounded-3xl">
+                            <h3 className="text-xl font-bold mb-3">Accesos rápidos</h3>
+                            <div className="grid grid-cols-2 gap-3">
+                                <button onClick={() => setTab('salud')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Salud</button>
+                                <button onClick={() => setTab('noticias')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Noticias</button>
+                                <button onClick={() => setTab('amt')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Migration Amt</button>
+                                <button onClick={() => setTab('edu')} className="bg-zinc-900 rounded-2xl py-3 text-sm font-semibold">Educación</button>
+                            </div>
+                        </div>
+
+                        <div className="bento-card p-6 rounded-3xl">
+                            <h3 className="text-xl font-bold mb-3">Hoy conviene revisar</h3>
+                            <ul className="space-y-3 text-sm text-zinc-400">
+                                <li>• Citas médicas y teléfonos de contacto.</li>
+                                <li>• Noticias oficiales y comunitarias.</li>
+                                <li>• Trámites del portal de Hamburgo.</li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            );
 
             return (
                 <div className="min-h-screen flex flex-col md:flex-row">
@@ -100,44 +181,50 @@
                             { id: 'social', label: 'SocialCard', icon: 'social' },
                             { id: 'edu', label: 'Educación', icon: 'edu' },
                         ].map(item => (
-                            <button key={item.id} onClick={() => setTab(item.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${tab === item.id ? 'active-tab' : 'text-zinc-500 hover:bg-zinc-900'}`}>
+                            <button
+                                key={item.id}
+                                onClick={() => setTab(item.id)}
+                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${tab === item.id ? 'active-tab' : 'text-zinc-500 hover:bg-zinc-900'}`}
+                            >
                                 <Icon name={item.icon} /> {item.label}
                             </button>
                         ))}
                     </nav>
 
                     <main className="flex-1 p-6 md:p-12 max-w-5xl mx-auto w-full animate-fade">
-                        
-                        {/* NEWS HUB */}
+
+                        {tab === 'inicio' && <DashboardHome />}
+
                         {tab === 'noticias' && (
                             <div className="space-y-8">
                                 <h2 className="text-3xl font-bold">News Hub</h2>
                                 <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
                                     {['Todos', 'Oficial', 'Comunidad', 'Radio/Prensa'].map(f => (
-                                        <button key={f} onClick={() => setNewsFilter(f)} className={`px-4 py-2 rounded-full text-xs font-bold border ${newsFilter === f ? 'bg-white text-black border-white' : 'bg-zinc-900 text-zinc-500 border-zinc-800'}`}>{f}</button>
+                                        <button
+                                            key={f}
+                                            onClick={() => setNewsFilter(f)}
+                                            className={`px-4 py-2 rounded-full text-xs font-bold border ${newsFilter === f ? 'bg-white text-black border-white' : 'bg-zinc-900 text-zinc-500 border-zinc-800'}`}
+                                        >
+                                            {f}
+                                        </button>
                                     ))}
                                 </div>
+
                                 <div className="grid gap-4">
-                                    <div className="bento-card p-6 rounded-3xl">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <span className="text-[10px] font-bold text-blue-500 bg-blue-500/10 px-2 py-1 rounded">BAMF OFICIAL</span>
-                                            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                    {filteredNews.map((item) => (
+                                        <div key={item.title} className="bento-card p-6 rounded-3xl">
+                                            <span className="text-[10px] font-bold px-2 py-1 rounded bg-white/10">{item.tag}</span>
+                                            <h4 className="font-bold mt-3">{item.title}</h4>
+                                            <p className="text-sm text-zinc-400 mt-2">{item.text}</p>
+                                            <a href={item.href} target="_blank" rel="noreferrer" className="text-xs text-zinc-500 mt-4 block underline">
+                                                Ver fuente
+                                            </a>
                                         </div>
-                                        <h4 className="font-bold">Actualización: Cursos de Integración</h4>
-                                        <p className="text-sm text-zinc-400 mt-2">Nuevas plazas disponibles para niveles B1 en Hamburgo Norte.</p>
-                                        <a href="https://www.facebook.com/bamf.socialmedia" className="text-xs text-zinc-500 mt-4 block underline">Ver en Facebook</a>
-                                    </div>
-                                    <div className="bento-card p-6 rounded-3xl">
-                                        <span className="text-[10px] font-bold text-purple-500 bg-purple-500/10 px-2 py-1 rounded">RADIO / PRENSA</span>
-                                        <h4 className="font-bold mt-2">Cosmo Estación Sur: Podcast Semanal</h4>
-                                        <p className="text-sm text-zinc-400 mt-2">Hoy hablamos sobre la homologación de títulos extranjeros.</p>
-                                        <a href="https://www.facebook.com/cosmoestacionsur" className="text-xs text-zinc-500 mt-4 block underline">Ver en Facebook</a>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         )}
 
-                        {/* SALUD REDISEÑADA */}
                         {tab === 'salud' && (
                             <div className="space-y-12">
                                 <section>
@@ -154,7 +241,9 @@
                                             <tbody className="divide-y divide-zinc-800">
                                                 {DOCTORS_FULL.map((d, i) => (
                                                     <tr key={i} className="hover:bg-zinc-800/30">
-                                                        <td className="p-4 align-top"><span className="text-emerald-500 font-bold text-[10px] uppercase tracking-tighter">{d.cat}</span></td>
+                                                        <td className="p-4 align-top">
+                                                            <span className="text-emerald-500 font-bold text-[10px] uppercase tracking-tighter">{d.cat}</span>
+                                                        </td>
                                                         <td className="p-4 align-top font-semibold text-zinc-100">{d.name}</td>
                                                         <td className="p-4 align-top text-zinc-400">
                                                             <div className="text-xs">{d.addr}</div>
@@ -173,12 +262,12 @@
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="bento-card p-8 rounded-3xl">
                                             <h4 className="font-bold text-blue-500 mb-2">Doctolib</h4>
-                                            <p className="text-sm text-zinc-400">La herramienta #1. Filtra por "Spanisch" en el idioma del doctor.</p>
+                                            <p className="text-sm text-zinc-400">Filtra por idioma del doctor y revisa disponibilidad.</p>
                                             <a href="https://www.doctolib.de" className="mt-4 block text-xs underline font-bold tracking-widest">ABRIR WEB</a>
                                         </div>
                                         <div className="bento-card p-8 rounded-3xl">
                                             <h4 className="font-bold text-orange-500 mb-2">Portal 116117</h4>
-                                            <p className="text-sm text-zinc-400">Para emergencias médicas fuera de horario de oficina.</p>
+                                            <p className="text-sm text-zinc-400">Para urgencias médicas fuera de horario de oficina.</p>
                                             <a href="https://www.116117.de" className="mt-4 block text-xs underline font-bold tracking-widest">VER URGENCIAS</a>
                                         </div>
                                     </div>
@@ -186,7 +275,6 @@
                             </div>
                         )}
 
-                        {/* OTRAS SECCIONES RESTAURADAS */}
                         {tab === 'finanzas' && (
                             <div className="space-y-8">
                                 <h2 className="text-3xl font-bold">Finanzas y Deudas</h2>
@@ -196,7 +284,7 @@
                                 </div>
                                 <div className="bento-card p-8 rounded-3xl">
                                     <h4 className="font-bold mb-2">Bancos Recomendados</h4>
-                                    <p className="text-sm text-zinc-400">Cuentas rápidas: Revolut, N26 (Online). Físicas: Sparkasse, Commerzbank.</p>
+                                    <p className="text-sm text-zinc-400">Cuentas rápidas: Revolut, N26. Físicas: Sparkasse, Commerzbank.</p>
                                 </div>
                             </div>
                         )}
@@ -239,16 +327,10 @@
                                 <h2 className="text-3xl font-bold">Educación y Ausbildung</h2>
                                 <div className="bento-card p-10 rounded-[3rem] border-l-8 border-orange-500">
                                     <h3 className="text-xl font-bold text-orange-500 mb-4">Regla de Oro: Ausbildung > 2 años</h3>
-                                    <p className="text-zinc-400 leading-relaxed">Debido a la complejidad del idioma técnico alemán, se recomienda encarecidamente realizar formaciones que superen los 2 años para garantizar estabilidad y aprendizaje real.</p>
+                                    <p className="text-zinc-400 leading-relaxed">
+                                        Debido a la complejidad del idioma técnico alemán, se recomienda encarecidamente realizar formaciones que superen los 2 años para garantizar estabilidad y aprendizaje real.
+                                    </p>
                                 </div>
-                            </div>
-                        )}
-
-                        {tab === 'inicio' && (
-                            <div className="text-center py-24 space-y-6">
-                                <img src="./Infonicahamburg.jpeg" className="w-32 h-32 rounded-[2.5rem] mx-auto shadow-2xl mb-10" />
-                                <h1 className="text-5xl font-bold tracking-tighter">InfoNicaHamburg</h1>
-                                <p className="text-zinc-500 text-lg max-w-xl mx-auto">La plataforma centralizada para la comunidad nicaragüense e hispana en Hamburgo.</p>
                             </div>
                         )}
 
