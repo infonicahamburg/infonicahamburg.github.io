@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoNicaHamburg - Guía de Experiencia en Alemania</title>
+    <title>InfoNicaHamburg - Guía de Integración</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -24,9 +24,7 @@
     </script>
 
     <style>
-        body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-serif; margin: 0; }
         .bento-card { transition: all 0.3s ease; border: 1px solid rgba(63, 63, 70, 0.3); }
         .bento-card:hover { border-color: rgba(161, 161, 170, 0.6); background-color: rgba(24, 24, 27, 0.8); transform: translateY(-2px); }
         .active-tab { background-color: #27272a; color: white; border: 1px solid #3f3f46; }
@@ -36,16 +34,16 @@
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; color: #555;">
+            Cargando guía...
+        </div>
+    </div>
 
     <script type="text/babel">
-        const { useState, useMemo } = React;
+        const { useState } = React;
 
-        // --- ICONOS ---
-        const Icon = ({ path, className = "w-5 h-5" }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: path }} />
-        );
-
+        // --- ICONOS (SVG Paths) ---
         const icons = {
             home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
             news: '<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>',
@@ -60,158 +58,204 @@
             facebook: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>'
         };
 
-        // --- BASE DE DATOS MÉDICOS ---
+        const Icon = ({ name, className = "w-5 h-5" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: icons[name] }} />
+        );
+
+        // --- DATOS ---
         const DOCTORS_DATA = [
             { category: 'Cabecera', name: 'Elena Kohl', address: 'Bei der Apostelkirche 20, 20257 Hamburg', phone: '040 409 814', extra: 'info@praxis-elena-kohl.de' },
             { category: 'Cabecera', name: 'Dra. Sandra Martínez Coll', address: 'Gurlittstr. 31-33, 20099 Hamburg', phone: '+49 40 246460' },
             { category: 'Cabecera', name: 'Dra. Beatriz H. Cañas de Sandberger', address: 'Burmesterstr. 2, 22305 Hamburg', phone: '', extra: 'Medicina general, tropical y de migración' },
-            { category: 'Cabecera', name: 'Dra. Joneth Mayorca Parra', address: 'Washingtonallee 14a, 22111 Hamburg', phone: '040 55643224', extra: 'De Venezuela. Formularios en español. Acepta cualquier seguro' },
-            { category: 'Ginecólogos', name: 'Praxisklinik Winterhude', address: 'Mühlenkamp 32, 22303 Hamburg', phone: '040 411 668 0', extra: 'Info@praxisklinik-winterhude.de' },
+            { category: 'Cabecera', name: 'Dra. Joneth Mayorca Parra', address: 'Washingtonallee 14a, 22111 Hamburg', phone: '040 55643224', extra: 'De Venezuela. Acepta cualquier seguro' },
+            { category: 'Ginecólogos', name: 'Praxisklinik Winterhude', address: 'Mühlenkamp 32, 22303 Hamburg', phone: '040 411 668 0' },
             { category: 'Ginecólogos', name: 'Dr. med. Dirk Schuh', address: 'Jungfrauenthal 8, 20149 Hamburg', phone: '040 480 10 02' },
-            { category: 'Ginecólogos', name: 'Dra. med. Elisabeth Künkel', address: 'Heußweg 37, 20255 Hamburg', phone: '+49 40 4210613', extra: 'Habla español. Acepta todos los seguros' },
+            { category: 'Ginecólogos', name: 'Dra. med. Elisabeth Künkel', address: 'Heußweg 37, 20255 Hamburg', phone: '+49 40 4210613' },
             { category: 'Pediatras', name: 'Dr. Marie Coen Schäfer', address: 'Pestalozzistraße 15, 22305 Hamburg', phone: '040 61 61 63' },
             { category: 'Pediatras', name: 'Dra. med. Marianne Kilian', address: 'Kieler Straße 457, 22525 Hamburg', phone: '040 5405450' },
-            { category: 'Dentistas', name: 'Zahnarztpraxis von Schuler Alarcon', address: 'Böttgerstraße 12, 20148 Hamburg', phone: '040 456 547', extra: 'Atención en español y lengua de signos' },
-            { category: 'Dentistas', name: 'Dentista Hamburg', address: 'Gänsemarkt 44, 20354 Hamburg', phone: '040 344344', extra: 'Atención fines de semana' },
-            { category: 'ORL', name: 'PD Dr. Marcos Sánchez Hanke', address: 'Speersort 8, 20095 Hamburg', phone: '040 338730', extra: 'Secretaria habla español. Acepta cualquier seguro' },
-            { category: 'ORL', name: 'Dra. Johanna Lanwehr', address: 'Mönckebergstraße 5, 20095 Hamburg', phone: '040 326633', extra: 'Estudió en Nicaragua.' },
-            { category: 'Oftalmología', name: 'Dra. med. Gabriele Brumm', address: 'Osterstraße 14, 20259 Hamburg', phone: '040 4919191', extra: 'Ella habla español muy bien. Su asistente no.' },
-            { category: 'Traumatología', name: 'Dra. Luisa Klein', address: 'Große Bleichen 32, 20354 Hamburg', phone: '040 34106560', extra: 'Citas vía Samedi' },
-            { category: 'Dermatólogos', name: 'Dra. Andrea Vanegas Ramirez', address: 'Uhlenhorster Weg 30, 22085 Hamburg', phone: '', extra: 'Colombiana. TROPICDERM. Particular y seguro TK' },
-            { category: 'Salud Mental', name: 'Dipl.-Psych. Maria V. del Vecchio-Schulz', address: 'Schloßstr. 98, 22041 Hamburg', phone: '040 430 4962', extra: 'Contactar por teléfono o Doctolib' },
+            { category: 'Dentistas', name: 'Schuler Alarcon', address: 'Böttgerstraße 12, 20148 Hamburg', phone: '040 456 547', extra: 'Atención en español y lengua de signos' },
+            { category: 'ORL', name: 'Dr. Marcos Sánchez Hanke', address: 'Speersort 8, 20095 Hamburg', phone: '040 338730', extra: 'Secretaria habla español' },
+            { category: 'Salud Mental', name: 'Dipl.-Psych. Maria V. del Vecchio-Schulz', address: 'Schloßstr. 98, 22041 Hamburg', phone: '040 430 4962' },
             { category: 'Salud Mental', name: 'Dr. med. Mauricio Dessauer', address: 'Hoheluftchaussee 56, 20253 Hamburg', phone: '040 420 41 52' },
-            { category: 'Matronas', name: 'Lourdes Alonso', address: 'Hamburgo (Visitas a domicilio)', phone: '', extra: 'Visitas puerperales en español' }
+            { category: 'Matronas', name: 'Lourdes Alonso', address: 'Hamburgo', extra: 'Visitas puerperales en español' }
         ];
 
-        // --- COMPONENTES DE SECCIÓN ---
+        // --- COMPONENTES ---
+
+        const Sidebar = ({ activeTab, setTab }) => (
+            <nav className="hidden md:flex w-72 h-screen sticky top-0 flex-col bg-zinc-950 border-r border-zinc-900 p-8 space-y-2">
+                <div className="flex items-center gap-3 mb-12 px-2">
+                    <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center font-bold text-white overflow-hidden">
+                        <img src="./Infonicahamburg.jpeg" alt="Logo" className="w-full h-full object-cover" />
+                    </div>
+                    <span className="font-bold text-white text-xl tracking-tighter">InfoNica</span>
+                </div>
+                {[
+                    { id: 'inicio', label: 'Inicio', icon: 'home' },
+                    { id: 'noticias', label: 'Noticias', icon: 'news' },
+                    { id: 'salud', label: 'Salud', icon: 'health' },
+                    { id: 'educacion', label: 'Educación', icon: 'edu' },
+                    { id: 'socialcard', label: 'SocialCard', icon: 'social' },
+                    { id: 'sobremi', label: 'Sobre Mí', icon: 'user' },
+                ].map(item => (
+                    <button 
+                        key={item.id}
+                        onClick={() => setTab(item.id)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeTab === item.id ? 'active-tab' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50'}`}
+                    >
+                        <Icon name={item.icon} /> {item.label}
+                    </button>
+                ))}
+            </nav>
+        );
 
         const Dashboard = ({ setTab }) => (
             <div className="space-y-10 animate-fade">
                 <div className="relative overflow-hidden rounded-[2.5rem] bg-zinc-900 border border-zinc-800 p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
-                    <img src="./Infonicahamburg.jpeg" className="w-32 h-32 md:w-44 md:h-44 rounded-3xl object-cover shadow-2xl" alt="Logo" />
+                    <img src="./Infonicahamburg.jpeg" className="w-32 h-32 md:w-44 md:h-44 rounded-3xl object-cover shadow-2xl bg-zinc-800" alt="Logo" />
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">InfoNicaHamburg</h1>
                         <p className="text-zinc-400 max-w-xl text-lg leading-relaxed">
-                            Guía de experiencia personal para facilitar tu integración en Hamburgo. Información real, directa y probada.
+                            Guía personal basada en experiencia real para facilitar tu integración en Hamburgo.
                         </p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div onClick={() => setTab('noticias')} className="bento-card bg-zinc-900/40 p-6 rounded-3xl cursor-pointer border-l-4 border-blue-500">
-                        <Icon path={icons.news} className="text-blue-500 mb-4" />
-                        <h3 className="font-bold text-white">Noticias</h3>
+                        <Icon name="news" className="text-blue-500 mb-4" />
+                        <h3 className="font-bold text-white text-sm">Últimas Noticias</h3>
                         <p className="text-xs text-zinc-500 mt-2">BAMF, Cosmo y Comunidad.</p>
                     </div>
                     <div onClick={() => setTab('salud')} className="bento-card bg-zinc-900/40 p-6 rounded-3xl cursor-pointer border-l-4 border-emerald-500">
-                        <Icon path={icons.health} className="text-emerald-500 mb-4" />
-                        <h3 className="font-bold text-white">Salud</h3>
-                        <p className="text-xs text-zinc-500 mt-2">Médicos en español.</p>
+                        <Icon name="health" className="text-emerald-500 mb-4" />
+                        <h3 className="font-bold text-white text-sm">Directorio Médico</h3>
+                        <p className="text-xs text-zinc-500 mt-2">Médicos que hablan español.</p>
                     </div>
                     <div onClick={() => setTab('educacion')} className="bento-card bg-zinc-900/40 p-6 rounded-3xl cursor-pointer border-l-4 border-orange-500">
-                        <Icon path={icons.edu} className="text-orange-500 mb-4" />
-                        <h3 className="font-bold text-white">Educación</h3>
-                        <p className="text-xs text-zinc-500 mt-2">BUT y Ausbildung.</p>
+                        <Icon name="edu" className="text-orange-500 mb-4" />
+                        <h3 className="font-bold text-white text-sm">Educación</h3>
+                        <p className="text-xs text-zinc-500 mt-2">BUT y Ausbildung +2 años.</p>
                     </div>
                     <div onClick={() => setTab('socialcard')} className="bento-card bg-zinc-900/40 p-6 rounded-3xl cursor-pointer border-l-4 border-purple-500">
-                        <Icon path={icons.social} className="text-purple-500 mb-4" />
-                        <h3 className="font-bold text-white">SocialCard</h3>
-                        <p className="text-xs text-zinc-500 mt-2">Gestión de servicios.</p>
+                        <Icon name="social" className="text-purple-500 mb-4" />
+                        <h3 className="font-bold text-white text-sm">SocialCard</h3>
+                        <p className="text-xs text-zinc-500 mt-2">Gestión de saldo y portal.</p>
                     </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <a href="https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/asylbewerberleistungen-904606" target="_blank" className="bento-card bg-zinc-900/20 p-8 rounded-[2rem] flex justify-between items-center group">
-                        <div>
-                            <h3 className="text-lg font-bold text-zinc-200">Amt für Migration</h3>
-                            <p className="text-sm text-zinc-500 mt-1">Nueva plataforma de comunicación oficial.</p>
-                        </div>
-                        <Icon path={icons.external} className="text-zinc-600 group-hover:text-white transition-colors" />
-                    </a>
-                    <a href="https://www.arbeitsagentur.de/" target="_blank" className="bento-card bg-zinc-900/20 p-8 rounded-[2rem] flex justify-between items-center group">
-                        <div>
-                            <h3 className="text-lg font-bold text-zinc-200">Agentur für Arbeit</h3>
-                            <p className="text-sm text-zinc-500 mt-1">Búsqueda de empleo y asesoría.</p>
-                        </div>
-                        <Icon path={icons.external} className="text-zinc-600 group-hover:text-white transition-colors" />
-                    </a>
                 </div>
             </div>
         );
 
         const NewsView = () => (
             <div className="animate-fade space-y-8">
-                <div>
-                    <h2 className="text-3xl font-bold">Feed de Noticias</h2>
-                    <p className="text-zinc-500 text-sm mt-1">Fuentes clave sobre migración en Alemania.</p>
-                </div>
-                <div className="grid gap-6">
+                <h2 className="text-3xl font-bold">Noticias y Fuentes</h2>
+                <div className="grid gap-4">
                     {[
-                        { source: 'BAMF Oficial', title: 'Nuevas regulaciones BAMF 2026', desc: 'Sigue la página oficial para avisos legales de última hora.', link: 'https://www.facebook.com/bamf.bund' },
-                        { source: 'Cosmo en Español', title: 'Actualidad en tu idioma', desc: 'Radio y noticias culturales para la comunidad hispana.', link: 'https://www.facebook.com/cosmoenespanol' },
-                        { source: 'Migración Alemania', title: 'Comunidad y Apoyo', desc: 'Grupo de Facebook con experiencias compartidas de trámites.', link: 'https://www.facebook.com/groups/migracionenalemania' }
-                    ].map((news, i) => (
-                        <div key={i} className="bento-card bg-zinc-900/40 p-8 rounded-[2.5rem]">
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                                <span className="text-[10px] font-bold uppercase text-zinc-500">{news.source}</span>
+                        { title: 'BAMF', link: 'https://www.facebook.com/bamf.bund', color: 'blue' },
+                        { title: 'Migración en Alemania', link: 'https://www.facebook.com/groups/migracionenalemania', color: 'emerald' },
+                        { title: 'Cosmo en Español', link: 'https://www.facebook.com/cosmoenespanol', color: 'purple' }
+                    ].map((n, i) => (
+                        <a key={i} href={n.link} target="_blank" className="bento-card p-6 rounded-3xl flex justify-between items-center bg-zinc-900/40">
+                            <div className="flex items-center gap-4">
+                                <Icon name="facebook" className={`text-${n.color}-500`} />
+                                <span className="font-bold">{n.title}</span>
                             </div>
-                            <h3 className="text-xl font-bold mb-3">{news.title}</h3>
-                            <p className="text-zinc-400 text-sm leading-relaxed mb-6">{news.desc}</p>
-                            <a href={news.link} target="_blank" className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 hover:underline">
-                                <Icon path={icons.facebook} className="w-3 h-3" /> VER PÁGINA OFICIAL
-                            </a>
-                        </div>
+                            <Icon name="external" className="text-zinc-600" />
+                        </a>
                     ))}
                 </div>
             </div>
         );
 
         const SaludView = () => {
-            const [search, setSearch] = useState('');
-            const filteredDoctors = DOCTORS_DATA.filter(d => 
-                d.name.toLowerCase().includes(search.toLowerCase()) || 
-                d.category.toLowerCase().includes(search.toLowerCase())
-            );
+            const [query, setQuery] = useState('');
+            const filtered = DOCTORS_DATA.filter(d => d.name.toLowerCase().includes(query.toLowerCase()) || d.category.toLowerCase().includes(query.toLowerCase()));
 
             return (
-                <div className="animate-fade space-y-8">
-                    <div className="flex flex-col md:flex-row justify-between gap-4">
-                        <div>
-                            <h2 className="text-3xl font-bold">Salud</h2>
-                            <p className="text-zinc-500 text-sm mt-1">Directorio de especialistas en Hamburgo.</p>
-                        </div>
-                        <a href="https://www.doctolib.de/" target="_blank" className="bg-zinc-800 px-6 py-3 rounded-2xl border border-zinc-700 flex items-center gap-2 text-sm font-medium hover:bg-zinc-700 transition-all">
-                            Abrir Doctolib <Icon path={icons.external} className="w-4 h-4" />
-                        </a>
+                <div className="animate-fade space-y-6">
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-3xl font-bold">Salud</h2>
+                        <a href="https://www.doctolib.de" target="_blank" className="text-xs bg-zinc-800 px-4 py-2 rounded-xl border border-zinc-700">DOCTOLIB →</a>
                     </div>
-
-                    <div className="bg-amber-500/10 border border-amber-500/20 p-6 rounded-3xl">
-                        <h4 className="text-amber-500 font-bold text-xs uppercase mb-2 tracking-widest">Consejo de Experiencia</h4>
-                        <p className="text-sm text-zinc-300 italic leading-relaxed">
-                            "Si un doctor no aparece en Doctolib, te recomiendo ir físicamente al consultorio. Usa un traductor en el móvil para pedir la cita con la asistente si no hablas alemán."
-                        </p>
+                    <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs italic text-amber-200 leading-relaxed">
+                        "Si el doctor no está en Doctolib, te recomiendo ir directo al consultorio. Usa el traductor en tu móvil para pedir la cita con el asistente."
                     </div>
-
                     <div className="relative">
-                        <Icon path={icons.search} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
-                        <input 
-                            type="text" 
-                            placeholder="Buscar especialidad o nombre (ej: Pediatra)..." 
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-4 pl-12 pr-4 text-sm focus:border-zinc-600 outline-none"
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
+                        <Icon name="search" className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" />
+                        <input onChange={e => setQuery(e.target.value)} type="text" placeholder="Buscar dentista, ginecólogo..." className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-4 pl-12 pr-4 outline-none focus:border-zinc-700 text-sm" />
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredDoctors.map((doc, i) => (
-                            <div key={i} className="bento-card bg-zinc-900/30 p-6 rounded-3xl space-y-4">
-                                <div className="flex justify-between items-start">
-                                    <span className="text-[10px] font-bold uppercase tracking-tighter text-zinc-500 bg-zinc-850 px-2 py-1 rounded">{doc.category}</span>
-                                    {doc.phone && <a href={`tel:${doc.phone}`} className="text-emerald-500 hover:scale-110 transition-transform"><Icon path={icons.phone} /></a>}
+                        {filtered.map((doc, i) => (
+                            <div key={i} className="bento-card bg-zinc-900/40 p-5 rounded-3xl">
+                                <div className="flex justify-between items-start mb-3">
+                                    <span className="text-[10px] font-bold uppercase text-zinc-500 bg-zinc-950 px-2 py-1 rounded">{doc.category}</span>
+                                    {doc.phone && <a href={`tel:${doc.phone}`} className="text-emerald-500"><Icon name="phone" className="w-4 h-4" /></a>}
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-zinc-100">{doc.name}</h3>
-                                    <p className="text-xs text-zinc-500 mt-1">{doc.address}</p>
+                                <h4 className="font-bold text-zinc-100">{doc.name}</h4>
+                                <p className="text-[11px] text-zinc-500 mt-1">{doc.address}</p>
+                                {doc.extra && <p className="text-[10px] text-zinc-400 mt-3 p-2 bg-zinc-950/50 rounded-lg border border-zinc-800/50">{doc.extra}</p>}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const MainApp = () => {
+            const [tab, setTab] = useState('inicio');
+
+            return (
+                <div className="min-h-screen flex flex-col md:flex-row bg-zinc-950">
+                    <Sidebar activeTab={tab} setTab={setTab} />
+                    <main className="flex-1 p-6 md:p-16 pb-32 max-w-7xl mx-auto w-full">
+                        {tab === 'inicio' && <Dashboard setTab={setTab} />}
+                        {tab === 'noticias' && <NewsView />}
+                        {tab === 'salud' && <SaludView />}
+                        {tab === 'educacion' && (
+                            <div className="animate-fade space-y-6">
+                                <h2 className="text-3xl font-bold">Educación</h2>
+                                <div className="bento-card p-8 rounded-[2.5rem] bg-zinc-900/40">
+                                    <h3 className="text-xl font-bold text-orange-500 mb-4 underline">Ausbildung +2 años</h3>
+                                    <p className="text-zinc-400 leading-relaxed text-sm">
+                                        Debido a la dificultad del idioma, mi recomendación basada en experiencia es realizar una formación de más de 2 años. Evita los Umschulung cortos si quieres una base técnica sólida en Alemania.
+                                    </p>
                                 </div>
-                                {doc.extra && <p className="text-[11px] text-zinc-
+                            </div>
+                        )}
+                        {tab === 'socialcard' && (
+                            <div className="animate-fade space-y-6">
+                                <h2 className="text-3xl font-bold">SocialCard</h2>
+                                <a href="https://portal.socialcard.de/" target="_blank" className="bento-card p-8 rounded-[2.5rem] bg-zinc-900/40 block">
+                                    <Icon name="social" className="text-purple-500 w-10 h-10 mb-4" />
+                                    <h3 className="text-xl font-bold mb-2">Portal Oficial</h3>
+                                    <p className="text-sm text-zinc-400">Consulta tu saldo y movimientos de prestaciones sociales.</p>
+                                </a>
+                            </div>
+                        )}
+                        {tab === 'sobremi' && (
+                            <div className="animate-fade max-w-2xl mx-auto text-center py-10">
+                                <img src="./Infonicahamburg.jpeg" className="w-24 h-24 rounded-full mx-auto mb-6 border-2 border-zinc-800" alt="Me" />
+                                <h2 className="text-2xl font-bold mb-4">Sobre este proyecto</h2>
+                                <p className="text-zinc-400 text-sm leading-relaxed bg-zinc-900/50 p-6 rounded-3xl border border-zinc-800">
+                                    Toda la información aquí compartida nace de mi experiencia personal. No es asesoría oficial, sino una mano amiga para que tu proceso en Hamburgo sea más fluido.
+                                </p>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Nav Móvil */}
+                    <nav className="md:hidden fixed bottom-0 left-0 right-0 nav-blur border-t border-zinc-900 flex justify-around py-5 z-50">
+                        <button onClick={() => setTab('inicio')} className={tab === 'inicio' ? 'text-white' : 'text-zinc-600'}><Icon name="home" /></button>
+                        <button onClick={() => setTab('noticias')} className={tab === 'noticias' ? 'text-white' : 'text-zinc-600'}><Icon name="news" /></button>
+                        <button onClick={() => setTab('salud')} className={tab === 'salud' ? 'text-white' : 'text-zinc-600'}><Icon name="health" /></button>
+                        <button onClick={() => setTab('sobremi')} className={tab === 'sobremi' ? 'text-white' : 'text-zinc-600'}><Icon name="user" /></button>
+                    </nav>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<MainApp />);
+    </script>
+</body>
+</html>
