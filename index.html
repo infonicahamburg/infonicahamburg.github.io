@@ -1072,7 +1072,1091 @@ const App=()=>{
       </a>
     </div>
   );
+};<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>InfoNicaHamburg – Portal Integral</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},boxShadow:{glow:'0 0 0 1px rgba(255,255,255,0.08),0 20px 80px rgba(0,0,0,0.35)'}}}}}
+</script>
+<style>
+:root{--bg:#09090b;--panel:rgba(24,24,27,0.66);--stroke:rgba(255,255,255,0.08)}
+html,body{background:radial-gradient(circle at top left,rgba(244,114,182,.12),transparent 28%),radial-gradient(circle at top right,rgba(125,211,252,.10),transparent 24%),radial-gradient(circle at bottom left,rgba(167,243,208,.10),transparent 24%),linear-gradient(180deg,#09090b 0%,#0a0a0c 100%);color:#f4f4f5;}
+body{margin:0;font-family:Inter,sans-serif}
+.bento-card{transition:all .28s ease;border:1px solid var(--stroke);background:var(--panel);backdrop-filter:blur(14px)}
+.bento-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.14);background:rgba(39,39,42,.72)}
+.active-tab{background:rgba(255,255,255,.08);color:white;border:1px solid rgba(255,255,255,.14)}
+.no-scrollbar::-webkit-scrollbar{display:none}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-100%)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+.animate-fade{animation:fadeIn .42s ease-out forwards}
+.animate-slide-left{animation:slideInLeft .32s cubic-bezier(.22,1,.36,1) forwards}
+.animate-overlay{animation:fadeInOverlay .25s ease forwards}
+.soft-border{border:1px solid rgba(255,255,255,.08)}
+input[type=text]{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f4f4f5}
+input[type=text]::placeholder{color:#71717a}
+input[type=text]:focus{outline:none;border-color:rgba(255,255,255,.25)}
+.whatsapp-float{position:fixed;width:56px;height:56px;bottom:24px;right:18px;background-color:#25d366;color:#FFF;border-radius:50%;text-align:center;font-size:30px;box-shadow:0px 4px 18px rgba(0,0,0,0.35);z-index:900;display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease;}
+.whatsapp-float:hover{transform:scale(1.1)}
+/* Doctor cards mobile */
+.doc-card-mobile{background:rgba(24,24,27,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:1rem;margin-bottom:0.75rem;backdrop-filter:blur(14px);}
+/* Scrollbar thin for desktop sidebar */
+.sidebar-scroll{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent}
+</style>
+</head>
+<body><div id="root"></div>
+<script type="text/babel">
+const {useState,useMemo,useEffect}=React;
+
+/* ─── TRANSLATIONS ─── */
+const TR={
+  es:{
+    appName:'InfoNicaHamburg',
+    nav:{inicio:'Inicio',noticias:'Noticias',salud:'Salud',finanzas:'Finanzas',prestaciones:'Prestaciones',empleo:'Agencia Empleo',social:'SocialCard',edu:'Educación',orgs:'Ayuda y Orgs.',perfil:'Sobre mí'},
+    lang:'EN',
+    home:{badge:'Portal integral',title:'InfoNicaHamburg',sub:'La plataforma centralizada para la comunidad nicaragüense e hispana en Hamburgo.',quickAccess:'Secciones disponibles',checkToday:'Hoy conviene revisar',check1:'Citas médicas y teléfonos de contacto.',check2:'Noticias oficiales y comunitarias.',check3:'Organizaciones gratuitas y asesoría.',openHealth:'Abrir salud',viewNews:'Ver noticias',procedures:'Trámites',quickInfo:'Acceso rápido',quickInfoSub:'Todo lo importante en una sola pantalla, optimizado para móvil.'},
+    cards:[{title:'Salud',value:'29',desc:'médicos y especialistas',icon:'health'},{title:'Noticias',value:'3',desc:'fuentes activas',icon:'news'},{title:'Trámites',value:'4',desc:'atajos oficiales',icon:'gov'},{title:'Apoyo',value:'116117',desc:'urgencias fuera de horario',icon:'briefcase'}],
+    search:'Buscar doctor, especialidad o barrio…',
+    noResults:'No se encontraron resultados.',
+    sections:[
+      {id:'noticias',icon:'news',label:'Noticias',color:'bg-sky-400/10 border-sky-400/20 text-sky-100',accent:'text-sky-300',desc:'BAMF oficial, comunidad y COSMO'},
+      {id:'salud',icon:'health',label:'Salud',color:'bg-emerald-400/10 border-emerald-400/20 text-emerald-100',accent:'text-emerald-300',desc:'29 doctores que hablan español'},
+      {id:'finanzas',icon:'finance',label:'Finanzas',color:'bg-amber-400/10 border-amber-400/20 text-amber-100',accent:'text-amber-300',desc:'Cuentas, deudas y consumidor'},
+      {id:'prestaciones',icon:'gov',label:'Prestaciones',color:'bg-cyan-400/10 border-cyan-400/20 text-cyan-100',accent:'text-cyan-300',desc:'Portal online AsylbLG'},
+      {id:'empleo',icon:'briefcase',label:'Agencia Empleo',color:'bg-violet-400/10 border-violet-400/20 text-violet-100',accent:'text-violet-300',desc:'Registro, citas y financiación'},
+      {id:'social',icon:'social',label:'SocialCard',color:'bg-fuchsia-400/10 border-fuchsia-400/20 text-fuchsia-100',accent:'text-fuchsia-300',desc:'Guía completa Bezahlkarte'},
+      {id:'edu',icon:'edu',label:'Educación',color:'bg-rose-400/10 border-rose-400/20 text-rose-100',accent:'text-rose-300',desc:'Cursos, BUT y traductores'},
+      {id:'orgs',icon:'orgs',label:'Ayuda y Orgs.',color:'bg-teal-400/10 border-teal-400/20 text-teal-100',accent:'text-teal-300',desc:'ONGs, ropa, asesoría legal'},
+    ]
+  },
+  en:{
+    appName:'InfoNicaHamburg',
+    nav:{inicio:'Home',noticias:'News Hub',salud:'Health',finanzas:'Finances',prestaciones:'Benefits',empleo:'Job Agency',social:'SocialCard',edu:'Education',orgs:'Help & Orgs',perfil:'About me'},
+    lang:'ES',
+    home:{badge:'Comprehensive portal',title:'InfoNicaHamburg',sub:'The centralized platform for the Nicaraguan and Hispanic community in Hamburg.',quickAccess:'Available sections',checkToday:'Worth checking today',check1:'Doctor appointments and contact numbers.',check2:'Official and community news.',check3:'Free organizations and advice.',openHealth:'Open health',viewNews:'View news',procedures:'Procedures',quickInfo:'Quick access',quickInfoSub:'Everything important in one screen, mobile-optimized.'},
+    cards:[{title:'Health',value:'29',desc:'doctors & specialists',icon:'health'},{title:'News',value:'3',desc:'active sources',icon:'news'},{title:'Procedures',value:'4',desc:'official shortcuts',icon:'gov'},{title:'Support',value:'116117',desc:'out-of-hours emergencies',icon:'briefcase'}],
+    search:'Search doctor, specialty or district…',
+    noResults:'No results found.',
+    sections:[
+      {id:'noticias',icon:'news',label:'News',color:'bg-sky-400/10 border-sky-400/20 text-sky-100',accent:'text-sky-300',desc:'BAMF official, community & COSMO'},
+      {id:'salud',icon:'health',label:'Health',color:'bg-emerald-400/10 border-emerald-400/20 text-emerald-100',accent:'text-emerald-300',desc:'29 Spanish-speaking doctors'},
+      {id:'finanzas',icon:'finance',label:'Finances',color:'bg-amber-400/10 border-amber-400/20 text-amber-100',accent:'text-amber-300',desc:'Accounts, debts & consumer'},
+      {id:'prestaciones',icon:'gov',label:'Benefits',color:'bg-cyan-400/10 border-cyan-400/20 text-cyan-100',accent:'text-cyan-300',desc:'AsylbLG online portal'},
+      {id:'empleo',icon:'briefcase',label:'Job Agency',color:'bg-violet-400/10 border-violet-400/20 text-violet-100',accent:'text-violet-300',desc:'Registration, appointments & funding'},
+      {id:'social',icon:'social',label:'SocialCard',color:'bg-fuchsia-400/10 border-fuchsia-400/20 text-fuchsia-100',accent:'text-fuchsia-300',desc:'Complete Bezahlkarte guide'},
+      {id:'edu',icon:'edu',label:'Education',color:'bg-rose-400/10 border-rose-400/20 text-rose-100',accent:'text-rose-300',desc:'Courses, BUT & translators'},
+      {id:'orgs',icon:'orgs',label:'Help & Orgs.',color:'bg-teal-400/10 border-teal-400/20 text-teal-100',accent:'text-teal-300',desc:'NGOs, clothing, legal advice'},
+    ]
+  }
 };
+
+/* ─── IMAGES ─── */
+const IMG={
+  inicio:'./hamburgo.png',
+  logo:'./Infonicahamburg.jpeg',
+  perfil:'./arvid.png',
+  noticias:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1600&q=80',
+  salud:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80',
+  finanzas:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80',
+  prestaciones:'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80',
+  empleo:'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=80',
+  social:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1600&q=80',
+  edu:'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80',
+  orgs:'https://images.unsplash.com/photo-1593113563332-e147ce100919?auto=format&fit=crop&w=1600&q=80',
+};
+
+/* ─── ICONS ─── */
+const Icon=({name,size=18})=>{
+  const d={
+    home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>',
+    health:'<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+    edu:'<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>',
+    finance:'<line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+    gov:'<circle cx="12" cy="13" r="3"/><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    briefcase:'<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+    social:'<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10"/>',
+    search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
+    globe:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+    user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    orgs:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    whatsapp:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+    link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+    mail:'<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+    menu:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>',
+    close:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    chevron:'<polyline points="9 18 15 12 9 6"/>',
+    phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.37 2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.17-.88a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  };
+  return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:d[name]||''}}/>;
+};
+
+/* ─── BANNER ─── */
+const Banner=({label,title,text,image,tint='from-pink-400/25 via-transparent to-transparent'})=>(
+  <div className="overflow-hidden rounded-[2rem] soft-border bg-zinc-900/60 shadow-glow mb-8">
+    <div className="grid lg:grid-cols-[1.1fr_.9fr]">
+      <div className="p-6 md:p-8 lg:p-10">
+        <span className="inline-flex items-center rounded-full bg-white/8 px-3 py-1 text-[10px] font-bold tracking-[0.25em] text-zinc-200 uppercase">{label}</span>
+        <h2 className="mt-4 text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">{title}</h2>
+        <p className="mt-4 max-w-xl text-sm md:text-base text-zinc-300 leading-relaxed">{text}</p>
+      </div>
+      <div className="relative min-h-[160px] lg:min-h-full">
+        <img src={image} alt={title} className="absolute inset-0 h-full w-full object-cover" loading="lazy"/>
+        <div className={`absolute inset-0 bg-gradient-to-tr ${tint} to-black/10`}/>
+      </div>
+    </div>
+  </div>
+);
+
+/* ─── DOCTORS DATA ─── */
+const DOCS=[
+  {cat:'Cabecera / General',name:'Dra. Beatriz H. Cañas de Sandberger',addr:'Burmesterstr. 2, 22305 Hamburg',telf:'040 294165',note:'Allgemeinmedizin, Tropenmedizin y Migrantenmedizin. Habla español.'},
+  {cat:'Cabecera / General',name:'Dra. Joneth Mayorca Parra',addr:'Washingtonallee 14A, 22111 Hamburg',telf:'040 55643224',note:'De Venezuela. Formularios en español. Acepta cualquier seguro.'},
+  {cat:'Cabecera / General',name:'Elena Kohl',addr:'Bei der Apostelkirche 20, 20257 Hamburg',telf:'040 409 814',note:'Verificar si la consulta sigue activa.'},
+  {cat:'Ginecología',name:'Praxisklinik Winterhude',addr:'Mühlenkamp 32, 22303 Hamburg',telf:'040 411 668 0'},
+  {cat:'Ginecología',name:'Dr. med. Ulrike von der Mark',addr:'Ottenser Hauptstraße 33, 22765 Hamburg',telf:'040 3901244',note:'Doctora habla español. Recepción solo alemán/inglés.'},
+  {cat:'Ginecología',name:'Dra. Alexandra Thewes',addr:'Alsenstraße 25, 22769 Hamburg',telf:'040 856017',note:'Habla inglés, una colega habla español.'},
+  {cat:'Ginecología',name:'Dr. med. Elisenda Laborda Rouch',addr:'Isestraße 63, 20149 Hamburg',telf:'+49 40 483008',note:'Acepta seguros públicos y privados.'},
+  {cat:'Ginecología',name:'Dr. med. Elisabeth Künkel',addr:'Heußweg 37, 20255 Hamburg',telf:'+49 40 4210613',note:'Habla español. Acepta todos los seguros.'},
+  {cat:'Pediatría',name:'Dr. Marie Coen Schäfer',addr:'Pestalozzistraße 15, 22305 Hamburg',telf:'040 61 61 63'},
+  {cat:'Pediatría',name:'Dr. med. Marianne Kilian',addr:'Eppendorfer Landstraße 74, 20249 Hamburg',telf:'040 48 20 36'},
+  {cat:'Pediatría',name:'Dr. med. Laima Petrick',addr:'August-Krogmann-Str. 14a, 22159 Hamburg',telf:'040 643 1777'},
+  {cat:'Pediatría',name:'Dr. med. Bernd Friedrich',addr:'Neue Große Bergstraße 7, 22767 Hamburg',telf:'040 38 22 22'},
+  {cat:'Dentista',name:'Zahnarztpraxis von Schuler Alarcon',addr:'Böttgerstraße 12, 20148 Hamburg',telf:'040 456 547',note:'Atención en español, inglés y lengua de signos.'},
+  {cat:'Dentista',name:'Zahnarztpraxis Silva-Bielecke',addr:'Holsteinischer Kamp 1, 22081 Hamburg',telf:'040 20976237',note:'Sonia Rojas habla español.'},
+  {cat:'Dentista',name:'Dentista Hamburg',addr:'Speersort 8, 20095 Hamburg',telf:'040 344 544',note:'Implantes, endodoncia, periodoncia. Español. Abierto sábados y domingos.'},
+  {cat:'ORL / Alergia',name:'PD Dr. Marcos Sánchez Hanke',addr:'Speersort 8, 20095 Hamburg',telf:'040 338730',note:'Secretaria habla español.'},
+  {cat:'ORL / Alergia',name:'Dra. Johanna Lanwehr',addr:'Osterstraße 126, 20255 Hamburg',telf:'+49 40 4917474',note:'Estudió en España y Nicaragua. Habla español.'},
+  {cat:'Oftalmología',name:'Dr. med. Gabriele Brumm',addr:'Eppendorfer Landstrasse 36, 20249 Hamburg',telf:'040 207255',note:'Habla español muy bien.'},
+  {cat:'Traumatología',name:'Dra. Luisa Klein',addr:'Asklepios Gesundheitszentrum West / Heidberg',telf:'040 81912027',note:'Citas por app Samedi o página web.'},
+  {cat:'Psicología',name:'Dipl.-Psych. Francisca de Lima',addr:'Ferdinandstraße 36, 2. Etage, 20095 Hamburg',telf:'040 431 82 661 / 0157-38826033',note:'info@praxis-de-lima.de'},
+  {cat:'Psicología',name:'Dr. Enrique Orive Asensio',addr:'Bahrenfelderstr. 169, 5.OG, 22765 Hamburg',telf:'kontakt@psychotherapie-hamburg-altona.de'},
+  {cat:'Psicología',name:'Dipl.-Psych. Catalina Löffler',addr:'Winterhuder Marktplatz 2, 22299 Hamburg',telf:'040-36 85 85 34'},
+  {cat:'Psicología',name:'Dipl.-Psych. Maria V. del Vecchio-Schulz',addr:'Schloßstr. 98, 22041 Hamburg',telf:'040 430 4962'},
+  {cat:'Psicología',name:'María Teresa González Osorio',addr:'Bahrenfeld, Hamburg',telf:'+49 177 3322958'},
+  {cat:'Psicología / Neurología',name:'Dr. med. Mauricio Dessauer',addr:'Hoheluftchaussee 56, 20253 Hamburg',telf:'040 / 4 20 41 52',note:'Psiquiatría y Neurología.'},
+  {cat:'Dermatología',name:'Dra. Andrea Vanegas Ramirez',addr:'Uhlenhorster Weg 30, 22085 Hamburg',telf:'info@tropicderm.de',note:'Colombiana. TROPICDERM.'},
+  {cat:'Dermatología',name:'Dr. Christina Hojabri',addr:'Neue Große Bergstraße 20, 22767 Hamburg',telf:'040 38 619 062',note:'Especialista dermatología infantil.'},
+  {cat:'Matrona',name:'Lourdes Alonso',addr:'Hamburg',telf:'040 642 331 96 / 0176 961 632 40',note:'Visita puerperal en español y alemán.'},
+  {cat:'Matrona',name:'Viktoria Nickel',addr:'Heidberg 5, 22301 Hamburg',telf:'040 412 600 14',note:'Atiende en Winterhude, Eppendorf y Alsterdorf.'},
+];
+
+/* ─── CATEGORY COLORS ─── */
+const CAT_COLOR={
+  'Cabecera / General':'bg-emerald-400/15 text-emerald-300 border-emerald-400/30',
+  'Ginecología':'bg-pink-400/15 text-pink-300 border-pink-400/30',
+  'Pediatría':'bg-sky-400/15 text-sky-300 border-sky-400/30',
+  'Dentista':'bg-amber-400/15 text-amber-300 border-amber-400/30',
+  'ORL / Alergia':'bg-violet-400/15 text-violet-300 border-violet-400/30',
+  'Oftalmología':'bg-cyan-400/15 text-cyan-300 border-cyan-400/30',
+  'Traumatología':'bg-orange-400/15 text-orange-300 border-orange-400/30',
+  'Psicología':'bg-fuchsia-400/15 text-fuchsia-300 border-fuchsia-400/30',
+  'Psicología / Neurología':'bg-fuchsia-400/15 text-fuchsia-300 border-fuchsia-400/30',
+  'Dermatología':'bg-rose-400/15 text-rose-300 border-rose-400/30',
+  'Matrona':'bg-teal-400/15 text-teal-300 border-teal-400/30',
+};
+
+/* ─── MAIN APP ─── */
+const App=()=>{
+  const [tab,setTab]=useState('inicio');
+  const [lang,setLang]=useState('es');
+  const [menuOpen,setMenuOpen]=useState(false);
+  const [newsFilter,setNewsFilter]=useState('Todos');
+  const [docSearch,setDocSearch]=useState('');
+  const [prestSec,setPrestSec]=useState('servicios');
+  const [empleoSec,setEmpleoSec]=useState('guia');
+  const [socialSec,setSocialSec]=useState('guia');
+
+  const T=TR[lang];
+  const toggleLang=()=>setLang(l=>l==='es'?'en':'es');
+
+  // Cerrar menu cuando cambia de tab
+  const goTo=(id)=>{setTab(id);setMenuOpen(false);};
+
+  // Prevenir scroll del body cuando menú abierto
+  useEffect(()=>{
+    if(menuOpen){document.body.style.overflow='hidden';}
+    else{document.body.style.overflow='';}
+    return()=>{document.body.style.overflow='';};
+  },[menuOpen]);
+
+  const newsItems=[
+    {type:'Oficial',tag:'BAMF OFICIAL',title:lang==='es'?'Información oficial de migración':'Official migration information',text:lang==='es'?'Noticias oficiales sobre integración, residencia y permisos en Alemania.':'Official news on integration, residence and permits in Germany.',href:'https://www.facebook.com/bamf.socialmedia/'},
+    {type:'Comunidad',tag:'COMUNIDAD',title:lang==='es'?'Migración en Alemania':'Migration in Germany',text:lang==='es'?'Información comunitaria útil sobre trámites, experiencias y apoyo.':'Useful community info about procedures and support.',href:'https://www.facebook.com/migracionenalemania'},
+    {type:'Radio/Prensa',tag:'COSMO',title:'COSMO en español',text:lang==='es'?'Noticias, entrevistas y podcast para migrantes en Alemania.':'News, interviews and podcast for migrants in Germany.',href:'https://www.facebook.com/cosmoestacionsur/'},
+  ];
+  const filteredNews=newsFilter==='Todos'?newsItems:newsItems.filter(n=>n.type===newsFilter);
+
+  const filteredDocs=useMemo(()=>{
+    const q=docSearch.toLowerCase().trim();
+    if(!q)return DOCS;
+    return DOCS.filter(d=>(d.name+d.cat+(d.addr||'')+(d.note||'')).toLowerCase().includes(q));
+  },[docSearch]);
+
+  /* ── NAV ITEMS ── */
+  const NAV=[
+    {id:'inicio',icon:'home'},{id:'noticias',icon:'news'},{id:'salud',icon:'health'},
+    {id:'finanzas',icon:'finance'},{id:'prestaciones',icon:'gov'},{id:'empleo',icon:'briefcase'},
+    {id:'social',icon:'social'},{id:'edu',icon:'edu'},{id:'orgs',icon:'orgs'},{id:'perfil',icon:'user'},
+  ];
+
+  /* ── MOBILE HEADER ── */
+  const MobileHeader=()=>(
+    <header className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-zinc-950/95 border-b border-white/8 backdrop-blur-xl">
+      <button onClick={()=>setMenuOpen(true)} className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-zinc-300">
+        <Icon name="menu" size={22}/>
+      </button>
+      <button onClick={()=>goTo('inicio')} className="flex items-center gap-2">
+        <img src={IMG.logo} alt="logo" className="w-8 h-8 rounded-lg object-cover"/>
+        <span className="font-bold text-sm">InfoNicaHamburg</span>
+      </button>
+      <button onClick={toggleLang} className="flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold text-zinc-300">
+        {T.lang}
+      </button>
+    </header>
+  );
+
+  /* ── MOBILE DRAWER ── */
+  const MobileDrawer=()=>(
+    <div className="md:hidden fixed inset-0 z-[200]">
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-overlay" onClick={()=>setMenuOpen(false)}/>
+      {/* Drawer */}
+      <div className="absolute left-0 top-0 bottom-0 w-72 bg-zinc-950 border-r border-white/10 animate-slide-left flex flex-col">
+        <div className="flex items-center justify-between px-5 py-5 border-b border-white/8">
+          <div className="flex items-center gap-3">
+            <img src={IMG.logo} alt="logo" className="w-10 h-10 rounded-xl object-cover"/>
+            <div>
+              <div className="font-bold text-sm text-white">InfoNicaHamburg</div>
+              <div className="text-[10px] text-zinc-400">{lang==='es'?'Portal Integral':'Comprehensive Portal'}</div>
+            </div>
+          </div>
+          <button onClick={()=>setMenuOpen(false)} className="p-2 rounded-xl bg-white/5 text-zinc-400 hover:bg-white/10">
+            <Icon name="close" size={18}/>
+          </button>
+        </div>
+        <nav className="flex-1 overflow-y-auto sidebar-scroll px-3 py-4 space-y-1">
+          {NAV.map(item=>(
+            <button key={item.id} onClick={()=>goTo(item.id)}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium transition-all ${tab===item.id?'bg-white/10 text-white border border-white/14':'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'}`}>
+              <div className="flex items-center gap-3">
+                <Icon name={item.icon} size={16}/>
+                {T.nav[item.id]}
+              </div>
+              {tab===item.id&&<Icon name="chevron" size={14}/>}
+            </button>
+          ))}
+        </nav>
+        <div className="px-5 py-4 border-t border-white/8">
+          <button onClick={toggleLang} className="w-full flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-xs font-bold text-zinc-300">
+            <Icon name="globe" size={14}/> {lang==='es'?'Switch to English':'Cambiar a Español'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ── DOCTOR CARD (mobile) ── */
+  const DocCard=({d})=>{
+    const colorClass=CAT_COLOR[d.cat]||'bg-zinc-400/15 text-zinc-300 border-zinc-400/30';
+    return(
+      <div className="doc-card-mobile">
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${colorClass}`}>{d.cat}</span>
+        <h4 className="font-semibold text-zinc-100 mt-2 text-sm leading-snug">{d.name}</h4>
+        {d.addr&&<p className="text-xs text-zinc-400 mt-1">{d.addr}</p>}
+        {d.telf&&(
+          <a href={`tel:${d.telf.replace(/\s/g,'')}`} className="inline-flex items-center gap-1.5 mt-2 bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 text-xs font-mono px-3 py-1.5 rounded-xl">
+            <Icon name="phone" size={12}/>{d.telf}
+          </a>
+        )}
+        {d.note&&<p className="text-[11px] mt-2 text-zinc-500 italic leading-relaxed">{d.note}</p>}
+      </div>
+    );
+  };
+
+  /* ── HOME ── */
+  const Home=()=>(
+    <div className="space-y-6">
+      {/* Hero */}
+      <section className="overflow-hidden rounded-[2rem] soft-border bg-zinc-900/60 shadow-glow">
+        <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+          <div className="p-5 sm:p-8 md:p-10 lg:p-12">
+            <span className="inline-flex items-center rounded-full bg-pink-400/10 px-3 py-1 text-[10px] font-bold tracking-[0.25em] text-pink-200 uppercase">{T.home.badge}</span>
+            <h1 className="mt-3 text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[0.95]">{T.home.title}</h1>
+            <p className="mt-4 max-w-2xl text-sm sm:text-base text-zinc-300 leading-relaxed">{T.home.sub}</p>
+            <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+              {T.cards.map(c=>(
+                <div key={c.title} className="rounded-2xl border border-white/8 bg-white/5 p-3 sm:p-4">
+                  <div className="flex items-center justify-between text-zinc-400">
+                    <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.22em]">{c.title}</span>
+                    <Icon name={c.icon} size={14}/>
+                  </div>
+                  <div className="mt-2 text-xl sm:text-3xl font-extrabold">{c.value}</div>
+                  <div className="mt-0.5 text-[10px] sm:text-xs text-zinc-400">{c.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative min-h-[180px] lg:min-h-full">
+            <img src={IMG.inicio} alt="Hamburg" className="absolute inset-0 h-full w-full object-cover" loading="lazy"/>
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/65 via-black/18 to-pink-300/15"/>
+          </div>
+        </div>
+      </section>
+
+      {/* Secciones grid */}
+      <div>
+        <h2 className="text-base font-bold text-zinc-300 mb-3 px-1">{T.home.quickAccess}</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          {T.sections.map(s=>(
+            <button key={s.id} onClick={()=>goTo(s.id)}
+              className={`bento-card flex flex-col items-start p-4 rounded-[1.5rem] border text-left transition-all active:scale-95 ${s.color}`}>
+              <Icon name={s.icon} size={20}/>
+              <span className="mt-3 font-bold text-sm leading-tight">{s.label}</span>
+              <span className={`mt-1 text-[11px] leading-snug opacity-75 ${s.accent}`}>{s.desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Hoy conviene revisar */}
+      <div className="bento-card p-5 rounded-[2rem]">
+        <h3 className="text-base font-bold mb-3 text-sky-100">{T.home.checkToday}</h3>
+        <ul className="space-y-2 text-sm text-zinc-300">
+          <li className="flex items-start gap-2"><span className="text-sky-300 mt-0.5">•</span>{T.home.check1}</li>
+          <li className="flex items-start gap-2"><span className="text-sky-300 mt-0.5">•</span>{T.home.check2}</li>
+          <li className="flex items-start gap-2"><span className="text-sky-300 mt-0.5">•</span>{T.home.check3}</li>
+        </ul>
+      </div>
+    </div>
+  );
+
+  /* ── SALUD ── */
+  const Salud=()=>(
+    <div className="space-y-6 animate-fade">
+      <Banner label={T.nav.salud} title={lang==='es'?'Doctores que hablan español en Hamburgo':'Spanish-speaking doctors in Hamburg'} text={lang==='es'?'Directorio visual optimizado para móvil. Busca por nombre, especialidad o barrio.':'Visual directory optimized for mobile. Search by name, specialty or district.'} image={IMG.salud} tint="from-emerald-400/20 via-transparent to-transparent"/>
+
+      <div className="bento-card p-5 rounded-[2rem] bg-rose-400/5 border border-rose-500/30">
+        <h4 className="font-bold text-rose-100 mb-1 text-sm">{lang==='es'?'¿Perdiste tu tarjeta de salud?':'Lost your health card?'}</h4>
+        <p className="text-xs text-zinc-300 mb-3">{lang==='es'?'Solicítala al Amt für Migration a través del portal online de Prestaciones.':'Request it from the Amt für Migration through the Benefits online portal.'}</p>
+        <button onClick={()=>goTo('prestaciones')} className="text-xs bg-rose-500/20 text-rose-100 px-3 py-2 rounded-lg font-bold border border-rose-500/40">{lang==='es'?'Ir a Prestaciones':'Go to Benefits'}</button>
+      </div>
+
+      <div className="relative">
+        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-zinc-500"><Icon name="search"/></div>
+        <input type="text" value={docSearch} onChange={e=>setDocSearch(e.target.value)} placeholder={T.search} className="w-full rounded-2xl pl-11 pr-4 py-3 text-sm"/>
+      </div>
+
+      <p className="text-xs text-zinc-500 px-1">{filteredDocs.length} {lang==='es'?'resultados':'results'}</p>
+
+      {/* MOBILE: Cards */}
+      <div className="md:hidden">
+        {filteredDocs.length===0
+          ? <p className="text-center text-zinc-500 py-8">{T.noResults}</p>
+          : filteredDocs.map((d,i)=><DocCard key={i} d={d}/>)
+        }
+      </div>
+
+      {/* DESKTOP: Table */}
+      <div className="hidden md:block bg-zinc-900/50 rounded-[2rem] border border-zinc-800 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left text-sm">
+            <thead className="bg-zinc-900/80">
+              <tr>
+                <th className="p-4 text-zinc-400 font-medium">{lang==='es'?'Especialidad':'Specialty'}</th>
+                <th className="p-4 text-zinc-400 font-medium">{lang==='es'?'Nombre':'Name'}</th>
+                <th className="p-4 text-zinc-400 font-medium">{lang==='es'?'Dirección / Notas':'Address / Notes'}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-800">
+              {filteredDocs.length===0
+                ? <tr><td colSpan={3} className="p-6 text-center text-zinc-500">{T.noResults}</td></tr>
+                : filteredDocs.map((d,i)=>(
+                  <tr key={i} className="hover:bg-zinc-800/30">
+                    <td className="p-4 align-top"><span className="text-emerald-300 font-bold text-[10px] uppercase tracking-[0.22em]">{d.cat}</span></td>
+                    <td className="p-4 align-top font-semibold text-zinc-100">{d.name}</td>
+                    <td className="p-4 align-top text-zinc-300">
+                      <div className="text-xs">{d.addr}</div>
+                      {d.telf&&<div className="text-emerald-300 font-mono mt-1">{d.telf}</div>}
+                      {d.note&&<div className="text-[10px] mt-1 italic text-zinc-500">{d.note}</div>}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bento-card p-5 rounded-[2rem]">
+          <h4 className="font-bold text-pink-100 mb-1">Doctolib</h4>
+          <p className="text-sm text-zinc-300">{lang==='es'?'Filtra por idioma del doctor y disponibilidad.':'Filter by doctor language and availability.'}</p>
+          <a href="https://www.doctolib.de" target="_blank" rel="noreferrer" className="mt-3 flex items-center gap-2 text-xs underline font-bold text-pink-200"><Icon name="link" size={14}/>{lang==='es'?'ABRIR WEB':'OPEN WEBSITE'}</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem]">
+          <h4 className="font-bold text-sky-100 mb-1">Portal 116117</h4>
+          <p className="text-sm text-zinc-300">{lang==='es'?'Urgencias médicas fuera de horario de oficina.':'Medical emergencies outside office hours.'}</p>
+          <a href="https://www.116117.de" target="_blank" rel="noreferrer" className="mt-3 flex items-center gap-2 text-xs underline font-bold text-sky-200"><Icon name="link" size={14}/>{lang==='es'?'VER URGENCIAS':'VIEW EMERGENCIES'}</a>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ── FINANZAS ── */
+  const Finanzas=()=>(
+    <div className="space-y-6 animate-fade">
+      <Banner label={T.nav.finanzas} title={lang==='es'?'Finanzas y deudas':'Finances and debts'} text={lang==='es'?'Gestiona deudas, cuentas bancarias y protección al consumidor en Hamburgo.':'Manage debts, bank accounts and consumer protection in Hamburg.'} image={IMG.finanzas} tint="from-amber-400/20 via-transparent to-transparent"/>
+      <div className="bento-card p-6 rounded-[2rem] border-l-4 border-emerald-400/60">
+        <h4 className="font-bold text-emerald-100 mb-2">💳 {lang==='es'?'Abrir una cuenta bancaria física':'Open a physical bank account'}</h4>
+        <p className="text-sm text-zinc-300 mb-2">{lang==='es'?'Recomendamos abrir una cuenta en un banco físico (Sparkasse, Haspa o Holsteins) solo después de que estés en un alojamiento de seguimiento y te suban las prestaciones.':'We recommend opening an account in a physical bank (Sparkasse, Haspa or Holsteins) only after you are in follow-up accommodation and your benefits increase.'}</p>
+        <ul className="text-xs text-zinc-400 space-y-2 mt-3">
+          <li>• <strong>{lang==='es'?'Paso 1:':'Step 1:'}</strong> {lang==='es'?'Haz una cita online o visita la sucursal (Filiale) personalmente.':'Make an online appointment or visit the branch (Filiale) personally.'}</li>
+          <li>• <strong>{lang==='es'?'Requisitos:':'Requirements:'}</strong> {lang==='es'?'Ausweis, Meldebestätigung, copia del pasaporte y tu Steuer-ID.':'Ausweis, Meldebestätigung, passport copy and your Steuer-ID.'}</li>
+          <li>• <strong>{lang==='es'?'Tecnología:':'Technology:'}</strong> {lang==='es'?'Lleva tu teléfono con internet móvil y acceso a tu correo para configurar la App en el banco.':'Bring your phone with mobile internet and email access to set up the App at the bank.'}</li>
+        </ul>
+      </div>
+      <div className="bento-card p-6 rounded-[2rem] bg-rose-400/5 border-rose-300/20">
+        <h4 className="font-bold text-rose-100 mb-2">⚖️ {lang==='es'?'Gestión de deudas (Schulden)':'Debt management'}</h4>
+        <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'No ignores las cartas de Inkasso. Existen organizaciones públicas que te ayudan gratis.':'Do not ignore Inkasso letters. There are public organizations that help you for free.'}</p>
+        <div className="flex flex-wrap gap-3">
+          <a href="https://www.drk-hamburg.de/angebote/schuldnerberatung.html" target="_blank" className="flex items-center gap-2 bg-rose-400/20 border border-rose-400/40 text-rose-100 text-xs px-3 py-2 rounded-xl"><Icon name="link" size={12}/> DRK Schuldnerberatung</a>
+          <a href="https://www.diakonie-hamburg.de/de/rat-und-hilfe/schulden/" target="_blank" className="flex items-center gap-2 bg-rose-400/20 border border-rose-400/40 text-rose-100 text-xs px-3 py-2 rounded-xl"><Icon name="link" size={12}/> Diakonisches Werk</a>
+        </div>
+      </div>
+      <div className="bento-card p-6 rounded-[2rem] border-l-4 border-amber-400/60">
+        <h4 className="font-bold text-amber-100 mb-2">🛑 {lang==='es'?'Protección al consumidor':'Consumer protection'}</h4>
+        <p className="text-sm text-zinc-300 mb-2">{lang==='es'?'Contratos engañosos: acude a la Verbraucherzentrale im Quartier. Defensa gratuita en español.':'Deceptive contracts: go to the Verbraucherzentrale im Quartier. Free defense in Spanish.'}</p>
+        <div className="text-xs text-zinc-400 space-y-1 mt-3">
+          <p className="font-bold text-zinc-200 mb-2">{lang==='es'?'Direcciones:':'Addresses:'}</p>
+          <p>• <strong>St. Georg:</strong> Kirchenallee / Ecke Ernst-Merck-Straße</p>
+          <p>• <strong>Billstedt/Horn:</strong> Merkenstraße 4 — Lunes 14–16h</p>
+          <p>• <strong>Harburg:</strong> Lüneburger Str. 1a — Martes 14–17h</p>
+          <p>• <strong>Neuwiedenthal:</strong> Rehrstieg 22 — Jueves 10–12h</p>
+          <p>• <strong>Osdorfer Born:</strong> Bornheide 76 — Miércoles 12–14h</p>
+        </div>
+        <a href="https://www.vzhh.de/themen/verbraucherzentrale-im-quartier/verbraucherschutz-vor-ort-hamburgs-stadtteilen" target="_blank" className="inline-flex mt-3 items-center gap-2 text-xs font-bold text-amber-300 underline"><Icon name="link" size={12}/>{lang==='es'?'Ver todas las oficinas':'View all offices'}</a>
+      </div>
+    </div>
+  );
+
+  /* ── PRESTACIONES ── */
+  const Prestaciones=()=>{
+    const subs=[
+      {id:'servicios',label:lang==='es'?'🖥️ Online':'🖥️ Online'},
+      {id:'guia',label:lang==='es'?'📋 Pasos':'📋 Steps'},
+      {id:'que',label:lang==='es'?'💰 Qué recibes':'💰 You receive'},
+      {id:'consejos',label:lang==='es'?'💡 Consejos':'💡 Tips'},
+    ];
+    return(
+      <div className="space-y-6 animate-fade">
+        <Banner label={lang==='es'?'Prestaciones':'Benefits'} title={lang==='es'?'Prestaciones AsylbLG':'AsylbLG Benefits'} text={lang==='es'?'Gestiona tus prestaciones online sin colas ni citas.':'Manage your benefits online without queues or appointments.'} image={IMG.prestaciones} tint="from-cyan-400/20 via-transparent to-transparent"/>
+        <div className="bento-card rounded-[2rem] p-4 border-l-4 border-yellow-400/70 bg-yellow-400/5">
+          <p className="text-yellow-200 font-bold text-sm">🆕 {lang==='es'?'Desde 2024 puedes hacer todos tus trámites online en hamburg.de. Sin ir en persona.':'Since 2024 you can handle all your procedures online at hamburg.de. No in-person visit needed.'}</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {subs.map(s=>(
+            <button key={s.id} onClick={()=>setPrestSec(s.id)} className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${prestSec===s.id?'bg-white text-black border-white':'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-600'}`}>{s.label}</button>
+          ))}
+        </div>
+        {prestSec==='servicios'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {emoji:'📝',color:'border-emerald-400/40 bg-emerald-400/5',tc:'text-emerald-100',lc:'text-emerald-300',title:lang==='es'?'1. Solicitud Nueva (Neu-Antrag)':'1. New Application (Neu-Antrag)',desc:lang==='es'?'Solicita por primera vez las prestaciones según AsylbLG. Online sin ir a la oficina.':'Apply for AsylbLG benefits for the first time. Online without going to the office.',href:'https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/neu-antrag-asylbewerberleistungen-1140248',btn:lang==='es'?'INICIAR':'START'},
+              {emoji:'📄',color:'border-sky-400/40 bg-sky-400/5',tc:'text-sky-100',lc:'text-sky-300',title:lang==='es'?'2. Solicitar Leistungsbescheid':'2. Request Leistungsbescheid',desc:lang==='es'?'Pide tu resolución u otras certificaciones. Te la envían por correo o email.':'Request your benefit resolution or certificates. Sent by post or email.',href:'https://am.hamburg.de/intelliform/forms/HH/standard/alg_leistungen_asylblg/alg_leistungen_asylblg/index?value=2',btn:lang==='es'?'SOLICITAR':'REQUEST'},
+              {emoji:'🩺',color:'border-violet-400/40 bg-violet-400/5',tc:'text-violet-100',lc:'text-violet-300',title:lang==='es'?'3. Ayuda para Cuidados (Hilfe zur Pflege)':'3. Nursing Care Assistance',desc:lang==='es'?'Si tú o un familiar necesitan cuidados, solicita la Hilfe zur Pflege completamente online.':'If you or a family member need care, apply for Hilfe zur Pflege completely online.',href:'https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/neu-antrag-pflege-1133612',btn:lang==='es'?'SOLICITAR':'REQUEST'},
+              {emoji:'💬',color:'border-amber-400/40 bg-amber-400/5',tc:'text-amber-100',lc:'text-amber-300',title:lang==='es'?'4. ⭐ Comunicarte con el Amt':'4. ⭐ Contact the Amt',desc:lang==='es'?'LA MÁS IMPORTANTE: Envía consultas, cambios de situación y documentos al Amt. Reemplaza visitas presenciales.':'MOST IMPORTANT: Send queries, changes and documents to the Amt. Replaces in-person visits.',href:'https://www.hamburg.de/politik-und-verwaltung/behoerden/behoerde-fuer-inneres-und-sport/anfragen-und-mitteilungen-1140134',btn:lang==='es'?'ENVIAR MENSAJE':'SEND MESSAGE'},
+            ].map((s,i)=>(
+              <div key={i} className={`bento-card p-5 rounded-[2rem] border ${s.color}`}>
+                <div className="text-3xl mb-2">{s.emoji}</div>
+                <h4 className={`font-bold mb-1 ${s.tc}`}>{s.title}</h4>
+                <p className="text-sm text-zinc-300 mb-3 leading-relaxed">{s.desc}</p>
+                <a href={s.href} target="_blank" rel="noreferrer" className={`inline-flex items-center gap-2 text-xs font-bold underline uppercase tracking-widest ${s.lc}`}><Icon name="link" size={12}/>{s.btn}</a>
+              </div>
+            ))}
+          </div>
+        )}
+        {prestSec==='guia'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {num:'1',c:'bg-cyan-400/20 text-cyan-200 border-cyan-400/30',title:lang==='es'?'Accede al portal hamburg.de':'Go to hamburg.de portal',desc:lang==='es'?'Visita hamburg.de. No necesitas cuenta ni registro previo. Todo gratuito.':'Visit hamburg.de. No account needed. Everything is free.'},
+              {num:'2',c:'bg-emerald-400/20 text-emerald-200 border-emerald-400/30',title:lang==='es'?'Elige el servicio':'Choose the service',desc:lang==='es'?'Selecciona entre los 4 servicios: nueva solicitud, certificados, cuidados o enviar mensajes.':'Select from 4 services: new application, certificates, care or messages.'},
+              {num:'3',c:'bg-violet-400/20 text-violet-200 border-violet-400/30',title:lang==='es'?'Completa el formulario':'Complete the form',desc:lang==='es'?'Rellena los campos. Ten a mano tu Fallnummer. Puedes adjuntar fotos desde el móvil.':'Fill in the fields. Have your Fallnummer ready. You can attach photos from your phone.'},
+              {num:'4',c:'bg-amber-400/20 text-amber-200 border-amber-400/30',title:lang==='es'?'Recibe confirmación':'Receive confirmation',desc:lang==='es'?'Recibirás una confirmación. El Amt responde en días hábiles. Urgente: asylblg@amtfuermigration.hamburg.de':'You will receive a confirmation. The Amt responds within business days. Urgent: asylblg@amtfuermigration.hamburg.de'},
+            ].map((s,i)=>(
+              <div key={i} className="bento-card rounded-[2rem] p-5">
+                <div className="flex gap-4">
+                  <div className={`w-10 h-10 min-w-[2.5rem] rounded-2xl border flex items-center justify-center font-extrabold text-lg ${s.c}`}>{s.num}</div>
+                  <div><h4 className="font-bold text-zinc-100 mb-1">{s.title}</h4><p className="text-sm text-zinc-300">{s.desc}</p></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {prestSec==='que'&&(
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade">
+            {[
+              {e:'💵',t:lang==='es'?'Prestación en efectivo':'Cash benefit',d:lang==='es'?'Cantidad mensual para gastos personales: ropa, higiene, transporte y ocio.':'Monthly amount for personal expenses: clothing, hygiene, transport and leisure.'},
+              {e:'🏠',t:lang==='es'?'Alojamiento':'Accommodation',d:lang==='es'?'El Estado cubre el alojamiento mientras dure el procedimiento de asilo.':'The State covers accommodation during the asylum process.'},
+              {e:'🍽️',t:lang==='es'?'Alimentación':'Food',d:lang==='es'?'Cobertura de alimentación según el tipo de alojamiento.':'Food coverage depending on the type of accommodation.'},
+              {e:'🏥',t:lang==='es'?'Asistencia médica':'Medical care',d:lang==='es'?'Atención básica: enfermedades agudas, dolor, urgencias y embarazo.':'Basic care: acute illness, pain, emergencies and pregnancy.'},
+              {e:'👶',t:lang==='es'?'Prestaciones para menores':'Benefits for minors',d:lang==='es'?'Los menores reciben prestaciones específicas incluyendo educación y actividades.':'Minors receive specific benefits including education and activities.'},
+              {e:'🩺',t:lang==='es'?'Ayuda para cuidados':'Nursing care',d:lang==='es'?'Para personas que necesitan ayuda por enfermedad, discapacidad o edad.':'For people who need help due to illness, disability or age.'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1 text-sm">{c.t}</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {prestSec==='consejos'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'📧',t:lang==='es'?'Email oficial del Amt':'Official Amt email',d:'asylblg@amtfuermigration.hamburg.de'},
+              {e:'📑',t:lang==='es'?'Guarda tu número de caso':'Save your case number',d:lang==='es'?'El Fallnummer aparece en todos tus documentos oficiales. Lo necesitarás en cada formulario.':'The Fallnummer appears in all your official documents. You will need it in every form.'},
+              {e:'📸',t:lang==='es'?'Fotos de documentos':'Document photos',d:lang==='es'?'Sube fotos desde el móvil. Que sean legibles y sin sombras.':'Upload photos from your phone. Make sure they are legible and shadow-free.'},
+              {e:'🔄',t:lang==='es'?'Comunica cambios de situación':'Report changes',d:lang==='es'?'Cambio de domicilio, trabajo o familia: comunícalo inmediatamente por "Anfragen und Mitteilungen".':'Change of address, work or family: report it immediately via "Anfragen und Mitteilungen".'},
+              {e:'⏰',t:lang==='es'?'Plazos de respuesta':'Response deadlines',d:lang==='es'?'El Amt responde en pocos días hábiles para consultas y varias semanas para nuevas solicitudes.':'The Amt usually responds within a few business days for queries and several weeks for new applications.'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  /* ── EMPLEO ── */
+  const Empleo=()=>{
+    const subs=[
+      {id:'guia',label:lang==='es'?'📋 Registro':'📋 Register'},
+      {id:'cita',label:lang==='es'?'📅 Cita':'📅 Appointment'},
+      {id:'financiacion',label:lang==='es'?'🎓 Titulación':'🎓 Degree'},
+      {id:'aleman',label:lang==='es'?'🇩🇪 Alemán B2':'🇩🇪 German B2'},
+      {id:'empleo2',label:lang==='es'?'💼 Empleo':'💼 Jobs'},
+    ];
+    return(
+      <div className="space-y-6 animate-fade">
+        <Banner label={T.nav.empleo} title={lang==='es'?'Agentur für Arbeit Hamburg':'Employment Agency Hamburg'} text={lang==='es'?'Registro online, citas, financiación de titulaciones, alemán y búsqueda de empleo.':'Online registration, appointments, degree funding, German courses and job search.'} image={IMG.empleo} tint="from-violet-400/20 via-transparent to-transparent"/>
+        <div className="bento-card p-4 rounded-2xl bg-sky-400/5 border border-sky-400/20">
+          <div className="text-sm text-zinc-300 space-y-1">
+            <p>📍 <strong>Welcome Center:</strong> Süderstrasse 32 (entrada por detrás, 1er piso)</p>
+            <p>📞 0800 4 5555-00 (gratis) | 🕐 Lun–Jue 7:45–12:15 | Jue 15:00–17:00 | Vie 7:45–12:15</p>
+          </div>
+          <a href="https://www.hamburg.com/welcome/en/" target="_blank" className="inline-flex mt-2 items-center gap-2 text-xs font-bold text-sky-300 underline"><Icon name="link" size={12}/>{lang==='es'?'Web Oficial':'Official Web'}</a>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {subs.map(s=>(
+            <button key={s.id} onClick={()=>setEmpleoSec(s.id)} className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${empleoSec===s.id?'bg-white text-black border-white':'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-600'}`}>{s.label}</button>
+          ))}
+        </div>
+        {empleoSec==='guia'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {num:'1',c:'bg-violet-400/20 text-violet-200 border-violet-400/30',title:lang==='es'?'Crea tu cuenta en arbeitsagentur.de':'Create account at arbeitsagentur.de',desc:lang==='es'?'Ve a www.arbeitsagentur.de → "Anmelden" → "Registrieren". Necesitas tu número de identidad.':'Go to www.arbeitsagentur.de → "Anmelden" → "Registrieren". You need your ID number.'},
+              {num:'2',c:'bg-sky-400/20 text-sky-200 border-sky-400/30',title:lang==='es'?'Usa el eService':'Use eService',desc:lang==='es'?'Reporta disponibilidad, envía documentos y comunícate con tu asesor online.':'Report availability, send documents and communicate with your advisor online.',sub:lang==='es'?'También: App "BA-mobil" para gestiones desde el móvil.':'Also: "BA-mobil" App for mobile management.'},
+              {num:'3',c:'bg-emerald-400/20 text-emerald-200 border-emerald-400/30',title:lang==='es'?'Descarga la App BA-mobil':'Download BA-mobil App',desc:lang==='es'?'App oficial. Disponible en Android e iOS. Gestiona desempleo, citas y documentos.':'Official app. Available on Android and iOS. Manage unemployment, appointments and documents.'},
+              {num:'4',c:'bg-pink-400/20 text-pink-200 border-pink-400/30',title:lang==='es'?'Registro como desempleado':'Register as unemployed',desc:lang==='es'?'Si pierdes tu trabajo, regístralo online en cuanto sepas la fecha de fin. Tienes 3 días.':'If you lose your job, register online as soon as you know the end date. You have 3 days.'},
+            ].map((s,i)=>(
+              <div key={i} className="bento-card rounded-[2rem] p-5">
+                <div className="flex gap-4">
+                  <div className={`w-10 h-10 min-w-[2.5rem] rounded-2xl border flex items-center justify-center font-extrabold text-lg ${s.c}`}>{s.num}</div>
+                  <div><h4 className="font-bold text-zinc-100 mb-1">{s.title}</h4><p className="text-sm text-zinc-300">{s.desc}</p>{s.sub&&<p className="text-xs text-zinc-500 mt-1 italic">{s.sub}</p>}</div>
+                </div>
+              </div>
+            ))}
+            <a href="https://www.arbeitsagentur.de/vor-ort/hamburg" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl bg-violet-400/15 border border-violet-400/20 px-5 py-3 text-sm font-bold text-violet-100"><Icon name="link" size={14}/>{lang==='es'?'Portal Agentur für Arbeit ↗':'Agentur für Arbeit Portal ↗'}</a>
+          </div>
+        )}
+        {empleoSec==='cita'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'🖥️',t:lang==='es'?'Cita online':'Online appointment',d:lang==='es'?'Ve a arbeitsagentur.de → "Termin vereinbaren". Elige motivo, fecha y hora.':'Go to arbeitsagentur.de → "Termin vereinbaren". Choose reason, date and time.',href:'https://web.arbeitsagentur.de/portal/terminvereinbarung/pc/agenturen/anliegenauswahl'},
+              {e:'📍',t:lang==='es'?'Dónde ir':'Where to go',d:'Süderstrasse 32 (entrada por detrás, primer piso). Hamburg.'},
+              {e:'📋',t:lang==='es'?'Qué llevar':'What to bring',d:lang==='es'?'Pasaporte/Ausweis, Aufenthaltstitel, Meldebestätigung y documentos de tu situación.':'Passport/Ausweis, Aufenthaltstitel, Anmeldung and documents related to your situation.'},
+              {e:'🔔',t:lang==='es'?'Sin cita urgente':'Urgent walk-in',d:lang==='es'?'Lun, Mar, Jue: 7:45–12:15 y Jue tarde: 15:00–17:00. Tendrás que esperar.':'Mon, Tue, Thu: 7:45–12:15 and Thu afternoon: 15:00–17:00. You will have to wait.'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+                {c.href&&<a href={c.href} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs text-sky-300 underline font-bold"><Icon name="link" size={12}/>{lang==='es'?'RESERVAR CITA ↗':'BOOK APPOINTMENT ↗'}</a>}
+              </div>
+            ))}
+          </div>
+        )}
+        {empleoSec==='financiacion'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'🎓',t:lang==='es'?'1. Asesoría Diakonie Hamburg':'1. Diakonie Hamburg Advice',d:lang==='es'?'ANTES de ir a la Agentur, solicita asesoría en español a la Diakonie para el reconocimiento de tu título.':'BEFORE going to the Agentur, request advice in Spanish from Diakonie for your degree recognition.',href:'https://www.diakonie-hamburg.de/de/rat-und-hilfe/auslaendische-abschluesse/'},
+              {e:'💶',t:lang==='es'?'2. Pide el bono AVGS':'2. Request the AVGS voucher',d:lang==='es'?'Con la hoja de la Diakonie, pide explícitamente el bono (AVGS) bajo §45 SGB III en tu cita.':'With the Diakonie paper, explicitly ask for the AVGS voucher under §45 SGB III at your appointment.'},
+              {e:'📚',t:lang==='es'?'Cualificación complementaria':'Supplementary qualification',d:lang==='es'?'Si tu título no es directamente reconocible, te asesoran sobre formaciones complementarias para equipararlo.':'If your degree is not directly recognisable, they advise on complementary training.'},
+              {e:'🔗',t:lang==='es'?'Portal Anabin':'Anabin portal',d:lang==='es'?'Revisa tu título en anabin.kmk.org y make-it-in-germany.com antes de la cita.':'Check your degree at anabin.kmk.org and make-it-in-germany.com before your appointment.',href:'https://www.anabin.kmk.org'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+                {c.href&&<a href={c.href} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs text-amber-300 underline font-bold"><Icon name="link" size={12}/>{lang==='es'?'ABRIR ↗':'OPEN ↗'}</a>}
+              </div>
+            ))}
+          </div>
+        )}
+        {empleoSec==='aleman'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'📝',t:'AVGS — Bono de activación',d:lang==='es'?'El Aktivierungs- und Vermittlungsgutschein (AVGS) financia cursos de alemán. Se solicita en tu cita de asesoría.':'The AVGS finances German courses. Apply for it at your advisory appointment.'},
+              {e:'🏫',t:'Bildungsgutschein',d:lang==='es'?'Para cursos largos (B2 intensivo). Cubre el coste en centros reconocidos (VHS, DAA, Volkshochschule).':'For longer courses (intensive B2). Covers full cost at recognised centres (VHS, DAA, Volkshochschule).'},
+              {e:'🎯',t:lang==='es'?'Qué pedir en tu cita':'What to ask for',d:lang==='es'?'"Ich möchte einen Deutschkurs bis B2 Beruf machen. Kann ich einen AVGS oder Bildungsgutschein bekommen?"':'"Ich möchte einen Deutschkurs bis B2 Beruf machen. Kann ich einen AVGS oder Bildungsgutschein bekommen?"'},
+              {e:'⚡',t:lang==='es'?'Consejo importante':'Important tip',d:lang==='es'?'Investiga el curso antes de la cita. Elige un centro con certificación AZAV. Lleva nombre, precio y duración.':'Research the course before the appointment. Choose an AZAV certified centre. Bring name, price and duration.'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {empleoSec==='empleo2'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'🔍',t:lang==='es'?'Jobsuche online':'Online job search',d:lang==='es'?'Portal arbeitsagentur.de/jobsuche. Filtra por sector, horario, idioma y zona de Hamburg.':'Portal arbeitsagentur.de/jobsuche. Filter by sector, schedule, language and Hamburg area.',href:'https://www.arbeitsagentur.de/jobsuche'},
+              {e:'🎓',t:'Ausbildung',d:lang==='es'?'Busca plazas en "Ausbildungssuche" en el portal. Tu asesor puede conectarte con empresas directamente.':'Find places in "Ausbildungssuche" on the portal. Your advisor can connect you with companies directly.',href:'https://www.arbeitsagentur.de/bildung/ausbildung/ausbildungsstelle-finden'},
+              {e:'📊',t:'meerBiZ',d:lang==='es'?'Centro de Información Profesional en la sede principal. Acceso libre. Ideal para orientarte.':'Professional Information Centre at the main office. Free access. Ideal for guidance.'},
+              {e:'👩‍💼',t:lang==='es'?'Reincorporación para mujeres':'Women re-entry',d:lang==='es'?'Programas para mujeres que quieren volver al mercado laboral. Pregunta por "Wiedereinstieg nach Familienzeit".':'Programmes for women wanting to re-enter the labour market. Ask about "Wiedereinstieg nach Familienzeit".'},
+              {e:'🏢',t:lang==='es'?'Jugendberufsagentur — Jóvenes':'Jugendberufsagentur — Youth',d:lang==='es'?'Para menores de 25 años. Combina Agentur, Jobcenter y organismos educativos. jba-hamburg.de':'For under 25s. Combines Agentur, Jobcenter and educational bodies. jba-hamburg.de',href:'https://www.jba-hamburg.de'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+                {c.href&&<a href={c.href} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs text-pink-300 underline font-bold"><Icon name="link" size={12}/>{lang==='es'?'ABRIR ↗':'OPEN ↗'}</a>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  /* ── SOCIALCARD ── */
+  const Social=()=>{
+    const subs=[
+      {id:'guia',label:lang==='es'?'📋 Qué es':'📋 What it is'},
+      {id:'iban',label:'💳 IBAN'},
+      {id:'pagar',label:lang==='es'?'💸 Pagar':'💸 Pay'},
+      {id:'anbieter',label:lang==='es'?'➕ Proveedor':'➕ Provider'},
+      {id:'efectivo',label:lang==='es'?'💶 Efectivo':'💶 Cash'},
+      {id:'consejos',label:lang==='es'?'💡 Consejos':'💡 Tips'},
+    ];
+    return(
+      <div className="space-y-6 animate-fade">
+        <Banner label="SocialCard" title={lang==='es'?'Guía completa SocialCard':'Complete SocialCard Guide'} text={lang==='es'?'Tarjeta de pago AsylbLG activa desde 2024. IBAN, pagos, proveedores y efectivo.':'AsylbLG payment card active since 2024. IBAN, payments, providers and cash.'} image={IMG.social} tint="from-fuchsia-400/20 via-transparent to-transparent"/>
+        <div className="bento-card p-4 rounded-2xl bg-fuchsia-400/5 border border-fuchsia-400/20">
+          <p className="text-sm text-fuchsia-200 font-semibold">🆕 {lang==='es'?'Nueva SocialCard federal introducida en Hamburg desde diciembre 2024.':'New federal SocialCard introduced in Hamburg since December 2024.'}</p>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem] bg-rose-400/5 border border-rose-500/30">
+          <h4 className="font-bold text-rose-100 mb-1 text-sm">{lang==='es'?'¿Perdiste tu SocialCard?':'Lost your SocialCard?'}</h4>
+          <p className="text-xs text-zinc-300 mb-3">{lang==='es'?'Bloquéala inmediatamente en el portal. Luego solicita una nueva al Amt für Migration.':'Block it immediately in the portal. Then request a new one from the Amt für Migration.'}</p>
+          <button onClick={()=>goTo('prestaciones')} className="text-xs bg-rose-500/20 text-rose-100 px-3 py-2 rounded-lg font-bold border border-rose-500/40">{lang==='es'?'Solicitar en Prestaciones':'Request in Benefits'}</button>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {subs.map(s=>(
+            <button key={s.id} onClick={()=>setSocialSec(s.id)} className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${socialSec===s.id?'bg-white text-black border-white':'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-600'}`}>{s.label}</button>
+          ))}
+        </div>
+        {socialSec==='guia'&&(
+          <div className="space-y-4 animate-fade">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                {e:'💳',t:lang==='es'?'Tarjeta Visa prepago':'Prepaid Visa card',d:lang==='es'?'Débito con saldo sin cuenta bancaria. Funciona como VISA en tiendas físicas de Alemania.':'Debit card with balance, no bank account. Works as VISA in physical shops in Germany.'},
+                {e:'📱',t:lang==='es'?'Física y virtual':'Physical and virtual',d:lang==='es'?'Tarjeta física y digital en tu smartphone con la App "My SocialCard". Requiere 2FA con tu móvil.':'Physical card and digital on your smartphone via "My SocialCard" App. Requires 2FA with your phone.'},
+                {e:'🏦',t:lang==='es'?'Portal web':'Web portal',d:'portal.socialcard.de — '+( lang==='es'?'Saldo, transferencias, IBAN, pagos y proveedores.':'Balance, transfers, IBAN, payments and providers.')},
+                {e:'🛒',t:lang==='es'?'Dónde pagar':'Where to pay',d:lang==='es'?'Tiendas físicas con logo VISA en Alemania. No funciona online ni fuera de Alemania.':'Physical shops with VISA logo in Germany. Does not work online or outside Germany.'},
+              ].map((c,i)=>(
+                <div key={i} className="bento-card p-5 rounded-[2rem]">
+                  <div className="text-2xl mb-2">{c.e}</div>
+                  <h4 className="font-bold text-zinc-100 mb-1 text-sm">{c.t}</h4>
+                  <p className="text-xs text-zinc-400">{c.d}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a href="https://portal.socialcard.de" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-2xl bg-fuchsia-400/90 text-white px-5 py-3 font-bold text-sm"><Icon name="link" size={14}/>{lang==='es'?'ABRIR PORTAL':'OPEN PORTAL'}</a>
+              <a href="https://www.hamburg.de/politik-und-verwaltung/behoerden/sozialbehoerde/themen/soziales/socialcard" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-2xl border border-fuchsia-400/30 bg-fuchsia-400/10 text-fuchsia-100 px-5 py-3 font-bold text-sm"><Icon name="link" size={14}/>{lang==='es'?'Info Hamburg':'Hamburg Info'}</a>
+            </div>
+          </div>
+        )}
+        {socialSec==='iban'&&(
+          <div className="space-y-4 animate-fade">
+            <div className="bento-card p-5 rounded-[2rem] border-l-4 border-emerald-400/60">
+              <p className="text-sm text-zinc-300">{lang==='es'?'La SocialCard tiene IBAN virtual (22 caracteres). Sirve para domiciliaciones (Lastschrift) con proveedores autorizados.':'The SocialCard has a virtual IBAN (22 characters). Used for direct debits (Lastschrift) with authorised providers.'}</p>
+            </div>
+            {[
+              {num:'1',c:'bg-emerald-400/20 text-emerald-200 border-emerald-400/30',title:lang==='es'?'Accede al portal':'Access the portal',desc:'portal.socialcard.de'},
+              {num:'2',c:'bg-sky-400/20 text-sky-200 border-sky-400/30',title:lang==='es'?'Ve a "Lastschrift"':'Go to "Lastschrift"',desc:lang==='es'?'En el menú principal. Aquí gestionas domiciliaciones y ves tu IBAN.':'In the main menu. Here you manage direct debits and see your IBAN.'},
+              {num:'3',c:'bg-violet-400/20 text-violet-200 border-violet-400/30',title:lang==='es'?'Acepta el acuerdo':'Accept the agreement',desc:lang==='es'?'Primera vez: acepta "Besondere Kartennutzungsvereinbarung Lastschrift". Una sola vez. Después aparece tu IBAN.':'First time: accept "Besondere Kartennutzungsvereinbarung Lastschrift". Once only. Then your IBAN appears.'},
+              {num:'4',c:'bg-amber-400/20 text-amber-200 border-amber-400/30',title:lang==='es'?'Solo a proveedores autorizados':'Only to authorised providers',desc:lang==='es'?'⚠️ Solo transporte, deporte, música, móvil, energía. No la des a otras personas.':'⚠️ Only transport, sport, music, mobile, energy. Do not give it to other people.'},
+            ].map((s,i)=>(
+              <div key={i} className="bento-card rounded-[2rem] p-5">
+                <div className="flex gap-4">
+                  <div className={`w-10 h-10 min-w-[2.5rem] rounded-2xl border flex items-center justify-center font-extrabold text-lg ${s.c}`}>{s.num}</div>
+                  <div><h4 className="font-bold text-zinc-100 mb-1 text-sm">{s.title}</h4><p className="text-sm text-zinc-300">{s.desc}</p></div>
+                </div>
+              </div>
+            ))}
+            <div className="bento-card p-5 rounded-[2rem] bg-rose-400/5 border-rose-400/20">
+              <h4 className="font-bold text-rose-200 mb-1 text-sm">⚠️ {lang==='es'?'Tu IBAN NO puede recibir dinero de terceros':'Your IBAN CANNOT receive money from others'}</h4>
+              <p className="text-xs text-zinc-400">{lang==='es'?'Nadie puede enviarte dinero a tu IBAN. Solo la autoridad carga saldo. Es EXCLUSIVAMENTE para domiciliaciones con proveedores autorizados.':'Nobody can send money to your IBAN. Only the authority loads balance. It is EXCLUSIVELY for direct debits with authorised providers.'}</p>
+            </div>
+          </div>
+        )}
+        {socialSec==='pagar'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'💸',t:lang==='es'?'Enviar dinero — "Geld senden"':'Send money — "Geld senden"',d:lang==='es'?'En el portal: "Geld senden" → "Vorlagen". Selecciona proveedor, importe y confirma.':'In the portal: "Geld senden" → "Vorlagen". Select provider, amount and confirm.'},
+              {e:'💰',t:lang==='es'?'Consultar saldo':'Check balance',d:lang==='es'?'Aparece en la pantalla principal del portal y en la App. Se actualiza en tiempo real.':'Appears on the main portal screen and in the App. Updates in real time.'},
+              {e:'💵',t:lang==='es'?'Retirar efectivo':'Withdraw cash',d:lang==='es'?'En cajeros dentro de Alemania hasta el límite mensual de tu caso. No funciona fuera de Alemania.':'At ATMs within Germany up to your monthly limit. Does not work outside Germany.'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {socialSec==='anbieter'&&(
+          <div className="space-y-4 animate-fade">
+            <div className="bento-card p-5 rounded-[2rem] border border-violet-400/30">
+              <h4 className="font-bold text-violet-100 mb-3 text-sm">{lang==='es'?'Para Transferencias — Menú "Geld senden"':'For Transfers — Menu "Geld senden"'}</h4>
+              {[
+                {num:'1',d:lang==='es'?'"Geld senden" → busca en "Vorlagen".':'"Geld senden" → search in "Vorlagen".'},
+                {num:'2',d:lang==='es'?'Si no está, ve a "Zahlungsempfänger" y solicita la activación.':'If not there, go to "Zahlungsempfänger" and request activation.'},
+                {num:'3',d:lang==='es'?'Introduce: nombre, IBAN del proveedor, justificación y categoría.':'Enter: name, provider IBAN, justification and category.'},
+                {num:'4',d:lang==='es'?'Primera vez: sube un documento (factura/contrato). Se borra tras la revisión.':'First time: upload a document (invoice/contract). Deleted after review.'},
+                {num:'5',d:lang==='es'?'La autoridad revisa y activa el proveedor.':'The authority reviews and activates the provider.'},
+              ].map((s,i)=>(
+                <div key={i} className="flex gap-3 mb-3">
+                  <div className="w-7 h-7 min-w-[1.75rem] rounded-full bg-violet-400/20 border border-violet-400/30 flex items-center justify-center text-violet-200 font-bold text-xs">{s.num}</div>
+                  <p className="text-sm text-zinc-300 pt-0.5">{s.d}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bento-card p-5 rounded-[2rem] border border-emerald-400/30">
+              <h4 className="font-bold text-emerald-100 mb-3 text-sm">{lang==='es'?'Para Domiciliaciones — Menú "Lastschrift"':'For Direct Debits — Menu "Lastschrift"'}</h4>
+              {[
+                {num:'1',d:lang==='es'?'"Lastschrift" → busca en la lista (transporte, deporte, música, móvil, energía).':'"Lastschrift" → search in the list (transport, sport, music, mobile, energy).'},
+                {num:'2',d:lang==='es'?'Si no está: "Zahlungsempfänger hinzufügen". Necesitas: nombre, IBAN y Gläubiger-ID.':'If not listed: "Zahlungsempfänger hinzufügen". You need: name, IBAN and Gläubiger-ID.'},
+                {num:'3',d:lang==='es'?'Sube un documento de verificación (primera vez).':'Upload a verification document (first time).'},
+                {num:'4',d:lang==='es'?'Solo tras aprobación puedes dar tu IBAN a ese proveedor.':'Only after approval can you give your IBAN to that provider.'},
+              ].map((s,i)=>(
+                <div key={i} className="flex gap-3 mb-3">
+                  <div className="w-7 h-7 min-w-[1.75rem] rounded-full bg-emerald-400/20 border border-emerald-400/30 flex items-center justify-center text-emerald-200 font-bold text-xs">{s.num}</div>
+                  <p className="text-sm text-zinc-300 pt-0.5">{s.d}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bento-card p-4 rounded-2xl bg-amber-400/5 border-amber-400/20">
+              <p className="text-xs text-amber-200">✅ {lang==='es'?'Proveedores autorizados Lastschrift: transporte/ÖPNV, clubes deportivos, música, móvil, electricidad.':'Authorised Lastschrift providers: transport/ÖPNV, sports clubs, music, mobile, electricity.'}</p>
+            </div>
+          </div>
+        )}
+        {socialSec==='efectivo'&&(
+          <div className="space-y-4 animate-fade">
+            <div className="bento-card p-5 rounded-[2rem] border-l-4 border-green-400/60">
+              <p className="text-sm text-zinc-300">{lang==='es'?'La iniciativa "Bezahlkarte NEIN" permite cambiar cupones de supermercado por dinero en efectivo.':'The "Bezahlkarte NEIN" initiative allows exchanging supermarket vouchers for cash.'}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bento-card p-5 rounded-[2rem]">
+                <h4 className="font-bold text-sky-100 mb-3">🛒 {lang==='es'?'1. Compra cupones de 50€':'1. Buy 50€ vouchers'}</h4>
+                <p className="text-sm text-zinc-300 mb-2">{lang==='es'?'Con tu SocialCard, compra tarjetas de regalo de EXACTAMENTE 50€ SOLO en:':'With your SocialCard, buy gift cards of EXACTLY 50€ ONLY in:'}</p>
+                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-xs text-green-300 font-bold">✅ Rewe, Lidl, Aldi, Penny, Edeka, AlNatura, Denns.</div>
+                <p className="text-xs text-rose-300 mt-3">❌ {lang==='es'?'NO: Amazon, Playstation, Wunschgutschein, Zalando, H&M, C&A.':'NOT: Amazon, Playstation, Wunschgutschein, Zalando, H&M, C&A.'}</p>
+              </div>
+              <div className="bento-card p-5 rounded-[2rem]">
+                <h4 className="font-bold text-emerald-100 mb-3">💵 {lang==='es'?'2. Puntos de cambio':'2. Exchange points'}</h4>
+                <ul className="text-xs text-zinc-400 space-y-2">
+                  <li>• <strong>Fanräume St. Pauli:</strong> {lang==='es'?'1er y 3er Lunes (17–19h)':'1st and 3rd Monday (17–19h)'}</li>
+                  <li>• <strong>Cafe Exil (Hammer Str. 10):</strong> {lang==='es'?'1er Viernes (14–17h) — SOLO MUJERES':'1st Friday (14–17h) — WOMEN ONLY'}</li>
+                  <li>• <strong>Infoladen Wilhelmsburg (Fährstr. 48):</strong> {lang==='es'?'1er Lunes (15–17h)':'1st Monday (15–17h)'}</li>
+                  <li>• <strong>Die LINKE Harburg:</strong> {lang==='es'?'1er y 3er Lunes (17–19h)':'1st and 3rd Monday (17–19h)'}</li>
+                  <li>• <strong>Die LINKE Eimsbüttel:</strong> {lang==='es'?'1er y 3er Lunes (17–19h)':'1st and 3rd Monday (17–19h)'}</li>
+                  <li>• <strong>Die LINKE Altona:</strong> {lang==='es'?'1er y 3er Lunes (17–19h)':'1st and 3rd Monday (17–19h)'}</li>
+                  <li>• <strong>Die LINKE Mitte:</strong> {lang==='es'?'1er y 3er Lunes (17–19h)':'1st and 3rd Monday (17–19h)'}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+        {socialSec==='consejos'&&(
+          <div className="space-y-4 animate-fade">
+            {[
+              {e:'🔒',t:lang==='es'?'Bloquea si la pierdes':'Block if you lose it',d:lang==='es'?'En el portal o App inmediatamente. Luego pide nueva tarjeta al Amt por Prestaciones.':'In the portal or App immediately. Then request a new card from the Amt via Benefits.'},
+              {e:'📱',t:lang==='es'?'Activa la App antes':'Activate App early',d:lang==='es'?'Requiere verificar tu número de móvil. Si olvidas la contraseña recibirás nueva tarjeta con nuevo IBAN.':'Requires verifying your mobile number. If you forget your password you will receive a new card with new IBAN.'},
+              {e:'🔄',t:lang==='es'?'Si cambias de tarjeta':'If you change card',d:lang==='es'?'Nuevo IBAN: re-solicita todos los proveedores y notifícales el nuevo IBAN.':'New IBAN: re-request all providers and notify them of the new IBAN.'},
+              {e:'📧',t:lang==='es'?'Problemas o quejas':'Problems or complaints',d:'asylblg@amtfuermigration.hamburg.de'},
+              {e:'🛡️',t:lang==='es'?'No funciona en compras online':'No online shopping',d:lang==='es'?'Alternativa: compra tarjetas regalo (Amazon, Otto) en el supermercado con tu SocialCard.':'Alternative: buy gift cards (Amazon, Otto) at the supermarket with your SocialCard.'},
+            ].map((c,i)=>(
+              <div key={i} className="bento-card p-5 rounded-[2rem]">
+                <div className="text-2xl mb-2">{c.e}</div>
+                <h4 className="font-bold text-zinc-100 mb-1">{c.t}</h4>
+                <p className="text-sm text-zinc-400">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  /* ── EDU ── */
+  const Edu=()=>(
+    <div className="space-y-6 animate-fade">
+      <Banner label={T.nav.edu} title={lang==='es'?'Educación, Cursos y Traducciones':'Education, Courses and Translations'} text={lang==='es'?'Escuelas de alemán, beneficios BUT y traductores jurados.':'German schools, BUT benefits and sworn translators.'} image={IMG.edu} tint="from-amber-400/20 via-transparent to-transparent"/>
+      <div className="bento-card p-6 sm:p-8 rounded-[2rem] border-l-4 border-amber-300/70">
+        <h3 className="text-lg font-bold text-amber-100 mb-2">{lang==='es'?'Regla de Oro: Ausbildung > 2 años':'Golden Rule: Ausbildung > 2 years'}</h3>
+        <p className="text-sm text-zinc-300 leading-relaxed">{lang==='es'?'Debido a la complejidad del idioma técnico alemán, se recomienda realizar formaciones que superen los 2 años para garantizar estabilidad y aprendizaje real.':'Due to the complexity of German technical language, it is strongly recommended to undertake training exceeding 2 years to ensure stability and real learning.'}</p>
+      </div>
+      <div className="bento-card p-5 rounded-[2rem]">
+        <h4 className="font-bold text-sky-100 mb-2">🎒 {lang==='es'?'BUT (Bildung und Teilhabe)':'BUT (Education and Participation)'}</h4>
+        <p className="text-sm text-zinc-300 mb-2">{lang==='es'?'Si recibes prestaciones sociales, tus hijos menores de 25 años tienen derecho al paquete BUT.':'If you receive social benefits, your children under 25 are entitled to the BUT package.'}</p>
+        <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+          <li>• {lang==='es'?'Reembolso de costos para excursiones con la escuela o guardería.':'Reimbursement of costs for school or daycare excursions.'}</li>
+          <li>• {lang==='es'?'195€ anuales para material escolar (130€ en agosto + 65€ en febrero).':'€195 per year for school supplies (€130 in August + €65 in February).'}</li>
+        </ul>
+        <p className="text-xs text-sky-200 font-bold mb-3">💡 {lang==='es'?'Solicitarlo online a través de la sección Prestaciones en el portal de Hamburg.':'Request it online through the Benefits section in the Hamburg portal.'}</p>
+        <button onClick={()=>goTo('prestaciones')} className="text-xs bg-sky-500/20 text-sky-100 px-4 py-2 rounded-lg font-bold border border-sky-500/40">{lang==='es'?'Ir a Prestaciones':'Go to Benefits'}</button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bento-card p-5 rounded-[2rem] border border-violet-400/20">
+          <h4 className="font-bold text-violet-100 mb-3">🇩🇪 {lang==='es'?'Escuelas de Alemán Oficiales':'Official German Schools'}</h4>
+          <ul className="text-xs text-zinc-400 space-y-2 mb-4">
+            <li>• <strong>Hamburger Volkshochschule (VHS):</strong> {lang==='es'?'Múltiples sedes. Cursos intensivos hasta 25h semanales.':'Multiple branches. Intensive courses up to 25h weekly.'}</li>
+            <li>• <strong>Diakonie Hamburg:</strong> {lang==='es'?'Integrationszentrum en Winterhuder Weg 31.':'Integrationszentrum at Winterhuder Weg 31.'}</li>
+            <li>• <strong>Caritas Hamburg:</strong> {lang==='es'?'Sedes en St. Georg, Bergedorf, Steilshoop y Wandsbek.':'Branches in St. Georg, Bergedorf, Steilshoop and Wandsbek.'}</li>
+          </ul>
+          <div className="flex flex-col gap-2">
+            <a href="https://www.vhs-hamburg.de/" target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-violet-300 underline"><Icon name="link" size={12}/> VHS Hamburg</a>
+            <a href="https://www.caritas-hamburg.de/" target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-violet-300 underline"><Icon name="link" size={12}/> Caritas Hamburg</a>
+          </div>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem] border border-emerald-400/20">
+          <h4 className="font-bold text-emerald-100 mb-3">📄 {lang==='es'?'Traductores Jurados':'Sworn Translators'}</h4>
+          <ul className="text-xs text-zinc-400 space-y-2 mb-4">
+            <li>• <strong>Marta Gómez:</strong> +49 159 06829104 | info@marta-gomez.com</li>
+            <li>• <strong>Anabel Meincke-Vester:</strong> Haindaalwisch 11 | +49 40 6441 33 03</li>
+            <li>• <strong>Roberto Carballo Lázaro:</strong> Mittelweg 161 | +49 40 45024505</li>
+            <li>• <strong>Víctor López:</strong> victor.lopez@dieuebersetzer.com | +49 40 418592</li>
+          </ul>
+          <a href="https://www.justiz-dolmetscher.de/" target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-emerald-300 underline"><Icon name="link" size={12}/>{lang==='es'?'Buscador oficial':'Official search'}</a>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ── ORGS ── */
+  const Orgs=()=>(
+    <div className="space-y-6 animate-fade">
+      <Banner label={lang==='es'?'Asistencia':'Assistance'} title={lang==='es'?'Ayuda & Organizaciones':'Help & Organizations'} text={lang==='es'?'ONGs que brindan apoyo social, legal, burocrático y ropa a migrantes en Hamburgo.':'NGOs providing social, legal, bureaucratic and clothing support in Hamburg.'} image={IMG.orgs} tint="from-teal-400/20 via-transparent to-transparent"/>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bento-card p-5 rounded-[2rem] border border-teal-400/30">
+          <h4 className="font-bold text-teal-100 mb-2">👕 Hanseatic Help</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Ropa gratuita para personas refugiadas o con bajos recursos en "Help Stores".':'Free clothing for refugees at "Help Stores".'}</p>
+          <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+            <li>• {lang==='es'?'Reserva cita en su web.':'Book appointment on their website.'}</li>
+            <li>• {lang==='es'?'Lleva Ausweis y copia de tu resolución de prestaciones.':'Bring Ausweis and copy of your benefits resolution.'}</li>
+          </ul>
+          <a href="https://www.hanseatic-help.org/help-store/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-teal-300 underline font-bold"><Icon name="link" size={12}/>{lang==='es'?'Reservar Cita':'Book Appointment'}</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem]">
+          <h4 className="font-bold text-sky-100 mb-2">⚖️ Fluchtpunkt Hamburg</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Asistencia legal gratuita especializada en derecho de asilo. Atienden en español.':'Free legal assistance specialised in asylum law. Service in Spanish.'}</p>
+          <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+            <li>• {lang==='es'?'Sin cita: Miércoles 10:00–13:00':'Walk-in: Wednesdays 10:00–13:00'}</li>
+            <li>• 040 - 432 500 80</li>
+          </ul>
+          <a href="https://fluchtpunkt-hamburg.de/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-sky-300 underline font-bold"><Icon name="link" size={12}/>{lang==='es'?'Web Oficial':'Official Web'}</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem] border border-indigo-400/30">
+          <h4 className="font-bold text-indigo-100 mb-2">🏢 Flüchtlingszentrum Hamburg (FZ)</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Informa sobre procedimientos de asilo, cursos de alemán y retorno voluntario. Atención en español.':'Informs about asylum procedures, German courses and voluntary return. Spanish service.'}</p>
+          <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+            <li>• Adenauerallee 10, 20097 Hamburg</li>
+            <li>• {lang==='es'?'Lun, Mar, Jue, Vie: 09:00–13:00':'Mon, Tue, Thu, Fri: 09:00–13:00'} | 040 - 28 40 79 - 0</li>
+          </ul>
+          <a href="https://www.fz-hh.de/de/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-indigo-300 underline font-bold"><Icon name="link" size={12}/> FZ Hamburg</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem] border border-orange-400/30">
+          <h4 className="font-bold text-orange-100 mb-2">☕ Café Exil</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Punto de encuentro, ayuda burocrática y asesoría. Café e internet gratis.':'Meeting point, bureaucratic help and advice. Free coffee and internet.'}</p>
+          <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+            <li>• Hammer Str. 10, 22041 Hamburg</li>
+          </ul>
+          <a href="https://cafe-exil.de/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-orange-300 underline font-bold"><Icon name="link" size={12}/> Café Exil</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem]">
+          <h4 className="font-bold text-pink-100 mb-2">🤝 verikom gGmbH</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Asesoría social en extranjería, prestaciones y familia. Directamente en español.':'Social advice on immigration, benefits and family. Directly in Spanish.'}</p>
+          <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+            <li>• <strong>Mitte:</strong> Schauenburger Str. 49 | 040 285 33 87 55</li>
+            <li>• <strong>Altona:</strong> Hospitalstraße 109 | 040 238 55 83 12</li>
+          </ul>
+          <a href="https://www.verikom.de/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-pink-300 underline font-bold"><Icon name="link" size={12}/> verikom</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem] border border-blue-400/30">
+          <h4 className="font-bold text-blue-100 mb-2">🇳🇮 Nicaragua-Hilfe</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Alemanes que hablan español, expertos en migración, apoyan a nicaragüenses en todos sus trámites.':'German Spanish-speakers, migration experts, supporting Nicaraguans in all their procedures.'}</p>
+          <a href="mailto:info@nicaragua-hilfe.de" className="inline-flex items-center gap-2 text-xs text-blue-300 underline font-bold"><Icon name="mail" size={12}/> info@nicaragua-hilfe.de</a>
+        </div>
+        <div className="bento-card p-5 rounded-[2rem]">
+          <h4 className="font-bold text-amber-100 mb-2">🏥 Suchthilfe ({lang==='es'?'Adicciones':'Addictions'})</h4>
+          <p className="text-sm text-zinc-300 mb-3">{lang==='es'?'Centros con personal hispanohablante para ayuda con adicciones:':'Centers with Spanish-speaking staff for addiction help:'}</p>
+          <ul className="text-xs text-zinc-400 space-y-1 mb-3">
+            <li>• <strong>Die Boje (Wandsbek):</strong> Brauhausstieg 15-17 | 040 444091</li>
+            <li>• <strong>Kodrobs Eimsbüttel:</strong> Grindelallee 41 | 040 422 90 86</li>
+          </ul>
+          <div className="flex gap-3 flex-wrap">
+            <a href="https://www.dieboje.de/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-amber-300 underline"><Icon name="link" size={12}/> Die Boje</a>
+            <a href="https://www.jugendhilfe-ev.de/kodrobs-eimsbuettel/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-amber-300 underline"><Icon name="link" size={12}/> Kodrobs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ── PERFIL ── */
+  const Perfil=()=>(
+    <div className="space-y-6 animate-fade">
+      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6">
+        <div className="space-y-6">
+          <div className="bento-card p-6 rounded-[2rem]">
+            <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+              <div className="w-20 h-20 shrink-0 rounded-full border-2 border-white/10 overflow-hidden bg-zinc-800">
+                <img src={IMG.perfil} alt="Arvid" className="w-full h-full object-cover"/>
+              </div>
+              <div className="text-center sm:text-left">
+                <h3 className="text-xl font-bold text-white">Arvid Daniel Cabrera Pozo</h3>
+                <p className="text-sm text-pink-300 font-semibold mb-3">{lang==='es'?'Nacido en Nicaragua • Solicitante de asilo desde 2024':'Born in Nicaragua • Asylum seeker since 2024'}</p>
+                <p className="text-sm text-zinc-300 leading-relaxed">{lang==='es'?'He creado InfoNicaHamburg basándome en mi propia experiencia navegando el sistema alemán. Mi objetivo es centralizar la información vital para que a otras personas llegando les sea mucho más fácil adaptarse e integrarse.':'I created InfoNicaHamburg based on my own experience navigating the German system. My goal is to centralize vital information to make it easier for newcomers to adapt and integrate.'}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bento-card p-6 rounded-[2rem] border-l-4 border-emerald-400/60">
+            <h4 className="font-bold text-emerald-100 mb-3">{lang==='es'?'Comunidad y Contacto':'Community & Contact'}</h4>
+            <p className="text-sm text-zinc-300 mb-4">{lang==='es'?'Únete a nuestra comunidad para hacer preguntas y compartir información.':'Join our community to ask questions and share information.'}</p>
+            <a href="https://chat.whatsapp.com/CYS3is2L24dCZtQrFy35jk" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-2xl bg-[#25D366]/20 border border-[#25D366]/30 px-5 py-3 text-sm font-bold text-white w-fit hover:bg-[#25D366]/30 transition-colors">
+              <Icon name="whatsapp" size={16}/> {lang==='es'?'Unirme (WhatsApp)':'Join (WhatsApp)'}
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="bento-card p-6 rounded-[2rem] bg-black/40">
+            <h4 className="font-bold text-zinc-400 mb-4 uppercase tracking-widest text-xs">Impressum / Legal</h4>
+            <div className="space-y-2 text-sm text-zinc-400">
+              <p><strong className="text-zinc-300">§ 5 TMG:</strong></p>
+              <p>Arvid Daniel Cabrera Pozo</p>
+              <p>Wiesendamm 30</p>
+              <p>22305 Hamburg</p>
+              <div className="pt-3 border-t border-white/10 mt-3">
+                <p>E-Mail: infonicahamburg@gmail.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ─── RENDER ─── */
+  return(
+    <div className="min-h-screen flex flex-col md:flex-row relative">
+
+      {/* MOBILE HEADER */}
+      <MobileHeader/>
+
+      {/* MOBILE DRAWER */}
+      {menuOpen&&<MobileDrawer/>}
+
+      {/* DESKTOP SIDEBAR */}
+      <nav className="hidden md:flex w-64 bg-zinc-950/95 border-r border-white/8 p-6 sticky top-0 h-screen flex-col z-10">
+        <div className="flex items-center justify-between mb-8 px-2">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={()=>goTo('inicio')}>
+            <img src={IMG.logo} alt="logo" className="w-10 h-10 rounded-xl object-cover"/>
+            <span className="font-bold text-lg leading-tight">InfoNica<br/>Hamburg</span>
+          </div>
+          <button onClick={toggleLang} className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold text-zinc-300 hover:bg-white/10 transition-all">
+            <Icon name="globe" size={12}/>{T.lang}
+          </button>
+        </div>
+        <div className="flex flex-col gap-1 flex-1 sidebar-scroll overflow-y-auto">
+          {NAV.map(item=>(
+            <button key={item.id} onClick={()=>goTo(item.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all ${tab===item.id?'active-tab':'text-zinc-400 hover:bg-white/5'}`}>
+              <Icon name={item.icon} size={16}/>{T.nav[item.id]}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 pt-20 md:pt-0 p-4 sm:p-6 md:p-10 lg:p-12 max-w-6xl mx-auto w-full animate-fade">
+        {tab==='inicio'&&Home()}
+        {tab==='noticias'&&(
+          <div className="space-y-6">
+            <Banner label="News Hub" title={lang==='es'?'Noticias, comunidad y radio':'News, community and radio'} text={lang==='es'?'BAMF oficial, comunidad hispana y COSMO en español.':'Official BAMF, Hispanic community and COSMO in Spanish.'} image={IMG.noticias} tint="from-sky-400/20 via-transparent to-transparent"/>
+            <div className="flex flex-wrap gap-2">
+              {['Todos','Oficial','Comunidad','Radio/Prensa'].map(f=>(
+                <button key={f} onClick={()=>setNewsFilter(f)} className={`px-4 py-2 rounded-full text-xs font-bold border ${newsFilter===f?'bg-white text-black border-white':'bg-zinc-900 text-zinc-400 border-zinc-800'}`}>{f}</button>
+              ))}
+            </div>
+            <div className="grid gap-4">
+              {filteredNews.map(item=>(
+                <div key={item.title} className="bento-card p-5 rounded-[2rem]">
+                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-white/8 text-zinc-200">{item.tag}</span>
+                  <h4 className="font-bold mt-3 text-lg">{item.title}</h4>
+                  <p className="text-sm text-zinc-300 mt-2">{item.text}</p>
+                  <a href={item.href} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs text-zinc-400 mt-3 underline"><Icon name="link" size={12}/>{lang==='es'?'Ver fuente':'View source'}</a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {tab==='salud'&&Salud()}
+        {tab==='finanzas'&&Finanzas()}
+        {tab==='prestaciones'&&Prestaciones()}
+        {tab==='empleo'&&Empleo()}
+        {tab==='social'&&Social()}
+        {tab==='edu'&&Edu()}
+        {tab==='orgs'&&Orgs()}
+        {tab==='perfil'&&Perfil()}
+      </main>
+
+      {/* WhatsApp FAB */}
+      <a href="https://chat.whatsapp.com/CYS3is2L24dCZtQrFy35jk" target="_blank" rel="noreferrer" className="whatsapp-float">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </a>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
