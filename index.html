@@ -43,7 +43,7 @@ const {useState,useMemo,useEffect}=React;
 const TR={
   es:{
     appName:'InfoNicaHamburg',
-    nav:{inicio:'Inicio',noticias:'Noticias',salud:'Salud',finanzas:'Finanzas',prestaciones:'Prestaciones',empleo:'Agencia Empleo',social:'SocialCard',edu:'Educación',orgs:'Ayuda y Orgs.',perfil:'Sobre mí'},
+    nav:{inicio:'Inicio',noticias:'Noticias',salud:'Salud',finanzas:'Finanzas',prestaciones:'Prestaciones',empleo:'Agencia Empleo',social:'SocialCard',edu:'Educación',orgs:'Ayuda y Orgs.',transporte:'Transporte HVV',perfil:'Sobre mí'},
     lang:'EN',
     home:{badge:'Portal integral',title:'InfoNicaHamburg',sub:'La plataforma centralizada para la comunidad nicaragüense e hispana en Hamburgo.',quickAccess:'Accesos rápidos',checkToday:'Hoy conviene revisar',check1:'Citas médicas y teléfonos de contacto.',check2:'Noticias oficiales y comunitarias.',check3:'Organizaciones gratuitas y asesoría.',openHealth:'Abrir salud',viewNews:'Ver noticias',procedures:'Trámites',quickInfo:'Acceso rápido',quickInfoSub:'Todo lo importante en una sola pantalla, optimizado para móvil.'},
     cards:[{title:'Salud',value:'29',desc:'médicos y especialistas',icon:'health'},{title:'Noticias',value:'3',desc:'fuentes activas',icon:'news'},{title:'Trámites',value:'4',desc:'atajos oficiales',icon:'gov'},{title:'Apoyo',value:'116117',desc:'urgencias fuera de horario',icon:'briefcase'}],
@@ -52,7 +52,7 @@ const TR={
   },
   en:{
     appName:'InfoNicaHamburg',
-    nav:{inicio:'Home',noticias:'News Hub',salud:'Health',finanzas:'Finances',prestaciones:'Benefits',empleo:'Job Agency',social:'SocialCard',edu:'Education',orgs:'Help & Orgs',perfil:'About me'},
+    nav:{inicio:'Home',noticias:'News Hub',salud:'Health',finanzas:'Finances',prestaciones:'Benefits',empleo:'Job Agency',social:'SocialCard',edu:'Education',orgs:'Help & Orgs',transporte:'HVV Transport',perfil:'About me'},
     lang:'ES',
     home:{badge:'Comprehensive portal',title:'InfoNicaHamburg',sub:'The centralized platform for the Nicaraguan and Hispanic community in Hamburg.',quickAccess:'Quick links',checkToday:'Worth checking today',check1:'Doctor appointments and contact numbers.',check2:'Official and community news.',check3:'Free organizations and advice.',openHealth:'Open health',viewNews:'View news',procedures:'Procedures',quickInfo:'Quick access',quickInfoSub:'Everything important in one screen, mobile-optimized.'},
     cards:[{title:'Health',value:'29',desc:'doctors & specialists',icon:'health'},{title:'News',value:'3',desc:'active sources',icon:'news'},{title:'Procedures',value:'4',desc:'official shortcuts',icon:'gov'},{title:'Support',value:'116117',desc:'out-of-hours emergencies',icon:'briefcase'}],
@@ -72,8 +72,9 @@ const IMG={
   prestaciones:'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80',
   empleo:'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=80',
   social:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1600&q=80',
-  edu:'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80',
-  orgs:'https://images.unsplash.com/photo-1593113563332-e147ce100919?auto=format&fit=crop&w=1600&q=80',
+  edu:'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1600&q=80',
+  orgs:'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=1600&q=80',
+  transporte:'https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1600&q=80',
 };
 
 /* ─── ICONS ─── */
@@ -95,6 +96,7 @@ const Icon=({name,size=18})=>{
     link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
     mail:'<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
     /* ── NUEVOS: hamburguesa y cierre ── */
+    train:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 11h20"/><path d="M9 19l-2 2"/><path d="M15 19l2 2"/><circle cx="8" cy="15" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="15" r="1.2" fill="currentColor" stroke="none"/>',
     menu:'<line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/>',
     x:'<path d="M18 6 6 18"/><path d="M6 6l12 12"/>',
   };
@@ -157,7 +159,7 @@ const DOCS=[
 const NAV=[
   {id:'inicio',icon:'home'},{id:'noticias',icon:'news'},{id:'salud',icon:'health'},
   {id:'finanzas',icon:'finance'},{id:'prestaciones',icon:'gov'},{id:'empleo',icon:'briefcase'},
-  {id:'social',icon:'social'},{id:'edu',icon:'edu'},{id:'orgs',icon:'orgs'},{id:'perfil',icon:'user'},
+  {id:'social',icon:'social'},{id:'edu',icon:'edu'},{id:'orgs',icon:'orgs'},{id:'transporte',icon:'train'},{id:'perfil',icon:'user'},
 ];
 
 /* ─── MAIN APP ─── */
@@ -201,6 +203,7 @@ const App=()=>{
     social:'text-fuchsia-300 bg-fuchsia-400/10 border-fuchsia-400/20',
     edu:'text-orange-300 bg-orange-400/10 border-orange-400/20',
     orgs:'text-teal-300 bg-teal-400/10 border-teal-400/20',
+    transporte:'text-blue-300 bg-blue-400/10 border-blue-400/20',
     perfil:'text-zinc-300 bg-zinc-400/10 border-zinc-400/20',
   };
 
@@ -869,6 +872,119 @@ const App=()=>{
     </div>
   );
 
+  /* ── TRANSPORTE HVV ── */
+  const Transporte=()=>(
+    <div className="space-y-8 animate-fade">
+      <Banner label="HVV" title={lang==='es'?'Guía de Transporte en Hamburgo':'Hamburg Transport Guide'} text={lang==='es'?'Todo lo que necesitas saber para moverte por Hamburgo: tickets, descuentos para solicitantes de asilo y el Deutschlandticket social.':'Everything you need to get around Hamburg: tickets, asylum seeker discounts and the social Deutschlandticket.'} image={IMG.transporte} tint="from-blue-400/20 via-transparent to-transparent"/>
+
+      {/* App Móvil */}
+      <div className="bento-card p-6 rounded-[2rem] border border-blue-400/20 bg-blue-400/5">
+        <h4 className="font-bold text-blue-100 mb-3 text-lg">📱 {lang==='es'?'App Móvil Oficial: hvv':'Official Mobile App: hvv'}</h4>
+        <p className="text-sm text-zinc-300 mb-4">{lang==='es'?'La forma más rápida de consultar horarios en tiempo real y comprar billetes.':'The fastest way to check real-time schedules and buy tickets.'}</p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <a href="https://play.google.com/store/apps/details?id=de.eos.uic.hvv" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl bg-green-500/20 border border-green-500/30 px-4 py-3 text-sm font-bold text-green-100 hover:bg-green-500/30 transition-colors">
+            <Icon name="link"/> Android — Google Play ↗
+          </a>
+          <a href="https://apps.apple.com/de/app/hvv-%C3%B6pnv-tickets-fahrplan/id508011318" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl bg-zinc-500/20 border border-zinc-500/30 px-4 py-3 text-sm font-bold text-zinc-100 hover:bg-zinc-500/30 transition-colors">
+            <Icon name="link"/> iOS — App Store ↗
+          </a>
+        </div>
+      </div>
+
+      {/* Cómo comprar ticket */}
+      <div className="bento-card p-6 rounded-[2rem]">
+        <h4 className="font-bold text-sky-100 mb-4 text-lg">🎫 {lang==='es'?'1. Cómo comprar un ticket en la máquina':'1. How to buy a ticket at the machine'}</h4>
+        <p className="text-sm text-zinc-400 mb-5">{lang==='es'?'En todas las estaciones de U-Bahn (metro), S-Bahn (tren urbano) y en paradas principales de autobús encontrarás máquinas automáticas.':'At all U-Bahn, S-Bahn and main bus stops you will find vending machines.'}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            {e:'🌐',t:lang==='es'?'Idioma':'Language',d:lang==='es'?'En la pantalla principal, selecciona la bandera de España o el icono "English" para cambiar el idioma.':'On the main screen, select the Spanish flag or "English" icon to change language.'},
+            {e:'🎟️',t:lang==='es'?'Selección de billete':'Ticket selection',d:lang==='es'?'Elige entre "Billete sencillo" (Einzelkarte) o "Billete de día" (Ganztageskarte), ideal si harás más de dos viajes en el mismo día.':'Choose between a single ticket (Einzelkarte) or a day ticket (Ganztageskarte), ideal for more than two trips in a day.'},
+            {e:'💳',t:lang==='es'?'Métodos de pago':'Payment methods',d:lang==='es'?'Las máquinas aceptan monedas, billetes (hasta 20€) y tarjetas bancarias con sistema contactless.':'Machines accept coins, banknotes (up to €20) and contactless bank cards.'},
+            {e:'✅',t:lang==='es'?'Validación':'Validation',d:lang==='es'?'En Hamburgo, los tickets comprados en máquina ya están validados; no hace falta timbrarlos antes de subir.':'In Hamburg, machine-bought tickets are already validated — no need to stamp them before boarding.'},
+          ].map((c,i)=>(
+            <div key={i} className="bento-card p-4 rounded-2xl">
+              <div className="text-2xl mb-2">{c.e}</div>
+              <h5 className="font-bold text-zinc-100 mb-1 text-sm">{c.t}</h5>
+              <p className="text-xs text-zinc-400 leading-relaxed">{c.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Deutschlandticket */}
+      <div className="bento-card p-6 rounded-[2rem] border-l-8 border-blue-400/60">
+        <h4 className="font-bold text-blue-100 mb-4 text-lg">🇩🇪 {lang==='es'?'2. El Deutschlandticket (D-Ticket) y Descuento Social':'2. The Deutschlandticket (D-Ticket) and Social Discount'}</h4>
+        <p className="text-sm text-zinc-300 mb-5">{lang==='es'?'Abono mensual que permite viajar de forma ilimitada en todo el transporte regional y local de toda Alemania.':'Monthly pass for unlimited travel on all regional and local transport throughout Germany.'}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bento-card p-4 rounded-2xl bg-zinc-800/60 text-center">
+            <div className="text-3xl font-black text-zinc-200 mb-1">63€</div>
+            <div className="text-xs text-zinc-400 font-semibold uppercase tracking-wider">{lang==='es'?'Precio estándar (2026)':'Standard price (2026)'}</div>
+            <div className="text-xs text-zinc-500 mt-1">{lang==='es'?'por mes':'per month'}</div>
+          </div>
+          <div className="bento-card p-4 rounded-2xl bg-green-500/10 border border-green-500/30 text-center">
+            <div className="text-3xl font-black text-green-300 mb-1">27,50€</div>
+            <div className="text-xs text-green-200 font-semibold uppercase tracking-wider">{lang==='es'?'Con descuento social':'With social discount'}</div>
+            <div className="text-xs text-green-400/70 mt-1">{lang==='es'?'Si recibes AsylbLG':'If you receive AsylbLG'}</div>
+          </div>
+          <div className="bento-card p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-center">
+            <div className="text-2xl mb-1">🔄</div>
+            <div className="text-xs text-blue-200 font-semibold uppercase tracking-wider">{lang==='es'?'Suscripción mensual':'Monthly subscription'}</div>
+            <div className="text-xs text-blue-400/70 mt-1">{lang==='es'?'Se renueva automáticamente':'Renews automatically'}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Cómo solicitar el abono */}
+      <div className="bento-card p-6 rounded-[2rem]">
+        <h4 className="font-bold text-emerald-100 mb-2 text-lg">📋 {lang==='es'?'3. Cómo solicitar el abono con descuento':'3. How to apply for the discounted pass'}</h4>
+        <p className="text-sm text-zinc-300 mb-5">{lang==='es'?'Aunque el trámite se puede iniciar online, se recomienda hacerlo de forma presencial en un hvv Service Store para asegurar que el descuento se aplique correctamente desde el inicio.':'Although the process can be started online, it is recommended to do it in person at an hvv Service Store to ensure the discount is applied correctly from the start.'}</p>
+        <div className="bento-card p-5 rounded-2xl bg-amber-400/8 border border-amber-400/25 mb-4">
+          <h5 className="font-bold text-amber-100 mb-3">📄 {lang==='es'?'¿Qué debes llevar al Service Store?':'What to bring to the Service Store?'}</h5>
+          <div className="space-y-3">
+            {[
+              {n:'1',t:lang==='es'?'Informe de prestaciones (Bescheid)':'Benefits report (Bescheid)',d:lang==='es'?'El documento actualizado que acredita que recibes ayudas sociales.':'The up-to-date document certifying you receive social benefits.'},
+              {n:'2',t:lang==='es'?'Identificación (Ausweis)':'Identification (Ausweis)',d:lang==='es'?'Tu tarjeta de identidad o documento de estancia (Aufenthaltsgestattung / Duldung).':'Your identity card or residence document (Aufenthaltsgestattung / Duldung).'},
+              {n:'3',t:'IBAN',d:lang==='es'?'Necesario para domiciliar el pago mensual de la suscripción.':'Required to set up the monthly direct debit payment.'},
+            ].map((s,i)=>(
+              <div key={i} className="flex gap-3 items-start">
+                <div className="w-7 h-7 min-w-[1.75rem] rounded-full bg-amber-400/20 border border-amber-400/30 flex items-center justify-center text-xs font-extrabold text-amber-200">{s.n}</div>
+                <div><p className="text-sm font-bold text-zinc-100">{s.t}</p><p className="text-xs text-zinc-400">{s.d}</p></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Service Stores */}
+      <div className="bento-card p-6 rounded-[2rem]">
+        <h4 className="font-bold text-teal-100 mb-4 text-lg">📍 {lang==='es'?'Ubicaciones de los hvv Service Stores':'hvv Service Store Locations'}</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5">
+          {[
+            {loc:'Hauptbahnhof',detail:lang==='es'?'Wandelhalle (parte superior) y hvv Service Center (Lado Sur)':'Wandelhalle (upper level) and hvv Service Center (South Side)'},
+            {loc:'Altona',detail:lang==='es'?'Estación de tren (Bf. Altona)':'Train station (Bf. Altona)'},
+            {loc:'Jungfernstieg',detail:lang==='es'?'Estación subterránea (Entrada Neuer Wall)':'Underground station (Neuer Wall entrance)'},
+            {loc:'Dammtor',detail:lang==='es'?'Estación de tren (Bf. Dammtor)':'Train station (Bf. Dammtor)'},
+            {loc:'Harburg',detail:lang==='es'?'Estación de tren (Bf. Harburg)':'Train station (Bf. Harburg)'},
+            {loc:'Bergedorf',detail:lang==='es'?'Centro de servicios en la estación de tren':'Service centre at the train station'},
+            {loc:'Barmbek',detail:lang==='es'?'Estación de metro y tren urbano':'Metro and urban rail station'},
+            {loc:'Wandsbek Markt',detail:lang==='es'?'Centro de atención en la terminal de buses':'Customer centre at the bus terminal'},
+            {loc:'Billstedt',detail:lang==='es'?'Centro de atención en la estación de metro':'Customer centre at the metro station'},
+            {loc:'Blankenese',detail:lang==='es'?'Estación de tren':'Train station'},
+            {loc:'Niendorf Markt',detail:lang==='es'?'Punto de información y venta':'Information and sales point'},
+          ].map((s,i)=>(
+            <div key={i} className="flex gap-3 items-start py-2 border-b border-white/5 last:border-0">
+              <span className="text-teal-400 mt-0.5">🚇</span>
+              <div><p className="text-sm font-bold text-zinc-100">{s.loc}</p><p className="text-xs text-zinc-400">{s.detail}</p></div>
+            </div>
+          ))}
+        </div>
+        <div className="bento-card p-4 rounded-2xl bg-blue-400/8 border border-blue-400/25">
+          <p className="text-xs text-blue-200">💡 <strong>{lang==='es'?'Consejo:':'Tip:'}</strong> {lang==='es'?'Para evitar largas esperas, puedes reservar una cita previa (Termin buchen) a través de la página web oficial de hvv.':'To avoid long waits, you can book an appointment in advance (Termin buchen) through the official hvv website.'}</p>
+        </div>
+      </div>
+    </div>
+  );
+
   /* ── PERFIL ── */
   const Perfil=()=>(
     <div className="space-y-8 animate-fade">
@@ -1069,6 +1185,7 @@ const App=()=>{
         {tab==='social'&&Social()}
         {tab==='edu'&&Edu()}
         {tab==='orgs'&&Orgs()}
+        {tab==='transporte'&&Transporte()}
         {tab==='perfil'&&Perfil()}
       </main>
 
