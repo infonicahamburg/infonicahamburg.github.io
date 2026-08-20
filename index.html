@@ -536,7 +536,7 @@
                 perfil: 'text-zinc-300 bg-zinc-400/10 border-zinc-400/20',
             };
 
-            /* ── DATA NOTICIAS ── */
+            /* ─── DATA NOTICIAS ─── */
             const newsItems = [
                 { type: 'Oficial', tag: 'BAMF OFICIAL', title: lang === 'es' ? 'Información oficial de migración' : 'Official migration information', text: lang === 'es' ? 'Noticias oficiales sobre integración, residencia y permisos en Alemania.' : 'Official news on integration, residence and permits in Germany.',
                     href: 'https://www.facebook.com/bamf.socialmedia/' },
@@ -1308,15 +1308,32 @@
                     </div>
 
                     <div className="bento-card p-6 rounded-[2rem]">
-                        <h4 className="font-bold text-emerald-100 mb-2 text-lg">📋 {lang === 'es' ? '3. Cómo solicitar el abono con descuento' : '3. How to apply for the discounted pass'}</h4>
-                        <p className="text-sm text-zinc-300 mb-5">{lang === 'es' ? 'Aunque el trámite se puede iniciar online, se recomienda hacerlo de forma presencial en un hvv Service Store para asegurar que el descuento se aplique correctamente desde el inicio.' : 'Although the process can be started online, it is recommended to do it in person at an hvv Service Store to ensure the discount is applied correctly from the start.'}</p>
-                        <div className="bento-card p-5 rounded-2xl bg-amber-400/8 border border-amber-400/25 mb-4">
-                            <h5 className="font-bold text-amber-100 mb-3">📄 {lang === 'es' ? '¿Qué debes llevar al Service Store?' : 'What to bring to the Service Store?'}</h5>
+                        <h4 className="font-bold text-emerald-100 mb-2 text-lg">📋 {lang === 'es' ? '3. Cómo solicitar el abono con descuento (Online)' : '3. How to apply for the discounted pass (Online)'}</h4>
+                        <p className="text-sm text-zinc-300 mb-5">{lang === 'es' ? 'Ahora puedes solicitar el descuento social para el Deutschlandticket directamente en línea a través del portal oficial hvv.de. Ya no es necesario ir a un Service Store de forma presencial.' : 'You can now apply for the social discount for the Deutschlandticket directly online via the official hvv.de portal. No need to visit a Service Store in person anymore.'}</p>
+                        
+                        <div className="bento-card p-5 rounded-2xl bg-emerald-400/8 border border-emerald-400/25 mb-4">
+                            <h5 className="font-bold text-emerald-100 mb-3">🖥️ {lang === 'es' ? 'Proceso en línea (3 pasos)' : 'Online process (3 steps)'}</h5>
                             <div className="space-y-3">
                                 {[
-                                    { n: '1', t: lang === 'es' ? 'Informe de prestaciones (Bescheid)' : 'Benefits report (Bescheid)', d: lang === 'es' ? 'El documento actualizado que acredita que recibes ayudas sociales.' : 'The up-to-date document certifying you receive social benefits.' },
-                                    { n: '2', t: lang === 'es' ? 'Identificación (Ausweis)' : 'Identification (Ausweis)', d: lang === 'es' ? 'Tu tarjeta de identidad o documento de estancia (Aufenthaltsgestattung / Duldung).' : 'Your identity card or residence document (Aufenthaltsgestattung / Duldung).' },
-                                    { n: '3', t: 'IBAN', d: lang === 'es' ? 'Necesario para domiciliar el pago mensual de la suscripción.' : 'Required to set up the monthly direct debit payment.' },
+                                    { n: '1', t: lang === 'es' ? 'Regístrate en hvv.de/meinhvv' : 'Register at hvv.de/meinhvv', d: lang === 'es' ? 'Crea una cuenta o inicia sesión en el portal "Mein HVV".' : 'Create an account or log in to the "Mein HVV" portal.' },
+                                    { n: '2', t: lang === 'es' ? 'Configura el acceso al contrato (Vertragszugriff einrichten)' : 'Set up contract access (Vertragszugriff einrichten)', d: lang === 'es' ? 'Dentro del portal, busca la opción para gestionar el acceso a tu contrato y configúralo.' : 'In the portal, look for the option to manage access to your contract and set it up.' },
+                                    { n: '3', t: lang === 'es' ? 'Abre y modifica el contrato (Vertrag aufrufen und ändern)' : 'Open and modify the contract (Vertrag aufrufen und ändern)', d: lang === 'es' ? 'Accede a tu contrato actual y selecciona la opción para modificarlo.' : 'Access your current contract and select the option to modify it.' },
+                                ].map((s, i) => (
+                                    <div key={i} className="flex gap-3 items-start">
+                                        <div className="w-7 h-7 min-w-[1.75rem] rounded-full bg-emerald-400/20 border border-emerald-400/30 flex items-center justify-center text-xs font-extrabold text-emerald-200">{s.n}</div>
+                                        <div><p className="text-sm font-bold text-zinc-100">{s.t}</p><p className="text-xs text-zinc-400">{s.d}</p></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="bento-card p-5 rounded-2xl bg-amber-400/8 border border-amber-400/25 mb-4">
+                            <h5 className="font-bold text-amber-100 mb-3">📝 {lang === 'es' ? 'Dentro del contrato, sigue estos subpasos:' : 'Inside the contract, follow these sub-steps:'}</h5>
+                            <div className="space-y-3">
+                                {[
+                                    { n: 'a', t: lang === 'es' ? 'Busca la opción de descuento' : 'Find the discount option', d: lang === 'es' ? 'Dentro de las opciones de modificación, localiza y selecciona la opción para solicitar el descuento social.' : 'Within the modification options, find and select the option to apply for the social discount.' },
+                                    { n: 'b', t: lang === 'es' ? 'Introduce las fechas' : 'Enter the dates', d: lang === 'es' ? 'Se te pedirá que indiques la fecha de inicio y la fecha de fin del período de descuento.' : 'You will be asked to enter the start and end date of the discount period.' },
+                                    { n: 'c', t: lang === 'es' ? 'Número de expediente (Fallnummer)' : 'Case number (Fallnummer)', d: lang === 'es' ? 'Si eres solicitante de asilo o recibes otro tipo de ayuda social, se te solicitará tu número de expediente.' : 'If you are an asylum seeker or receive other social benefits, you will be asked for your case number.' },
                                 ].map((s, i) => (
                                     <div key={i} className="flex gap-3 items-start">
                                         <div className="w-7 h-7 min-w-[1.75rem] rounded-full bg-amber-400/20 border border-amber-400/30 flex items-center justify-center text-xs font-extrabold text-amber-200">{s.n}</div>
@@ -1325,10 +1342,13 @@
                                 ))}
                             </div>
                         </div>
+
+                        <a href="https://www.hvv.de/de/meinhvv" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400/15 border border-emerald-400/20 px-5 py-3 text-sm font-bold text-emerald-100 hover:bg-emerald-400/25 transition-colors"><Icon name="link" /> {lang === 'es' ? 'ABRIR PORTAL MEIN HVV ↗' : 'OPEN MEIN HVV PORTAL ↗'}</a>
                     </div>
 
                     <div className="bento-card p-6 rounded-[2rem]">
                         <h4 className="font-bold text-teal-100 mb-4 text-lg">📍 {lang === 'es' ? 'Ubicaciones de los hvv Service Stores' : 'hvv Service Store Locations'}</h4>
+                        <p className="text-sm text-zinc-400 mb-4">{lang === 'es' ? 'Aunque el trámite ahora es en línea, los Service Stores siguen disponibles para consultas o si prefieres asistencia presencial.' : 'Although the process is now online, Service Stores remain available for inquiries or if you prefer in-person assistance.'}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5">
                             {[
                                 { loc: 'Hauptbahnhof', detail: lang === 'es' ? 'Wandelhalle (parte superior) y hvv Service Center (Lado Sur)' : 'Wandelhalle (upper level) and hvv Service Center (South Side)' },
@@ -1348,9 +1368,6 @@
                                     <div><p className="text-sm font-bold text-zinc-100">{s.loc}</p><p className="text-xs text-zinc-400">{s.detail}</p></div>
                                 </div>
                             ))}
-                        </div>
-                        <div className="bento-card p-4 rounded-2xl bg-blue-400/8 border border-blue-400/25">
-                            <p className="text-xs text-blue-200">💡 <strong>{lang === 'es' ? 'Consejo:' : 'Tip:'}</strong> {lang === 'es' ? 'Para evitar largas esperas, puedes reservar una cita previa (Termin buchen) a través de la página web oficial de hvv.' : 'To avoid long waits, you can book an appointment in advance (Termin buchen) through the official hvv website.'}</p>
                         </div>
                     </div>
                 </div>
